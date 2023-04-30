@@ -37,7 +37,7 @@ namespace LaserGRBL
 			InitThreadingCB();
 
             CBCore.SelectedItem = Settings.GetObject("Firmware Type", Firmware.Grbl);
-			CBSupportPWM.Checked = Settings.GetObject("Support Hardware PWM", true);
+			CBSupportPWM.Checked = Settings.GetObject("Support Hardware PWM", false);
 			CBProtocol.SelectedItem = Settings.GetObject("ComWrapper Protocol", ComWrapper.WrapperType.UsbSerial);
 			CBStreamingMode.SelectedItem = Settings.GetObject("Streaming Mode", GrblCore.StreamingMode.Buffered);
 			CbUnidirectional.Checked = Settings.GetObject("Unidirectional Engraving", false);

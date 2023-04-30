@@ -19,9 +19,9 @@ namespace LaserGRBL.RasterConverter
 		static bool ratiolock = true;
 
 		GrblCore mCore;
-		bool supportPWM = Settings.GetObject("Support Hardware PWM", true);
+		bool supportPWM = Settings.GetObject("Support Hardware PWM", false);
 
-		public ComboboxItem[] LaserOptions = new ComboboxItem[] { new ComboboxItem("M3 - Constant Power", "M3"), new ComboboxItem("M4 - Dynamic Power", "M4") };
+		public ComboboxItem[] LaserOptions = new ComboboxItem[] { new ComboboxItem("Z轴落笔", "G1 Z-5"), new ComboboxItem("固定功率", "M3"), new ComboboxItem("动态功率", "M4") };
 		public class ComboboxItem
 		{
 			public string Text { get; set; }
@@ -48,9 +48,8 @@ namespace LaserGRBL.RasterConverter
 			LblMaxPerc.Visible = LblMinPerc.Visible = LblSmin.Visible = LblSmax.Visible = IIMaxPower.Visible = IIMinPower.Visible = BtnModulationInfo.Visible = supportPWM;
 			AssignMinMaxLimit();
 
-			CBLaserON.Items.Add(LaserOptions[0]);
-			CBLaserON.Items.Add(LaserOptions[1]);
-		}
+			CBLaserON.Items.AddRange(LaserOptions);
+        }
 
 		private void AssignMinMaxLimit()
 		{
@@ -99,14 +98,26 @@ namespace LaserGRBL.RasterConverter
 			IIBorderTracing.CurrentValue = IP.BorderSpeed = Settings.GetObject("GrayScaleConversion.VectorizeOptions.BorderSpeed", 1000);
 			IILinearFilling.CurrentValue = IP.MarkSpeed = Settings.GetObject("GrayScaleConversion.Gcode.Speed.Mark", 1000);
 
-			IP.LaserOn = Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.LaserOn", "M3");
+			IP.LaserOn = Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.LaserOn", "G1 Z-5");
+			switch (IP.LaserOn)
+            {
+                case "M3":
+                case "M4":
+                    if (IP.LaserOn == "M3" || !GrblCore.Configuration.LaserMode)
+                        CBLaserON.SelectedItem = LaserOptions[1];
+                    else
+                        CBLaserON.SelectedItem = LaserOptions[2];
+                    IP.LaserOff = "M5";break;
+                case "G1 Z-5":
+                    CBLaserON.SelectedItem = LaserOptions[0];
+                    IP.LaserOff = "G1 Z5"; break;
+                default:
+                    IP.LaserOff = "G1 Z5"; 
+                    break;
+			}
+			
 
-			if (IP.LaserOn == "M3" || !GrblCore.Configuration.LaserMode)
-				CBLaserON.SelectedItem = LaserOptions[0];
-			else
-				CBLaserON.SelectedItem = LaserOptions[1];
-
-			IP.LaserOff = "M5"; 
+			
 
 			IIMinPower.CurrentValue = IP.MinPower = Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.PowerMin", 0);
 			IIMaxPower.CurrentValue = IP.MaxPower = Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.PowerMax", (int)GrblCore.Configuration.MaxPWM);

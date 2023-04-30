@@ -1064,7 +1064,7 @@ namespace LaserGRBL.RasterConverter
 						conf.oX = TargetOffset.X;
 						conf.oY = TargetOffset.Y;
 						conf.borderSpeed = BorderSpeed;
-						conf.pwm = Settings.GetObject("Support Hardware PWM", true);
+						conf.pwm = Settings.GetObject("Support Hardware PWM", false);
 						conf.firmwareType = Settings.GetObject("Firmware Type", Firmware.Grbl);
 
 						if (SelectedTool == Tool.Line2Line || SelectedTool == Tool.Dithering || SelectedTool == Tool.NoProcessing)

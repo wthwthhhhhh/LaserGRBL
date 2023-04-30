@@ -22,7 +22,7 @@ namespace LaserGRBL.RasterConverter
 		GrblCore mCore;
 		ImageProcessor IP;
 		bool preventClose;
-		bool supportPWM = Settings.GetObject("Support Hardware PWM", true);
+		bool supportPWM = Settings.GetObject("Support Hardware PWM", false);
 
 		private RasterToLaserForm(GrblCore core, string filename, bool append)
 		{
@@ -111,6 +111,9 @@ namespace LaserGRBL.RasterConverter
 		}
 		void OnPreviewReady(Image img)
 		{
+			try
+			{
+
 			if (InvokeRequired)
 			{
 				Invoke(new ImageProcessor.PreviewReadyDlg(OnPreviewReady), img);
@@ -134,11 +137,20 @@ namespace LaserGRBL.RasterConverter
 				WB.Running = false;
 				BtnCreate.Enabled = true;
 				preventClose = false;
-			}
-		}
+                }
+            }
+            catch (Exception ex)
+            {
+
+              
+            }
+        }
 
 		private static Image CreatePaper(Image img)
 		{
+			try
+			{
+
 			Image newimage = new Bitmap(img.Width + 6, img.Height + 6);
 			using (Graphics g = Graphics.FromImage(newimage))
 			{
@@ -149,7 +161,14 @@ namespace LaserGRBL.RasterConverter
 				g.DrawImage(img, 1, 1); //disegno
 			}
 			return newimage;
-		}
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+			return img;
+        }
 
 		void WTTick(object sender, EventArgs e)
 		{

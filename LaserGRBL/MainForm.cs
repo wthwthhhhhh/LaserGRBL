@@ -159,7 +159,8 @@ namespace LaserGRBL
 
 			ManageMessage();
 			ManageCommandLineArgs(args);
-		}
+            Core.SetPenUp();
+        }
 
 		private void ManageCommandLineArgs(string[] args)
 		{
@@ -993,10 +994,15 @@ namespace LaserGRBL
 		{
 			ShowWiFiConfig();
 		}
-	}
+
+        private void PreviewForm_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
 
 
-	public class MMnRenderer : ToolStripProfessionalRenderer
+    public class MMnRenderer : ToolStripProfessionalRenderer
 	{
 		public MMnRenderer() : base(new CustomMenuColor()) { }
 

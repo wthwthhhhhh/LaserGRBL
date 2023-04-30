@@ -517,7 +517,22 @@ namespace LaserGRBL
 			Refresh();
 		}
 
-		
-	}
+        private void Preview_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BtnPenDown_Click(object sender, EventArgs e)
+        {
+
+            Core.SetPenDown();
+        }
+
+        private void BtnPenUp_Click(object sender, EventArgs e)
+        {
+
+            Core.SetPenUp();
+        }
+    }
 
 }

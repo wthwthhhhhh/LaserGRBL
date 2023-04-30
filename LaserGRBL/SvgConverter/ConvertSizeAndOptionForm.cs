@@ -17,7 +17,7 @@ namespace LaserGRBL.SvgConverter
 	public partial class SvgToGCodeForm : Form
 	{
 		GrblCore mCore;
-		bool supportPWM = Settings.GetObject("Support Hardware PWM", true);
+		bool supportPWM = Settings.GetObject("Support Hardware PWM", false);
 
 		public ComboboxItem[] LaserOptions = new ComboboxItem[] { new ComboboxItem("M3 - Constant Power", "M3"), new ComboboxItem("M4 - Dynamic Power", "M4") };
 		public class ComboboxItem

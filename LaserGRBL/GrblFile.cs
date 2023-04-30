@@ -361,7 +361,7 @@ namespace LaserGRBL
 				}
 			}
 
-			bool supportPWM = Settings.GetObject("Support Hardware PWM", true);
+			bool supportPWM = Settings.GetObject("Support Hardware PWM", false);
 
 
 			if (supportPWM)
@@ -449,7 +449,7 @@ namespace LaserGRBL
 			public string lOn;
 			public string lOff;
 			public RasterConverter.ImageProcessor.Direction dir;
-			public bool pwm;
+			public bool pwm { get { return false; } set { } }
 			public double fres;
 			public bool vectorfilling;
 			public Firmware firmwareType;

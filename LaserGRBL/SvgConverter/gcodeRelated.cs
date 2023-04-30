@@ -61,7 +61,7 @@ namespace LaserGRBL.SvgConverter
 
 		public static void setup(GrblCore core)
 		{
-			SupportPWM = Settings.GetObject("Support Hardware PWM", true); //If Support PWM use S command instead of M3-M4 / M5
+			SupportPWM = Settings.GetObject("Support Hardware PWM", false); //If Support PWM use S command instead of M3-M4 / M5
 
 			setDecimalPlaces(mDecimalPlaces);
 
@@ -78,7 +78,7 @@ namespace LaserGRBL.SvgConverter
 				gcodeSpindleSpeed /= 255.0f;
 			gcodeSpindleCmdOn = Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.LaserOn", "M3");
 			gcodeSpindleCmdOff = Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.LaserOff", "M5");
-			SupportPWM = Settings.GetObject("Support Hardware PWM", true); //If Support PWM use S command instead of M3-M4 / M5
+			SupportPWM = Settings.GetObject("Support Hardware PWM", false); //If Support PWM use S command instead of M3-M4 / M5
 
 			lastMovewasG0 = true;
 			lastx = -1; lasty = -1; lastz = 0; lasts = -1 ; lastg = -1;

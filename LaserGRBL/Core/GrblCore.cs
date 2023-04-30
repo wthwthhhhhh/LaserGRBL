@@ -2759,8 +2759,12 @@ namespace LaserGRBL
 
 		internal void SetNewZero()
 		{ if (CanDoZeroing) EnqueueCommand(new GrblCommand("G92 X0 Y0 Z0")); }
+        internal void SetPenDown()
+        { EnqueueCommand(new GrblCommand("G0 Z-5 F5000")); }
+        internal void SetPenUp()
+        {  EnqueueCommand(new GrblCommand("G0 Z0 F5000")); }
 
-		public int JogSpeed { get; set; }
+        public int JogSpeed { get; set; }
 		public decimal JogStep { get; set; }
 
 		public bool ContinuosJogEnabled { get { return Settings.GetObject("Enable Continuous Jog", false); } }

@@ -23,7 +23,7 @@ namespace LaserGRBL
 	{
 		public class StatePositionBuilder : StateBuilder
 		{
-			bool supportPWM = Settings.GetObject("Support Hardware PWM", true);
+			bool supportPWM = Settings.GetObject("Support Hardware PWM", false);
 
 			public class CumulativeElement : Element
 			{

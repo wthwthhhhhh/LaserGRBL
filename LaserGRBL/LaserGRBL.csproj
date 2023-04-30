@@ -18,7 +18,7 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <SourceAnalysisOverrideSettingsFile>C:\Users\Diego\AppData\Roaming\ICSharpCode\SharpDevelop5\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
-    <ApplicationIcon>Grafica\LaserGrbl.ico</ApplicationIcon>
+    <ApplicationIcon>bitbug_favicon.ico</ApplicationIcon>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <FileUpgradeFlags>
@@ -907,6 +907,9 @@
     <EmbeddedResource Include="SvgConverter\ConvertSizeAndOptionForm.ro-RO.resx">
       <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ImageButton.resx">
+      <DependentUpon>ImageButton.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WiFiConfigurator\OrturWiFiConfig.resx">
       <DependentUpon>OrturWiFiConfig.cs</DependentUpon>
     </EmbeddedResource>
@@ -928,8 +931,12 @@
     <EmbeddedResource Include="CSV\alarm_codes.ortur.GrblHal.csv" />
     <EmbeddedResource Include="CSV\error_codes.ortur.GrblHal.csv" />
     <None Include="Resources\flag_greece.png" />
+    <Content Include="bitbug_favicon.ico" />
     <Content Include="Grafica\777494-200.png" />
     <Content Include="Grafica\info.png" />
+    <None Include="Resources\BtnPenUp.Image.png" />
+    <None Include="Resources\penDown.png" />
+    <None Include="Resources\penUp.png" />
     <Content Include="Sound\connect.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1508,6 +1515,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PreviewForm.es.resx">
       <DependentUpon>PreviewForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PreviewForm.fr.resx">
       <DependentUpon>PreviewForm.cs</DependentUpon>

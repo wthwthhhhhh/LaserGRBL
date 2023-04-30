@@ -117,16 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="LblDescription.Text" xml:space="preserve">
-    <value>This tool allows you to search for the IP that your network has assigned to your engraver connected via WiFi. Scan the network and try to check if the connection port is available.
-
-Press "Scan" button to start.</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAE0AAABNCAYAAADjCemwAAAAIGNIUk0AAHolAACAgwAA9CUAAITRAABt
-        XwAA6GwAADyLAAAbWIPnB3gAAAAJcEhZcwAACxMAAAsTAQCanBgAACFnSURBVHhe7ZsHeFVVvsUvgkiV
+        XwAA6GwAADyLAAAbWIPnB3gAAAAJcEhZcwAACxIAAAsSAdLdfvwAACFnSURBVHhe7ZsHeFVVvsUvgkiV
         GiCUAIEkBEISQhJIiAlgpEgHpRNCgFASOkhRiiNFYewFu4A+dcZRFAcdUdQ3iIINKyBFEBIIyKCIYgP+
         b/029+QFCDEw8973fMP+vsW599xzzt577fVv+wSfmV3EeaLQkxdRNAo9eRFFo9CTF1E0Cj15EUWj0JMX
         UTTyP5QsWfKfRokSJXylSpXyBQUF+Ro3buxr2LBhPvjepEmT8hEREcOio6Pvio2NvTc+Pn5OQkJCP32u

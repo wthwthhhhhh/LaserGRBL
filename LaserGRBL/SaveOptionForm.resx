@@ -145,13 +145,10 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="CBLFLineEndings.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 94</value>
-  </data>
-  <data name="CBLFLineEndings.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>3, 71</value>
   </data>
   <data name="CBLFLineEndings.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 21</value>
+    <value>138, 16</value>
   </data>
   <data name="CBLFLineEndings.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -181,13 +178,10 @@
     <value>NoControl</value>
   </data>
   <data name="CBHeader.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 4</value>
-  </data>
-  <data name="CBHeader.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>3, 3</value>
   </data>
   <data name="CBHeader.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 21</value>
+    <value>102, 16</value>
   </data>
   <data name="CBHeader.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -217,13 +211,10 @@
     <value>NoControl</value>
   </data>
   <data name="CBFooter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 65</value>
-  </data>
-  <data name="CBFooter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>3, 49</value>
   </data>
   <data name="CBFooter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 21</value>
+    <value>102, 16</value>
   </data>
   <data name="CBFooter.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -247,13 +238,10 @@
     <value>Left</value>
   </data>
   <data name="UDCount.Location" type="System.Drawing.Point, System.Drawing">
-    <value>66, 34</value>
-  </data>
-  <data name="UDCount.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>50, 25</value>
   </data>
   <data name="UDCount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>81, 22</value>
+    <value>61, 21</value>
   </data>
   <data name="UDCount.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -280,13 +268,10 @@
     <value>NoControl</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 36</value>
-  </data>
-  <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 0, 4, 0</value>
+    <value>3, 28</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 17</value>
+    <value>41, 12</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -316,13 +301,10 @@
     <value>NoControl</value>
   </data>
   <data name="CBBetween.Location" type="System.Drawing.Point, System.Drawing">
-    <value>167, 34</value>
-  </data>
-  <data name="CBBetween.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>147, 26</value>
   </data>
   <data name="CBBetween.Size" type="System.Drawing.Size, System.Drawing">
-    <value>227, 21</value>
+    <value>192, 16</value>
   </data>
   <data name="CBBetween.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -346,16 +328,13 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 19</value>
-  </data>
-  <data name="tableLayoutPanel2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>3, 17</value>
   </data>
   <data name="tableLayoutPanel2.RowCount" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
   <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>473, 119</value>
+    <value>355, 90</value>
   </data>
   <data name="tableLayoutPanel2.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -373,22 +352,16 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="CBLFLineEndings" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="CBHeader" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="CBFooter" Row="2" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="UDCount" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label1" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="CBBetween" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,50,AutoSize,50,Absolute,581" /&gt;&lt;Rows Styles="AutoSize,0,Absolute,32,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="CBLFLineEndings" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="CBHeader" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="CBFooter" Row="2" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="UDCount" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label1" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="CBBetween" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,50,AutoSize,50,Absolute,436" /&gt;&lt;Rows Styles="AutoSize,0,Absolute,24,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="groupBox1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 4</value>
-  </data>
-  <data name="groupBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="groupBox1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>3, 3</value>
   </data>
   <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>481, 142</value>
+    <value>361, 110</value>
   </data>
   <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -415,13 +388,13 @@
     <value>NoControl</value>
   </data>
   <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 156</value>
+    <value>5, 120</value>
   </data>
   <data name="label2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>7, 6, 7, 6</value>
+    <value>5, 4, 5, 4</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>475, 102</value>
+    <value>347, 84</value>
   </data>
   <data name="label2.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -489,13 +462,10 @@ NOTE: If you export gcode to re-load inside LaserGRBL it is better to use quick 
     <value>NoControl</value>
   </data>
   <data name="BtnSave.Location" type="System.Drawing.Point, System.Drawing">
-    <value>334, 4</value>
-  </data>
-  <data name="BtnSave.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>251, 3</value>
   </data>
   <data name="BtnSave.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 52</value>
+    <value>107, 39</value>
   </data>
   <data name="BtnSave.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -522,16 +492,13 @@ NOTE: If you export gcode to re-load inside LaserGRBL it is better to use quick 
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 289</value>
-  </data>
-  <data name="tableLayoutPanel3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>3, 217</value>
   </data>
   <data name="tableLayoutPanel3.RowCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tableLayoutPanel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>481, 60</value>
+    <value>361, 45</value>
   </data>
   <data name="tableLayoutPanel3.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -557,14 +524,11 @@ NOTE: If you export gcode to re-load inside LaserGRBL it is better to use quick 
   <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="tableLayoutPanel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
   <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>489, 353</value>
+    <value>367, 265</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -588,13 +552,10 @@ NOTE: If you export gcode to re-load inside LaserGRBL it is better to use quick 
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>8, 16</value>
+    <value>6, 12</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>489, 353</value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>367, 265</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>
