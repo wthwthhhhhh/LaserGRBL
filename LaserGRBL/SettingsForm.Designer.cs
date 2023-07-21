@@ -582,6 +582,8 @@
             // CbEnableZJog
             // 
             resources.ApplyResources(this.CbEnableZJog, "CbEnableZJog");
+            this.CbEnableZJog.Checked = true;
+            this.CbEnableZJog.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CbEnableZJog.Name = "CbEnableZJog";
             this.CbEnableZJog.UseVisualStyleBackColor = true;
             // 

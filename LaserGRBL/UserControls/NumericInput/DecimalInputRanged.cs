@@ -35,13 +35,17 @@ namespace LaserGRBL.UserControls.NumericInput
         {
             this.SuspendLayout();
             // 
+            // TB
+            // 
+            this.TB.Size = new System.Drawing.Size(76, 14);
+            // 
             // DecimalInputRanged
             // 
-            // Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             this.Name = "DecimalInputRanged";
-            this.Size = new System.Drawing.Size(78, 15);
+            this.Size = new System.Drawing.Size(78, 16);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
 

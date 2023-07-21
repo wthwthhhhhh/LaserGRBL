@@ -26,10 +26,10 @@ namespace LaserGRBL
 			ForeColor = ColorScheme.FormForeColor;
 			BtnCancel.BackColor = BtnCreate.BackColor = ColorScheme.FormButtonsColor;
 
-			CbEStyles.DataSource = Enum.GetValues(typeof(CustomButton.EnableStyles));
+			CbEStyles.DataSource = Enum.GetValues(typeof(CustomButton.EnableStyles_CN));
 			CbEStyles.SelectedItem = CustomButton.EnableStyles.Always;
 
-			CbByttonType.DataSource = Enum.GetValues(typeof(CustomButton.ButtonTypes));
+			CbByttonType.DataSource = Enum.GetValues(typeof(CustomButton.ButtonTypes_CN));
 			CbEStyles.SelectedItem = CustomButton.ButtonTypes.Button;
 		}
 
@@ -166,5 +166,10 @@ namespace LaserGRBL
 			if (!string.IsNullOrEmpty(link))
 			{Tools.Utils.OpenLink(link);}
 		}
-	}
+
+        private void CbEStyles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

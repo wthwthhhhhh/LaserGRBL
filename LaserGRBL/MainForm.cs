@@ -46,11 +46,12 @@ namespace LaserGRBL
 			if (System.Threading.Thread.CurrentThread.Name == null)
 				System.Threading.Thread.CurrentThread.Name = "Main Thread";
 
-			using (SplashScreenForm f = new SplashScreenForm())
+			using (SplashScreenForm f = new SplashScreenForm()) {
+				f.FormBorderStyle = FormBorderStyle.None;
 				f.ShowDialog(this);
-
-			//build main communication object
-			Firmware ftype = Settings.GetObject("Firmware Type", Firmware.Grbl);
+            }
+            //build main communication object
+            Firmware ftype = Settings.GetObject("Firmware Type", Firmware.Grbl);
 			if (ftype == Firmware.Smoothie)
 				Core = new SmoothieCore(this, PreviewForm, JogForm);
 			else if (ftype == Firmware.Marlin)
@@ -396,7 +397,7 @@ namespace LaserGRBL
 
 		private void RefreshFormTitle()
 		{
-			string FormTitle = string.Format("LaserGRBL v{0}", Program.CurrentVersion.ToString(3));
+			string FormTitle = string.Format("CoolDraw v{0}", Program.CurrentVersion.ToString(3));
 
 			if (Core.Type != Firmware.Grbl)
 				FormTitle = FormTitle + $" (for {Core.Type})";
@@ -741,7 +742,7 @@ namespace LaserGRBL
 
 		private void toolsToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
 		{
-			flashGrblFirmwareToolStripMenuItem.Enabled = (Core.MachineStatus == GrblCore.MacStatus.Disconnected);
+			//flashGrblFirmwareToolStripMenuItem.Enabled = (Core.MachineStatus == GrblCore.MacStatus.Disconnected);
 		}
 
 		private void activateExtendedLogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -996,6 +997,11 @@ namespace LaserGRBL
 		}
 
         private void PreviewForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ConnectionForm_Load(object sender, EventArgs e)
         {
 
         }

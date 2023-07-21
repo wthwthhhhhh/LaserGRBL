@@ -40,7 +40,7 @@
             this.TB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TB.Location = new System.Drawing.Point(1, 1);
             this.TB.Name = "TB";
-            this.TB.Size = new System.Drawing.Size(77, 13);
+            this.TB.Size = new System.Drawing.Size(77, 14);
             this.TB.TabIndex = 0;
             // 
             // LB
@@ -53,12 +53,16 @@
             this.LB.TabIndex = 1;
             this.LB.Text = "LB";
             this.LB.Visible = false;
+            // 
+            // DecimalInputBase
+            // 
             this.Controls.Add(this.TB);
             this.Controls.Add(this.LB);
             this.Name = "DecimalInputBase";
             this.Size = new System.Drawing.Size(79, 15);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
     }
 }

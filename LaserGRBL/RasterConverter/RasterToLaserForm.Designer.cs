@@ -49,6 +49,14 @@
             this.BtnReverse = new LaserGRBL.UserControls.ImageButton();
             this.BtnAutoTrim = new LaserGRBL.UserControls.ImageButton();
             this.TlpLeft = new System.Windows.Forms.TableLayoutPanel();
+            this.GbCenterlineOptions = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.TBLineThreshold = new LaserGRBL.UserControls.ColorSlider();
+            this.TBCornerThreshold = new LaserGRBL.UserControls.ColorSlider();
+            this.CbLineThreshold = new System.Windows.Forms.CheckBox();
+            this.CbCornerThreshold = new System.Windows.Forms.CheckBox();
             this.GbPassthrough = new System.Windows.Forms.GroupBox();
             this.TbPassthroughInfo = new System.Windows.Forms.TextBox();
             this.GbParameters = new System.Windows.Forms.GroupBox();
@@ -71,14 +79,20 @@
             this.TbThreshold = new LaserGRBL.UserControls.ColorSlider();
             this.TBWhiteClip = new LaserGRBL.UserControls.ColorSlider();
             this.label4 = new System.Windows.Forms.Label();
-            this.GbCenterlineOptions = new System.Windows.Forms.GroupBox();
+            this.GbRandomlineOptions = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.label15 = new System.Windows.Forms.Label();
+            this.CbLineType = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.TBLineThreshold = new LaserGRBL.UserControls.ColorSlider();
-            this.TBCornerThreshold = new LaserGRBL.UserControls.ColorSlider();
-            this.CbLineThreshold = new System.Windows.Forms.CheckBox();
-            this.CbCornerThreshold = new System.Windows.Forms.CheckBox();
+            this.TBRandomThreshold = new LaserGRBL.UserControls.ColorSlider();
+            this.TBResolution = new LaserGRBL.UserControls.ColorSlider();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.TBAmplitude = new LaserGRBL.UserControls.ColorSlider();
+            this.TBFrequency = new LaserGRBL.UserControls.ColorSlider();
+            this.TBLineWidth = new LaserGRBL.UserControls.ColorSlider();
             this.GbVectorizeOptions = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.BtnAdaptiveQualityInfo = new LaserGRBL.UserControls.ImageButton();
@@ -119,9 +133,11 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.RbNoProcessing = new System.Windows.Forms.RadioButton();
             this.RbCenterline = new System.Windows.Forms.RadioButton();
-            this.RbDithering = new System.Windows.Forms.RadioButton();
             this.RbVectorize = new System.Windows.Forms.RadioButton();
+            this.RbRandomline = new System.Windows.Forms.RadioButton();
+            this.RbOneLine = new System.Windows.Forms.RadioButton();
             this.RbLineToLineTracing = new System.Windows.Forms.RadioButton();
+            this.RbDithering = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.BtnCancel = new System.Windows.Forms.Button();
             this.BtnCreate = new System.Windows.Forms.Button();
@@ -135,10 +151,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.PbOriginal)).BeginInit();
             this.FlipControl.SuspendLayout();
             this.TlpLeft.SuspendLayout();
+            this.GbCenterlineOptions.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
             this.GbPassthrough.SuspendLayout();
             this.GbParameters.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.GbCenterlineOptions.SuspendLayout();
+            this.GbRandomlineOptions.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.GbVectorizeOptions.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
@@ -385,14 +403,97 @@
             // TlpLeft
             // 
             resources.ApplyResources(this.TlpLeft, "TlpLeft");
+            this.TlpLeft.Controls.Add(this.GbCenterlineOptions, 0, 6);
             this.TlpLeft.Controls.Add(this.GbPassthrough, 0, 2);
             this.TlpLeft.Controls.Add(this.GbParameters, 0, 0);
-            this.TlpLeft.Controls.Add(this.GbCenterlineOptions, 0, 3);
+            this.TlpLeft.Controls.Add(this.GbRandomlineOptions, 0, 3);
             this.TlpLeft.Controls.Add(this.GbVectorizeOptions, 0, 5);
             this.TlpLeft.Controls.Add(this.GbLineToLineOptions, 0, 4);
             this.TlpLeft.Controls.Add(this.GbConversionTool, 0, 1);
             this.TlpLeft.Name = "TlpLeft";
             this.TlpMain.SetRowSpan(this.TlpLeft, 2);
+            // 
+            // GbCenterlineOptions
+            // 
+            resources.ApplyResources(this.GbCenterlineOptions, "GbCenterlineOptions");
+            this.GbCenterlineOptions.Controls.Add(this.tableLayoutPanel6);
+            this.GbCenterlineOptions.Name = "GbCenterlineOptions";
+            this.GbCenterlineOptions.TabStop = false;
+            // 
+            // tableLayoutPanel6
+            // 
+            resources.ApplyResources(this.tableLayoutPanel6, "tableLayoutPanel6");
+            this.tableLayoutPanel6.Controls.Add(this.label9, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.label10, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.TBLineThreshold, 2, 1);
+            this.tableLayoutPanel6.Controls.Add(this.TBCornerThreshold, 2, 0);
+            this.tableLayoutPanel6.Controls.Add(this.CbLineThreshold, 3, 1);
+            this.tableLayoutPanel6.Controls.Add(this.CbCornerThreshold, 3, 0);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            // 
+            // label9
+            // 
+            resources.ApplyResources(this.label9, "label9");
+            this.label9.Name = "label9";
+            // 
+            // label10
+            // 
+            resources.ApplyResources(this.label10, "label10");
+            this.label10.Name = "label10";
+            // 
+            // TBLineThreshold
+            // 
+            resources.ApplyResources(this.TBLineThreshold, "TBLineThreshold");
+            this.TBLineThreshold.BackColor = System.Drawing.Color.Transparent;
+            this.TBLineThreshold.BarInnerColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.TBLineThreshold.BarOuterColor = System.Drawing.Color.Gold;
+            this.TBLineThreshold.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.TBLineThreshold.ElapsedInnerColor = System.Drawing.Color.Yellow;
+            this.TBLineThreshold.ElapsedOuterColor = System.Drawing.Color.Gold;
+            this.TBLineThreshold.LargeChange = ((uint)(5u));
+            this.TBLineThreshold.Maximum = 360;
+            this.TBLineThreshold.Name = "TBLineThreshold";
+            this.TBLineThreshold.SmallChange = ((uint)(1u));
+            this.TBLineThreshold.ThumbRoundRectSize = new System.Drawing.Size(4, 4);
+            this.TBLineThreshold.ThumbSize = 8;
+            this.TT.SetToolTip(this.TBLineThreshold, resources.GetString("TBLineThreshold.ToolTip"));
+            this.TBLineThreshold.Value = 10;
+            this.TBLineThreshold.ValueChanged += new System.EventHandler(this.TBLineThreshold_ValueChanged);
+            this.TBLineThreshold.DoubleClick += new System.EventHandler(this.TBLineThreshold_DoubleClick);
+            // 
+            // TBCornerThreshold
+            // 
+            resources.ApplyResources(this.TBCornerThreshold, "TBCornerThreshold");
+            this.TBCornerThreshold.BackColor = System.Drawing.Color.Transparent;
+            this.TBCornerThreshold.BarInnerColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.TBCornerThreshold.BarOuterColor = System.Drawing.Color.Gold;
+            this.TBCornerThreshold.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.TBCornerThreshold.ElapsedInnerColor = System.Drawing.Color.Yellow;
+            this.TBCornerThreshold.ElapsedOuterColor = System.Drawing.Color.Gold;
+            this.TBCornerThreshold.LargeChange = ((uint)(5u));
+            this.TBCornerThreshold.Maximum = 720;
+            this.TBCornerThreshold.Name = "TBCornerThreshold";
+            this.TBCornerThreshold.SmallChange = ((uint)(1u));
+            this.TBCornerThreshold.ThumbRoundRectSize = new System.Drawing.Size(4, 4);
+            this.TBCornerThreshold.ThumbSize = 8;
+            this.TT.SetToolTip(this.TBCornerThreshold, resources.GetString("TBCornerThreshold.ToolTip"));
+            this.TBCornerThreshold.Value = 110;
+            this.TBCornerThreshold.ValueChanged += new System.EventHandler(this.TBCornerThreshold_ValueChanged);
+            this.TBCornerThreshold.DoubleClick += new System.EventHandler(this.TBCornerThreshold_DoubleClick);
+            // 
+            // CbLineThreshold
+            // 
+            resources.ApplyResources(this.CbLineThreshold, "CbLineThreshold");
+            this.CbLineThreshold.Name = "CbLineThreshold";
+            this.CbLineThreshold.UseVisualStyleBackColor = true;
+            this.CbLineThreshold.CheckedChanged += new System.EventHandler(this.CbUseLineThreshold_CheckedChanged);
+            // 
+            // CbCornerThreshold
+            // 
+            resources.ApplyResources(this.CbCornerThreshold, "CbCornerThreshold");
+            this.CbCornerThreshold.Name = "CbCornerThreshold";
+            this.CbCornerThreshold.UseVisualStyleBackColor = true;
+            this.CbCornerThreshold.CheckedChanged += new System.EventHandler(this.CbCornerThreshold_CheckedChanged);
             // 
             // GbPassthrough
             // 
@@ -639,23 +740,43 @@
             resources.ApplyResources(this.label4, "label4");
             this.label4.Name = "label4";
             // 
-            // GbCenterlineOptions
+            // GbRandomlineOptions
             // 
-            resources.ApplyResources(this.GbCenterlineOptions, "GbCenterlineOptions");
-            this.GbCenterlineOptions.Controls.Add(this.tableLayoutPanel3);
-            this.GbCenterlineOptions.Name = "GbCenterlineOptions";
-            this.GbCenterlineOptions.TabStop = false;
+            resources.ApplyResources(this.GbRandomlineOptions, "GbRandomlineOptions");
+            this.GbRandomlineOptions.Controls.Add(this.tableLayoutPanel3);
+            this.GbRandomlineOptions.Name = "GbRandomlineOptions";
+            this.GbRandomlineOptions.TabStop = false;
             // 
             // tableLayoutPanel3
             // 
             resources.ApplyResources(this.tableLayoutPanel3, "tableLayoutPanel3");
+            this.tableLayoutPanel3.Controls.Add(this.label15, 0, 5);
+            this.tableLayoutPanel3.Controls.Add(this.CbLineType, 0, 5);
             this.tableLayoutPanel3.Controls.Add(this.label6, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.label7, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.TBLineThreshold, 2, 1);
-            this.tableLayoutPanel3.Controls.Add(this.TBCornerThreshold, 2, 0);
-            this.tableLayoutPanel3.Controls.Add(this.CbLineThreshold, 3, 1);
-            this.tableLayoutPanel3.Controls.Add(this.CbCornerThreshold, 3, 0);
+            this.tableLayoutPanel3.Controls.Add(this.TBRandomThreshold, 2, 1);
+            this.tableLayoutPanel3.Controls.Add(this.TBResolution, 2, 0);
+            this.tableLayoutPanel3.Controls.Add(this.label13, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.label12, 0, 3);
+            this.tableLayoutPanel3.Controls.Add(this.label11, 0, 4);
+            this.tableLayoutPanel3.Controls.Add(this.TBAmplitude, 2, 2);
+            this.tableLayoutPanel3.Controls.Add(this.TBFrequency, 2, 3);
+            this.tableLayoutPanel3.Controls.Add(this.TBLineWidth, 2, 4);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            // 
+            // label15
+            // 
+            resources.ApplyResources(this.label15, "label15");
+            this.label15.Name = "label15";
+            // 
+            // CbLineType
+            // 
+            resources.ApplyResources(this.CbLineType, "CbLineType");
+            this.tableLayoutPanel3.SetColumnSpan(this.CbLineType, 3);
+            this.CbLineType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CbLineType.FormattingEnabled = true;
+            this.CbLineType.Name = "CbLineType";
+            this.CbLineType.SelectedIndexChanged += new System.EventHandler(this.CbLineType_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -667,58 +788,124 @@
             resources.ApplyResources(this.label7, "label7");
             this.label7.Name = "label7";
             // 
-            // TBLineThreshold
+            // TBRandomThreshold
             // 
-            resources.ApplyResources(this.TBLineThreshold, "TBLineThreshold");
-            this.TBLineThreshold.BackColor = System.Drawing.Color.Transparent;
-            this.TBLineThreshold.BarInnerColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.TBLineThreshold.BarOuterColor = System.Drawing.Color.Gold;
-            this.TBLineThreshold.BorderRoundRectSize = new System.Drawing.Size(8, 8);
-            this.TBLineThreshold.ElapsedInnerColor = System.Drawing.Color.Yellow;
-            this.TBLineThreshold.ElapsedOuterColor = System.Drawing.Color.Gold;
-            this.TBLineThreshold.LargeChange = ((uint)(5u));
-            this.TBLineThreshold.Name = "TBLineThreshold";
-            this.TBLineThreshold.SmallChange = ((uint)(1u));
-            this.TBLineThreshold.ThumbRoundRectSize = new System.Drawing.Size(4, 4);
-            this.TBLineThreshold.ThumbSize = 8;
-            this.TT.SetToolTip(this.TBLineThreshold, resources.GetString("TBLineThreshold.ToolTip"));
-            this.TBLineThreshold.Value = 10;
-            this.TBLineThreshold.ValueChanged += new System.EventHandler(this.TBLineThreshold_ValueChanged);
-            this.TBLineThreshold.DoubleClick += new System.EventHandler(this.TBLineThreshold_DoubleClick);
+            resources.ApplyResources(this.TBRandomThreshold, "TBRandomThreshold");
+            this.TBRandomThreshold.BackColor = System.Drawing.Color.Transparent;
+            this.TBRandomThreshold.BarInnerColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.TBRandomThreshold.BarOuterColor = System.Drawing.Color.Gold;
+            this.TBRandomThreshold.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.TBRandomThreshold.ElapsedInnerColor = System.Drawing.Color.Yellow;
+            this.TBRandomThreshold.ElapsedOuterColor = System.Drawing.Color.Gold;
+            this.TBRandomThreshold.LargeChange = ((uint)(5u));
+            this.TBRandomThreshold.Maximum = 20;
+            this.TBRandomThreshold.Minimum = 1;
+            this.TBRandomThreshold.Name = "TBRandomThreshold";
+            this.TBRandomThreshold.SmallChange = ((uint)(1u));
+            this.TBRandomThreshold.ThumbRoundRectSize = new System.Drawing.Size(4, 4);
+            this.TBRandomThreshold.ThumbSize = 8;
+            this.TT.SetToolTip(this.TBRandomThreshold, resources.GetString("TBRandomThreshold.ToolTip"));
+            this.TBRandomThreshold.Value = 6;
+            this.TBRandomThreshold.ValueChanged += new System.EventHandler(this.TBRandomThreshold_ValueChanged);
+            this.TBRandomThreshold.Scroll += new System.Windows.Forms.ScrollEventHandler(this.TBRandomThreshold_Scroll);
+            this.TBRandomThreshold.DoubleClick += new System.EventHandler(this.TBRandomThreshold_DoubleClick);
             // 
-            // TBCornerThreshold
+            // TBResolution
             // 
-            resources.ApplyResources(this.TBCornerThreshold, "TBCornerThreshold");
-            this.TBCornerThreshold.BackColor = System.Drawing.Color.Transparent;
-            this.TBCornerThreshold.BarInnerColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.TBCornerThreshold.BarOuterColor = System.Drawing.Color.Gold;
-            this.TBCornerThreshold.BorderRoundRectSize = new System.Drawing.Size(8, 8);
-            this.TBCornerThreshold.ElapsedInnerColor = System.Drawing.Color.Yellow;
-            this.TBCornerThreshold.ElapsedOuterColor = System.Drawing.Color.Gold;
-            this.TBCornerThreshold.LargeChange = ((uint)(5u));
-            this.TBCornerThreshold.Maximum = 360;
-            this.TBCornerThreshold.Name = "TBCornerThreshold";
-            this.TBCornerThreshold.SmallChange = ((uint)(1u));
-            this.TBCornerThreshold.ThumbRoundRectSize = new System.Drawing.Size(4, 4);
-            this.TBCornerThreshold.ThumbSize = 8;
-            this.TT.SetToolTip(this.TBCornerThreshold, resources.GetString("TBCornerThreshold.ToolTip"));
-            this.TBCornerThreshold.Value = 110;
-            this.TBCornerThreshold.ValueChanged += new System.EventHandler(this.TBCornerThreshold_ValueChanged);
-            this.TBCornerThreshold.DoubleClick += new System.EventHandler(this.TBCornerThreshold_DoubleClick);
+            resources.ApplyResources(this.TBResolution, "TBResolution");
+            this.TBResolution.BackColor = System.Drawing.Color.Transparent;
+            this.TBResolution.BarInnerColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.TBResolution.BarOuterColor = System.Drawing.Color.Gold;
+            this.TBResolution.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.TBResolution.ElapsedInnerColor = System.Drawing.Color.Yellow;
+            this.TBResolution.ElapsedOuterColor = System.Drawing.Color.Gold;
+            this.TBResolution.LargeChange = ((uint)(5u));
+            this.TBResolution.Maximum = 20;
+            this.TBResolution.Minimum = 1;
+            this.TBResolution.Name = "TBResolution";
+            this.TBResolution.SmallChange = ((uint)(1u));
+            this.TBResolution.ThumbRoundRectSize = new System.Drawing.Size(4, 4);
+            this.TBResolution.ThumbSize = 8;
+            this.TT.SetToolTip(this.TBResolution, resources.GetString("TBResolution.ToolTip"));
+            this.TBResolution.Value = 6;
+            this.TBResolution.ValueChanged += new System.EventHandler(this.TBResolution_ValueChanged);
+            this.TBResolution.Scroll += new System.Windows.Forms.ScrollEventHandler(this.TBResolution_Scroll);
+            this.TBResolution.DoubleClick += new System.EventHandler(this.TBResolution_DoubleClick);
             // 
-            // CbLineThreshold
+            // label13
             // 
-            resources.ApplyResources(this.CbLineThreshold, "CbLineThreshold");
-            this.CbLineThreshold.Name = "CbLineThreshold";
-            this.CbLineThreshold.UseVisualStyleBackColor = true;
-            this.CbLineThreshold.CheckedChanged += new System.EventHandler(this.CbUseLineThreshold_CheckedChanged);
+            resources.ApplyResources(this.label13, "label13");
+            this.label13.Name = "label13";
             // 
-            // CbCornerThreshold
+            // label12
             // 
-            resources.ApplyResources(this.CbCornerThreshold, "CbCornerThreshold");
-            this.CbCornerThreshold.Name = "CbCornerThreshold";
-            this.CbCornerThreshold.UseVisualStyleBackColor = true;
-            this.CbCornerThreshold.CheckedChanged += new System.EventHandler(this.CbCornerThreshold_CheckedChanged);
+            resources.ApplyResources(this.label12, "label12");
+            this.label12.Name = "label12";
+            // 
+            // label11
+            // 
+            resources.ApplyResources(this.label11, "label11");
+            this.label11.Name = "label11";
+            // 
+            // TBAmplitude
+            // 
+            resources.ApplyResources(this.TBAmplitude, "TBAmplitude");
+            this.TBAmplitude.BackColor = System.Drawing.Color.Transparent;
+            this.TBAmplitude.BarInnerColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.TBAmplitude.BarOuterColor = System.Drawing.Color.Gold;
+            this.TBAmplitude.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.TBAmplitude.ElapsedInnerColor = System.Drawing.Color.Yellow;
+            this.TBAmplitude.ElapsedOuterColor = System.Drawing.Color.Gold;
+            this.TBAmplitude.LargeChange = ((uint)(5u));
+            this.TBAmplitude.Minimum = 1;
+            this.TBAmplitude.Name = "TBAmplitude";
+            this.TBAmplitude.SmallChange = ((uint)(1u));
+            this.TBAmplitude.ThumbRoundRectSize = new System.Drawing.Size(4, 4);
+            this.TBAmplitude.ThumbSize = 8;
+            this.TT.SetToolTip(this.TBAmplitude, resources.GetString("TBAmplitude.ToolTip"));
+            this.TBAmplitude.ValueChanged += new System.EventHandler(this.TBAmplitude_ValueChanged);
+            this.TBAmplitude.DoubleClick += new System.EventHandler(this.TBAmplitude_DoubleClick);
+            // 
+            // TBFrequency
+            // 
+            resources.ApplyResources(this.TBFrequency, "TBFrequency");
+            this.TBFrequency.BackColor = System.Drawing.Color.Transparent;
+            this.TBFrequency.BarInnerColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.TBFrequency.BarOuterColor = System.Drawing.Color.Gold;
+            this.TBFrequency.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.TBFrequency.ElapsedInnerColor = System.Drawing.Color.Yellow;
+            this.TBFrequency.ElapsedOuterColor = System.Drawing.Color.Gold;
+            this.TBFrequency.LargeChange = ((uint)(5u));
+            this.TBFrequency.Minimum = 1;
+            this.TBFrequency.Name = "TBFrequency";
+            this.TBFrequency.SmallChange = ((uint)(1u));
+            this.TBFrequency.ThumbRoundRectSize = new System.Drawing.Size(4, 4);
+            this.TBFrequency.ThumbSize = 8;
+            this.TT.SetToolTip(this.TBFrequency, resources.GetString("TBFrequency.ToolTip"));
+            this.TBFrequency.Value = 20;
+            this.TBFrequency.ValueChanged += new System.EventHandler(this.TBFrequency_ValueChanged);
+            this.TBFrequency.DoubleClick += new System.EventHandler(this.TBFrequency_DoubleClick);
+            // 
+            // TBLineWidth
+            // 
+            resources.ApplyResources(this.TBLineWidth, "TBLineWidth");
+            this.TBLineWidth.BackColor = System.Drawing.Color.Transparent;
+            this.TBLineWidth.BarInnerColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.TBLineWidth.BarOuterColor = System.Drawing.Color.Gold;
+            this.TBLineWidth.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.TBLineWidth.ElapsedInnerColor = System.Drawing.Color.Yellow;
+            this.TBLineWidth.ElapsedOuterColor = System.Drawing.Color.Gold;
+            this.TBLineWidth.LargeChange = ((uint)(5u));
+            this.TBLineWidth.Maximum = 10;
+            this.TBLineWidth.Minimum = 1;
+            this.TBLineWidth.Name = "TBLineWidth";
+            this.TBLineWidth.SmallChange = ((uint)(1u));
+            this.TBLineWidth.ThumbRoundRectSize = new System.Drawing.Size(4, 4);
+            this.TBLineWidth.ThumbSize = 8;
+            this.TT.SetToolTip(this.TBLineWidth, resources.GetString("TBLineWidth.ToolTip"));
+            this.TBLineWidth.Value = 1;
+            this.TBLineWidth.ValueChanged += new System.EventHandler(this.TBLineWidth_ValueChanged);
+            this.TBLineWidth.DoubleClick += new System.EventHandler(this.TBLineWidth_DoubleClick);
             // 
             // GbVectorizeOptions
             // 
@@ -1116,10 +1303,13 @@
             resources.ApplyResources(this.tableLayoutPanel4, "tableLayoutPanel4");
             this.tableLayoutPanel4.Controls.Add(this.RbNoProcessing, 0, 4);
             this.tableLayoutPanel4.Controls.Add(this.RbCenterline, 0, 3);
-            this.tableLayoutPanel4.Controls.Add(this.RbDithering, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.RbVectorize, 0, 2);
-            this.tableLayoutPanel4.Controls.Add(this.RbLineToLineTracing, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.RbRandomline, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.RbOneLine, 0, 1);
+            this.tableLayoutPanel4.Controls.Add(this.RbLineToLineTracing, 0, 7);
+            this.tableLayoutPanel4.Controls.Add(this.RbDithering, 0, 5);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel4_Paint);
             // 
             // RbNoProcessing
             // 
@@ -1138,14 +1328,6 @@
             this.RbCenterline.CheckedChanged += new System.EventHandler(this.RbCenterline_CheckedChanged);
             this.RbCenterline.Click += new System.EventHandler(this.RbCenterline_Click);
             // 
-            // RbDithering
-            // 
-            resources.ApplyResources(this.RbDithering, "RbDithering");
-            this.RbDithering.Name = "RbDithering";
-            this.TT.SetToolTip(this.RbDithering, resources.GetString("RbDithering.ToolTip"));
-            this.RbDithering.UseVisualStyleBackColor = true;
-            this.RbDithering.CheckedChanged += new System.EventHandler(this.RbDithering_CheckedChanged);
-            // 
             // RbVectorize
             // 
             resources.ApplyResources(this.RbVectorize, "RbVectorize");
@@ -1154,16 +1336,40 @@
             this.RbVectorize.UseVisualStyleBackColor = true;
             this.RbVectorize.CheckedChanged += new System.EventHandler(this.RbVectorize_CheckedChanged);
             // 
+            // RbRandomline
+            // 
+            resources.ApplyResources(this.RbRandomline, "RbRandomline");
+            this.RbRandomline.Checked = true;
+            this.RbRandomline.Name = "RbRandomline";
+            this.RbRandomline.TabStop = true;
+            this.TT.SetToolTip(this.RbRandomline, resources.GetString("RbRandomline.ToolTip"));
+            this.RbRandomline.UseVisualStyleBackColor = true;
+            this.RbRandomline.CheckedChanged += new System.EventHandler(this.RbRandomline_CheckedChanged);
+            // 
+            // RbOneLine
+            // 
+            resources.ApplyResources(this.RbOneLine, "RbOneLine");
+            this.RbOneLine.Name = "RbOneLine";
+            this.TT.SetToolTip(this.RbOneLine, resources.GetString("RbOneLine.ToolTip"));
+            this.RbOneLine.UseVisualStyleBackColor = true;
+            this.RbOneLine.CheckedChanged += new System.EventHandler(this.RbOneLine_CheckedChanged);
+            // 
             // RbLineToLineTracing
             // 
             resources.ApplyResources(this.RbLineToLineTracing, "RbLineToLineTracing");
-            this.RbLineToLineTracing.Checked = true;
             this.RbLineToLineTracing.Name = "RbLineToLineTracing";
-            this.RbLineToLineTracing.TabStop = true;
             this.TT.SetToolTip(this.RbLineToLineTracing, resources.GetString("RbLineToLineTracing.ToolTip"));
             this.RbLineToLineTracing.UseVisualStyleBackColor = true;
             this.RbLineToLineTracing.CheckedChanged += new System.EventHandler(this.RbLineToLineTracing_CheckedChanged);
             this.RbLineToLineTracing.Click += new System.EventHandler(this.RbLineToLineTracing_Click);
+            // 
+            // RbDithering
+            // 
+            resources.ApplyResources(this.RbDithering, "RbDithering");
+            this.RbDithering.Name = "RbDithering";
+            this.TT.SetToolTip(this.RbDithering, resources.GetString("RbDithering.ToolTip"));
+            this.RbDithering.UseVisualStyleBackColor = true;
+            this.RbDithering.CheckedChanged += new System.EventHandler(this.RbDithering_CheckedChanged);
             // 
             // tableLayoutPanel1
             // 
@@ -1211,14 +1417,18 @@
             this.FlipControl.ResumeLayout(false);
             this.TlpLeft.ResumeLayout(false);
             this.TlpLeft.PerformLayout();
+            this.GbCenterlineOptions.ResumeLayout(false);
+            this.GbCenterlineOptions.PerformLayout();
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
             this.GbPassthrough.ResumeLayout(false);
             this.GbPassthrough.PerformLayout();
             this.GbParameters.ResumeLayout(false);
             this.GbParameters.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            this.GbCenterlineOptions.ResumeLayout(false);
-            this.GbCenterlineOptions.PerformLayout();
+            this.GbRandomlineOptions.ResumeLayout(false);
+            this.GbRandomlineOptions.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
             this.GbVectorizeOptions.ResumeLayout(false);
@@ -1326,14 +1536,12 @@
 		private System.Windows.Forms.CheckBox CbOptimizeFast;
 		private UserControls.ImageButton BtnReverse;
         private System.Windows.Forms.RadioButton RbCenterline;
-        private System.Windows.Forms.GroupBox GbCenterlineOptions;
+        private System.Windows.Forms.GroupBox GbRandomlineOptions;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.CheckBox CbLineThreshold;
 		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.CheckBox CbCornerThreshold;
-		private UserControls.ColorSlider TBLineThreshold;
-		private UserControls.ColorSlider TBCornerThreshold;
+		private UserControls.ColorSlider TBRandomThreshold;
+		private UserControls.ColorSlider TBResolution;
 		private System.Windows.Forms.CheckBox CbAdaptiveQuality;
 		private System.Windows.Forms.Label LAdaptiveQuality;
 		private UserControls.ImageButton BtnAdaptiveQualityInfo;
@@ -1343,5 +1551,23 @@
 		private System.Windows.Forms.TextBox TbPassthroughInfo;
         private UserControls.ImageButton BtnFill;
         private UserControls.ImageButton BtnOutliner;
+        private System.Windows.Forms.RadioButton RbRandomline;
+        private System.Windows.Forms.RadioButton RbOneLine;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private UserControls.ColorSlider TBAmplitude;
+        private UserControls.ColorSlider TBFrequency;
+        private UserControls.ColorSlider TBLineWidth;
+        private System.Windows.Forms.GroupBox GbCenterlineOptions;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private UserControls.ColorSlider TBLineThreshold;
+        private UserControls.ColorSlider TBCornerThreshold;
+        private System.Windows.Forms.CheckBox CbLineThreshold;
+        private System.Windows.Forms.CheckBox CbCornerThreshold;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.ComboBox CbLineType;
     }
 }

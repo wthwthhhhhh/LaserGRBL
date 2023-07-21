@@ -131,6 +131,12 @@
     <Compile Include="ComWrapper\MySerial\StopBits.cs" />
     <Compile Include="ComWrapper\MySerial\WinSerialStream.cs" />
     <Compile Include="ComWrapper\UsbSerial2.cs" />
+    <Compile Include="SetLineLenForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetLineLenForm.Designer.cs">
+      <DependentUpon>SetLineLenForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\Project.cs" />
     <Compile Include="Core\VigoCore.cs" />
     <Compile Include="CsPotrace\PotraceClipper.cs" />
@@ -895,6 +901,9 @@
     <EmbeddedResource Include="SaveOptionForm.ro-RO.resx">
       <DependentUpon>SaveOptionForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SetLineLenForm.resx">
+      <DependentUpon>SetLineLenForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.nl-NL.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -907,8 +916,20 @@
     <EmbeddedResource Include="SvgConverter\ConvertSizeAndOptionForm.ro-RO.resx">
       <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Tools\InputBox.resx">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ImageButton.resx">
       <DependentUpon>ImageButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\NumericInput\DecimalInputBase.resx">
+      <DependentUpon>DecimalInputBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\NumericInput\DecimalInputRanged.resx">
+      <DependentUpon>DecimalInputRanged.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\NumericInput\IntegerInputBase.resx">
+      <DependentUpon>IntegerInputBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WiFiConfigurator\OrturWiFiConfig.resx">
       <DependentUpon>OrturWiFiConfig.cs</DependentUpon>
@@ -937,6 +958,9 @@
     <None Include="Resources\BtnPenUp.Image.png" />
     <None Include="Resources\penDown.png" />
     <None Include="Resources\penUp.png" />
+    <None Include="Resources\校准机器位置.png" />
+    <None Include="Resources\pen2.png" />
+    <None Include="Resources\penImg.png" />
     <Content Include="Sound\connect.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1525,6 +1549,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PreviewForm.resx">
       <DependentUpon>PreviewForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PreviewForm.ru.resx">
       <DependentUpon>PreviewForm.cs</DependentUpon>

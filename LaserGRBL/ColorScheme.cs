@@ -236,7 +236,7 @@ namespace LaserGRBL
 		public static Color PreviewLaserPower
 		{ get { return GetColor(8); } }
 		public static Color PreviewCross
-		{ get { return GetColor(9); } }
+		{ get { return GetColor(8); } }
 
 		public static Color LogBackColor
 		{ get { return GetColor(10); } }

@@ -129,25 +129,44 @@ Grbl Parameters $130 and $131.
 
 This could generate a soft-limit error or the machine could crash into the axes boundary. Are you sure of the entered values?</value>
   </data>
-  <data name="WarnSoftLimitNS" xml:space="preserve">
-    <value>You have set negative offsets, but your engraver is set to use positive space with soft limit alarm enabled ($20=1).
-
-This could generate a soft-limit error. Are you sure of the entered values?</value>
+  <data name="DirectionNewHilbert" xml:space="preserve">
+    <value>Hilbert</value>
+  </data>
+  <data name="BoxTelegramSettingTitle" xml:space="preserve">
+    <value>Telegram notification</value>
   </data>
   <data name="DirectionDiagonal" xml:space="preserve">
     <value>Diagonal (old)</value>
   </data>
   <data name="AddCustomButtonsHint" xml:space="preserve">
-    <value>Right click here to add custom buttons</value>
+    <value>点击右键添加自定义按钮</value>
   </data>
   <data name="FirmwareRequireRestart" xml:space="preserve">
     <value>Restart required</value>
   </data>
+  <data name="DirectionNewVertical" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="DirectionNewGrid" xml:space="preserve">
+    <value>Grid</value>
+  </data>
   <data name="DirectionHorizontal" xml:space="preserve">
     <value>Horizontal (old)</value>
   </data>
+  <data name="DirectionNewDiagonal" xml:space="preserve">
+    <value>Diagonal</value>
+  </data>
   <data name="BoxImportCustomButtonrCaption" xml:space="preserve">
     <value>Confirmation</value>
+  </data>
+  <data name="BoxMachineSizeOutOfRangeText" xml:space="preserve">
+    <value>The engraver has some configuration parameters out of range. Please check machine configuration (menu "Grbl", "Grbl Configuration") parameters 130 and 131.</value>
+  </data>
+  <data name="BoxTelegramSettingText" xml:space="preserve">
+    <value>Test notification has been sent, please check your phone!</value>
+  </data>
+  <data name="DirectionNewHorizontal" xml:space="preserve">
+    <value>Horizontal</value>
   </data>
   <data name="MacStatusUnknown" xml:space="preserve">
     <value>Unknown</value>
@@ -158,12 +177,14 @@ This could generate a soft-limit error. Are you sure of the entered values?</val
   <data name="BoxReadConfigSuccess" xml:space="preserve">
     <value>{0} Config read successfully!</value>
   </data>
+  <data name="BoxMachineSizeOutOfRangeTitle" xml:space="preserve">
+    <value>Warning</value>
+  </data>
   <data name="FormulaOpticalCorrect" xml:space="preserve">
     <value>OpticalCorrect</value>
   </data>
-  <data name="WarnCenterline64bit" xml:space="preserve">
-    <value>Centerline option is not compatible with your PC.
-64bit OS is needed!</value>
+  <data name="DirectionNewSquares" xml:space="preserve">
+    <value>Squares</value>
   </data>
   <data name="CustomButtonEdit" xml:space="preserve">
     <value>Edit button</value>
@@ -192,6 +213,16 @@ This could generate a soft-limit error. Are you sure of the entered values?</val
   <data name="FirmwareRequireRestartNow" xml:space="preserve">
     <value>Restart is required to apply Firmware type changes. Restart now?</value>
   </data>
+  <data name="DirectionNewDiagonalGrid" xml:space="preserve">
+    <value>Diagonal Grid</value>
+  </data>
+  <data name="DirectionNewInsetFilling" xml:space="preserve">
+    <value>Inset Filling</value>
+  </data>
+  <data name="WarnWrongLaserMode" xml:space="preserve">
+    <value>"M4 Dynamic Laser Power Mode" has been set, but your engraver doesn't seem to support it.
+Only engravers with grbl version &gt;= 1.1 with "laser mode" enabled ($32=1) can take advantage of M4 option.</value>
+  </data>
   <data name="WarnLine2LinePWM" xml:space="preserve">
     <value>Line2Line option is not compatible with your engraver or with your configuration. PWM-able laser is needed, and PWM support should be enabled in LaserGRBL settings.</value>
   </data>
@@ -200,6 +231,9 @@ This could generate a soft-limit error. Are you sure of the entered values?</val
   </data>
   <data name="MsgboxCannotOpenFileNow" xml:space="preserve">
     <value>Cannot open a new file now.</value>
+  </data>
+  <data name="DirectionNewCross" xml:space="preserve">
+    <value>Cross Fill</value>
   </data>
   <data name="BoxWriteConfigNoChange" xml:space="preserve">
     <value>No changes... nothing to write!</value>
@@ -210,8 +244,10 @@ This could generate a soft-limit error. Are you sure of the entered values?</val
   <data name="MacStatusDisconnected" xml:space="preserve">
     <value>Disconnected</value>
   </data>
-  <data name="LanguageRequireRestartNow" xml:space="preserve">
-    <value>Require application restart, restart now?</value>
+  <data name="WarnSoftLimitNS" xml:space="preserve">
+    <value>You have set negative offsets, but your engraver is set to use positive space with soft limit alarm enabled ($20=1).
+
+This could generate a soft-limit error. Are you sure of the entered values?</value>
   </data>
   <data name="MacStatusHome" xml:space="preserve">
     <value>Home</value>
@@ -224,6 +260,9 @@ This could generate a soft-limit error. Are you sure of the entered values?</val
   </data>
   <data name="LanguageRequireRestart" xml:space="preserve">
     <value>Restart required</value>
+  </data>
+  <data name="DitheringOptions" xml:space="preserve">
+    <value>Dithering Options</value>
   </data>
   <data name="BoxImportConfigWithError" xml:space="preserve">
     <value>{0} Config imported with {1} errors!</value>
@@ -240,6 +279,12 @@ This could generate a soft-limit error. Are you sure of the entered values?</val
   <data name="FormulaWeightAverage" xml:space="preserve">
     <value>WeightAverage</value>
   </data>
+  <data name="WarnUnlockProportionText" xml:space="preserve">
+    <value>Freely assigning the width and height of the work can lead to distortion of the image. Do you want to continue?</value>
+  </data>
+  <data name="Line2LineOptions" xml:space="preserve">
+    <value>Line To Line Options</value>
+  </data>
   <data name="BoxAutoUpdateFailed" xml:space="preserve">
     <value>Automatic update failed!
 Please manually download the new version from lasergrbl site.</value>
@@ -250,8 +295,14 @@ Please manually download the new version from lasergrbl site.</value>
   <data name="BoxCustomButtonPleaseToolTipTitle" xml:space="preserve">
     <value>Missing field</value>
   </data>
+  <data name="DirectionNewReverseDiagonal" xml:space="preserve">
+    <value>Diagonal Reversed</value>
+  </data>
   <data name="DirectionVertical" xml:space="preserve">
     <value>Vertical (old)</value>
+  </data>
+  <data name="WarnUnlockProportionTitle" xml:space="preserve">
+    <value>Warning</value>
   </data>
   <data name="FormulaCustom" xml:space="preserve">
     <value>Custom</value>
@@ -262,11 +313,17 @@ Please manually download the new version from lasergrbl site.</value>
   <data name="MacStatusJog" xml:space="preserve">
     <value>Jog</value>
   </data>
+  <data name="DisconnectAnyway" xml:space="preserve">
+    <value>File transfer in progress. Disconnect anyway?</value>
+  </data>
   <data name="MacStatusDoor" xml:space="preserve">
     <value>Door</value>
   </data>
   <data name="BoxAutoUpdateResult" xml:space="preserve">
     <value>Update result</value>
+  </data>
+  <data name="WarnBufferStuckUnlockTitle" xml:space="preserve">
+    <value>Unlock buffer</value>
   </data>
   <data name="BoxExportConfigFileNotFound" xml:space="preserve">
     <value>File does not exist!</value>
@@ -289,6 +346,9 @@ Please manually download the new version from lasergrbl site.</value>
   <data name="BoxExportConfigSuccess" xml:space="preserve">
     <value>{0} Config exported successfully!</value>
   </data>
+  <data name="DirectionNewDiagonalCross" xml:space="preserve">
+    <value>Diagonal Cross Fill</value>
+  </data>
   <data name="BoxExportConfigError" xml:space="preserve">
     <value>Error exporting config!</value>
   </data>
@@ -302,13 +362,16 @@ Do you want to rewrite the configuration?</value>
   <data name="BoxAutoUpdateRequireAdmin" xml:space="preserve">
     <value>Update require administrator privilege!</value>
   </data>
-  <data name="ResumeJobHomingRequired" xml:space="preserve">
-    <value>It seems that the current position is no longer known by Grbl.
-Without the Homing Procedure ($H) the result may not be reliable.
-Continue anyway?</value>
+  <data name="WarnCenterline64bit" xml:space="preserve">
+    <value>Centerline option is not compatible with your PC.
+64bit OS is needed!</value>
   </data>
   <data name="MacStatusConnecting" xml:space="preserve">
     <value>Connecting</value>
+  </data>
+  <data name="WarnBufferStuckUnlockText" xml:space="preserve">
+    <value>If the buffer is blocked, it is because there was some communication problem with your engraver. If you press "OK" LaserGRBL will ignore the full buffer and send the next commands. If this happens often, you should try to understand the causes of this problem.
+Click "?" for more information.</value>
   </data>
   <data name="BoxImportCustomButtonClearText" xml:space="preserve">
     <value>Remove actual buttons? Select yes to remove, no to keep.</value>
@@ -316,17 +379,33 @@ Continue anyway?</value>
   <data name="MacStatusHold" xml:space="preserve">
     <value>Hold</value>
   </data>
+  <data name="ProblemConnectingText" xml:space="preserve">
+    <value>Error connecting your engraver.
+If you need help click on "?" button.</value>
+  </data>
+  <data name="WarnWrongLaserModeTitle" xml:space="preserve">
+    <value>Warning</value>
+  </data>
   <data name="BtnConnectTT" xml:space="preserve">
     <value>Connect</value>
   </data>
   <data name="CustomButtonRemove" xml:space="preserve">
     <value>Remove button</value>
   </data>
+  <data name="LanguageRequireRestartNow" xml:space="preserve">
+    <value>Require application restart, restart now?</value>
+  </data>
+  <data name="DirectionNewZigZag" xml:space="preserve">
+    <value>Zig Zag</value>
+  </data>
   <data name="MacStatusCheck" xml:space="preserve">
     <value>Check</value>
   </data>
   <data name="UnsupportedFiletype" xml:space="preserve">
     <value>This file type is not supported.</value>
+  </data>
+  <data name="ProblemConnectingTitle" xml:space="preserve">
+    <value>Problem with connection?</value>
   </data>
   <data name="BoxWriteConfigWithError" xml:space="preserve">
     <value>{0} Config written with {1} errors!</value>
@@ -343,8 +422,10 @@ Continue anyway?</value>
   <data name="WarnMessageBoxHeader" xml:space="preserve">
     <value>Warning</value>
   </data>
-  <data name="DisconnectAnyway" xml:space="preserve">
-    <value>File transfer in progress. Disconnect anyway?</value>
+  <data name="ResumeJobHomingRequired" xml:space="preserve">
+    <value>It seems that the current position is no longer known by Grbl.
+Without the Homing Procedure ($H) the result may not be reliable.
+Continue anyway?</value>
   </data>
   <data name="BoxDeleteCustomButtonText" xml:space="preserve">
     <value>Are you sure to delete selected button?</value>
@@ -355,85 +436,11 @@ Continue anyway?</value>
   <data name="BoxAbortProgramConfirm" xml:space="preserve">
     <value>Abort current job?</value>
   </data>
-  <data name="DirectionNewCross" xml:space="preserve">
-    <value>Cross Fill</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="校准机器位置" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\校准机器位置.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DirectionNewDiagonal" xml:space="preserve">
-    <value>Diagonal</value>
-  </data>
-  <data name="DirectionNewDiagonalCross" xml:space="preserve">
-    <value>Diagonal Cross Fill</value>
-  </data>
-  <data name="DirectionNewDiagonalGrid" xml:space="preserve">
-    <value>Diagonal Grid</value>
-  </data>
-  <data name="DirectionNewGrid" xml:space="preserve">
-    <value>Grid</value>
-  </data>
-  <data name="DirectionNewHorizontal" xml:space="preserve">
-    <value>Horizontal</value>
-  </data>
-  <data name="DirectionNewInsetFilling" xml:space="preserve">
-    <value>Inset Filling</value>
-  </data>
-  <data name="DirectionNewReverseDiagonal" xml:space="preserve">
-    <value>Diagonal Reversed</value>
-  </data>
-  <data name="DirectionNewSquares" xml:space="preserve">
-    <value>Squares</value>
-  </data>
-  <data name="DirectionNewVertical" xml:space="preserve">
-    <value>Vertical</value>
-  </data>
-  <data name="DirectionNewZigZag" xml:space="preserve">
-    <value>Zig Zag</value>
-  </data>
-  <data name="WarnWrongLaserMode" xml:space="preserve">
-    <value>"M4 Dynamic Laser Power Mode" has been set, but your engraver doesn't seem to support it.
-Only engravers with grbl version &gt;= 1.1 with "laser mode" enabled ($32=1) can take advantage of M4 option.</value>
-  </data>
-  <data name="WarnWrongLaserModeTitle" xml:space="preserve">
-    <value>Warning</value>
-  </data>
-  <data name="DirectionNewHilbert" xml:space="preserve">
-    <value>Hilbert</value>
-  </data>
-  <data name="DitheringOptions" xml:space="preserve">
-    <value>Dithering Options</value>
-  </data>
-  <data name="Line2LineOptions" xml:space="preserve">
-    <value>Line To Line Options</value>
-  </data>
-  <data name="WarnUnlockProportionText" xml:space="preserve">
-    <value>Freely assigning the width and height of the work can lead to distortion of the image. Do you want to continue?</value>
-  </data>
-  <data name="WarnUnlockProportionTitle" xml:space="preserve">
-    <value>Warning</value>
-  </data>
-  <data name="BoxTelegramSettingText" xml:space="preserve">
-    <value>Test notification has been sent, please check your phone!</value>
-  </data>
-  <data name="BoxTelegramSettingTitle" xml:space="preserve">
-    <value>Telegram notification</value>
-  </data>
-  <data name="WarnBufferStuckUnlockText" xml:space="preserve">
-    <value>If the buffer is blocked, it is because there was some communication problem with your engraver. If you press "OK" LaserGRBL will ignore the full buffer and send the next commands. If this happens often, you should try to understand the causes of this problem.
-Click "?" for more information.</value>
-  </data>
-  <data name="WarnBufferStuckUnlockTitle" xml:space="preserve">
-    <value>Unlock buffer</value>
-  </data>
-  <data name="ProblemConnectingText" xml:space="preserve">
-    <value>Error connecting your engraver.
-If you need help click on "?" button.</value>
-  </data>
-  <data name="ProblemConnectingTitle" xml:space="preserve">
-    <value>Problem with connection?</value>
-  </data>
-  <data name="BoxMachineSizeOutOfRangeText" xml:space="preserve">
-    <value>The engraver has some configuration parameters out of range. Please check machine configuration (menu "Grbl", "Grbl Configuration") parameters 130 and 131.</value>
-  </data>
-  <data name="BoxMachineSizeOutOfRangeTitle" xml:space="preserve">
-    <value>Warning</value>
+  <data name="penImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\penImg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

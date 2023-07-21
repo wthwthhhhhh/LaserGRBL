@@ -161,10 +161,12 @@ namespace LaserGRBL
 	[Serializable]
 	public class CustomButton
 	{
-		public enum EnableStyles { Always = 0, Connected = 1, Idle = 3, Run = 4, IdleProgram = 10}
-		public enum ButtonTypes { Button = 0, TwoStateButton = 1, PushButton =2 }
+		public enum EnableStyles { Always = 0, Connected = 1, Idle = 3, Run = 4, IdleProgram = 10 }
+        public enum EnableStyles_CN { 任意 = 0, 已连接 = 1, 空闲时 = 3, 绘制运行时 = 4, 绘制空闲时 = 10 }
+        public enum ButtonTypes { Button = 0, TwoStateButton = 1, PushButton =2 }
+        public enum ButtonTypes_CN { 单击式按钮 = 0, 切换式按钮 = 1, 按压式按钮 = 2 }
 
-		public System.Guid guid = Guid.NewGuid();
+        public System.Guid guid = Guid.NewGuid();
 		public System.Drawing.Image Image;
 		public string GCode;
 		public string GCode2;

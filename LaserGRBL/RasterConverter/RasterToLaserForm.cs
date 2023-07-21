@@ -32,7 +32,7 @@ namespace LaserGRBL.RasterConverter
 			UDQuality.Maximum = UDFillingQuality.Maximum = GetMaxQuality();
 
 			BackColor = ColorScheme.FormBackColor;
-			GbCenterlineOptions.ForeColor = GbConversionTool.ForeColor = GbLineToLineOptions.ForeColor = GbParameters.ForeColor = GbVectorizeOptions.ForeColor = ForeColor = ColorScheme.FormForeColor;
+			GbRandomlineOptions.ForeColor = GbConversionTool.ForeColor = GbLineToLineOptions.ForeColor = GbParameters.ForeColor = GbVectorizeOptions.ForeColor = ForeColor = ColorScheme.FormForeColor;
 			BtnCancel.BackColor = BtnCreate.BackColor = ColorScheme.FormButtonsColor;
 
 			IP = new ImageProcessor(core, filename, GetImageSize(), append);
@@ -79,7 +79,13 @@ namespace LaserGRBL.RasterConverter
 			CbFillingDirection.SelectedIndex = 0;
 			CbFillingDirection.ResumeLayout();
 
-			RbLineToLineTracing.Visible = supportPWM;
+            CbLineType.SuspendLayout();
+            foreach (ImageProcessor.LineTypeEnum type in Enum.GetValues(typeof(ImageProcessor.LineTypeEnum)))
+                CbLineType.Items.Add(type);
+            CbLineType.SelectedIndex = 0;
+            CbLineType.ResumeLayout();
+            CbLineType.SuspendLayout();
+            RbLineToLineTracing.Visible = supportPWM;
 
 			LoadSettings();
 			RefreshVE();
@@ -269,6 +275,9 @@ namespace LaserGRBL.RasterConverter
 
 		private void LoadSettings()
 		{
+			try
+			{
+
 			if ((IP.SelectedTool = Settings.GetObject("GrayScaleConversion.RasterConversionTool", ImageProcessor.Tool.Line2Line)) == ImageProcessor.Tool.Line2Line)
 				RbLineToLineTracing.Checked = true;
 			else if ((IP.SelectedTool = Settings.GetObject("GrayScaleConversion.RasterConversionTool", ImageProcessor.Tool.Line2Line)) == ImageProcessor.Tool.Dithering)
@@ -310,14 +319,28 @@ namespace LaserGRBL.RasterConverter
 			CbDither.SelectedItem = Settings.GetObject("GrayScaleConversion.DitheringOptions.DitheringMode", ImageTransform.DitheringMode.FloydSteinberg);
 
 			CbLineThreshold.Checked = IP.UseLineThreshold = Settings.GetObject("GrayScaleConversion.VectorizeOptions.LineThreshold.Enabled", true);
-			TBLineThreshold.Value = IP.LineThreshold = Settings.GetObject("GrayScaleConversion.VectorizeOptions.LineThreshold.Value", 10);
+            TBLineThreshold.Value = IP.LineThreshold = Settings.GetObject("GrayScaleConversion.VectorizeOptions.LineThreshold.Value", 10);
 
 			CbCornerThreshold.Checked = IP.UseCornerThreshold = Settings.GetObject("GrayScaleConversion.VectorizeOptions.CornerThreshold.Enabled", true);
-			TBCornerThreshold.Value = IP.CornerThreshold = Settings.GetObject("GrayScaleConversion.VectorizeOptions.CornerThreshold.Value", 110);
+            TBCornerThreshold.Value = IP.CornerThreshold = Settings.GetObject("GrayScaleConversion.VectorizeOptions.CornerThreshold.Value", 110);
 
-			if (RbLineToLineTracing.Checked && !supportPWM)
+            TBResolution.Value = IP.Resolution = Settings.GetObject("GrayScaleConversion.VectorizeOptions.Resolution.Value", 2);
+            TBRandomThreshold.Value = (int)(IP.RandomThreshold = Settings.GetObject("GrayScaleConversion.VectorizeOptions.RandomThreshold.Value", 2));
+            TBAmplitude.Value = (int)(IP.Amplitude = Settings.GetObject("GrayScaleConversion.VectorizeOptions.Amplitude.Value", 5));
+            TBFrequency.Value = (int)((IP.Frequency = Settings.GetObject("GrayScaleConversion.VectorizeOptions.Frequency.Value", 0.5f)) * 100);
+            TBLineWidth.Value = (int)(IP.LineWidth = Settings.GetObject("GrayScaleConversion.VectorizeOptions.LineWidth.Value", 1));
+            CbLineType.SelectedItem = (IP.LineType = Settings.GetObject("GrayScaleConversion.VectorizeOptions.LineType", ImageProcessor.LineTypeEnum.Default));
+
+
+                if (RbLineToLineTracing.Checked && !supportPWM)
 				RbDithering.Checked = true;
-		}
+            }
+            catch (Exception ex)
+            {
+
+				MessageBox.Show("配置未加载完成！");
+            }
+        }
 
         private Dictionary<string, object> GetActualSettings()
         {
@@ -371,9 +394,15 @@ namespace LaserGRBL.RasterConverter
                 { "GrayScaleConversion.VectorizeOptions.LineThreshold.Enabled", IP.UseLineThreshold },
                 { "GrayScaleConversion.VectorizeOptions.LineThreshold.Value", IP.LineThreshold },
                 { "GrayScaleConversion.VectorizeOptions.CornerThreshold.Enabled", IP.UseCornerThreshold },
-                { "GrayScaleConversion.VectorizeOptions.CornerThreshold.Value", IP.CornerThreshold }
-            };
+                { "GrayScaleConversion.VectorizeOptions.CornerThreshold.Value", IP.CornerThreshold },
 
+                { "GrayScaleConversion.VectorizeOptions.Resolution.Value", IP.Resolution },
+                { "GrayScaleConversion.VectorizeOptions.RandomThreshold.Value", IP.RandomThreshold },
+                { "GrayScaleConversion.VectorizeOptions.Amplitude.Value", IP.Amplitude },
+                { "GrayScaleConversion.VectorizeOptions.Frequency.Value", IP.Frequency },
+                { "GrayScaleConversion.VectorizeOptions.LineWidth.Value", IP.LineWidth },
+                { "GrayScaleConversion.VectorizeOptions.LineType", (ImageProcessor.LineTypeEnum)CbLineType.SelectedItem  }
+            };
             return settings;
         }
 
@@ -424,7 +453,7 @@ namespace LaserGRBL.RasterConverter
 		{
 			GbParameters.Enabled = !RbNoProcessing.Checked;
 			GbVectorizeOptions.Visible = RbVectorize.Checked;
-			GbCenterlineOptions.Visible = RbCenterline.Checked;
+            GbCenterlineOptions.Visible = RbCenterline.Checked;
 			GbLineToLineOptions.Visible = RbLineToLineTracing.Checked || RbDithering.Checked;
 			GbPassthrough.Visible = RbNoProcessing.Checked;
 			GbLineToLineOptions.Text = RbLineToLineTracing.Checked ? Strings.Line2LineOptions : Strings.DitheringOptions;
@@ -433,7 +462,10 @@ namespace LaserGRBL.RasterConverter
 			TbThreshold.Visible = !RbDithering.Checked && CbThreshold.Checked;
 
 			LblDitherMode.Visible = CbDither.Visible = RbDithering.Checked;
-		}
+
+            GbRandomlineOptions.Visible = RbRandomline.Checked|| RbOneLine.Checked;
+			CbLineType.Visible = RbOneLine.Checked;
+        }
 
 		private void TbThreshold_ValueChanged(object sender, EventArgs e)
 		{ if (IP != null) IP.Threshold = TbThreshold.Value; }
@@ -834,13 +866,13 @@ namespace LaserGRBL.RasterConverter
 		private void CbUseLineThreshold_CheckedChanged(object sender, EventArgs e)
 		{
 			if (IP != null) IP.UseLineThreshold = CbLineThreshold.Checked;
-			TBLineThreshold.Enabled = CbLineThreshold.Checked;
+            TBLineThreshold.Enabled = CbLineThreshold.Checked;
 		}
 
 		private void CbCornerThreshold_CheckedChanged(object sender, EventArgs e)
 		{
 			if (IP != null) IP.UseCornerThreshold = CbCornerThreshold.Checked;
-			TBCornerThreshold.Enabled = CbCornerThreshold.Checked;
+            TBCornerThreshold.Enabled = CbCornerThreshold.Checked;
 		}
 
 		private void TBLineThreshold_ValueChanged(object sender, EventArgs e)
@@ -884,5 +916,87 @@ namespace LaserGRBL.RasterConverter
 				//RbDithering.Checked = true;
 			}
 		}
+
+        private void tableLayoutPanel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void RbRandomline_CheckedChanged(object sender, EventArgs e)
+        {
+            if (IP != null)
+            {
+                if (RbRandomline.Checked)
+                    IP.SelectedTool = ImageProcessor.Tool.RandomLine;
+                RefreshVE();
+            }
+        }
+
+        private void RbOneLine_CheckedChanged(object sender, EventArgs e)
+        {
+            if (IP != null)
+            {
+                if (RbOneLine.Checked)
+                    IP.SelectedTool = ImageProcessor.Tool.OneLine;
+                RefreshVE();
+            }
+        }
+
+        private void TBCornerThreshold_Scroll(object sender, ScrollEventArgs e)
+        {
+
+        }
+
+        private void TBResolution_ValueChanged(object sender, EventArgs e)
+        { if (IP != null) IP.Resolution = (int)TBResolution.Value; }
+
+        private void TBResolution_DoubleClick(object sender, EventArgs e)
+        {
+            { if (IP != null) IP.Resolution = 2; }
+        }
+
+        private void TBRandomThreshold_DoubleClick(object sender, EventArgs e)
+        { if (IP != null) IP.RandomThreshold = 2; }
+
+        private void TBRandomThreshold_ValueChanged(object sender, EventArgs e)
+        { if (IP != null) IP.RandomThreshold = (int)TBRandomThreshold.Value; }
+
+        private void TBAmplitude_ValueChanged(object sender, EventArgs e)
+        { if (IP != null) IP.Amplitude = (int)TBAmplitude.Value; }
+
+        private void TBAmplitude_DoubleClick(object sender, EventArgs e)
+        { if (IP != null) IP.Amplitude = 5; }
+
+        private void TBFrequency_DoubleClick(object sender, EventArgs e)
+        { if (IP != null) IP.Frequency = 50; }
+
+        private void TBFrequency_ValueChanged(object sender, EventArgs e)
+        { if (IP != null) IP.Frequency = (int)TBFrequency.Value; }
+
+        private void TBLineWidth_DoubleClick(object sender, EventArgs e)
+        { if (IP != null) IP.LineWidth = 1; }
+
+        private void TBLineWidth_ValueChanged(object sender, EventArgs e)
+        { if (IP != null) IP.LineWidth = (int)TBLineWidth.Value; }
+        private void CbLineType_SelectedIndexChanged(object sender, EventArgs e)
+
+        { if (IP != null) IP.LineType = (ImageProcessor.LineTypeEnum)CbLineType.SelectedItem; }
+
+        private void TBResolution_Scroll(object sender, ScrollEventArgs e)
+        {
+
+        }
+
+        private void TBCornerThreshold_DoubleClick_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TBRandomThreshold_Scroll(object sender, ScrollEventArgs e)
+        {
+
+        }
+
+        
     }
 }

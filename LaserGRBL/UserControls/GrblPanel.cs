@@ -7,6 +7,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Resources;
 using System.Windows.Forms;
 using LaserGRBL;
 
@@ -23,8 +24,27 @@ namespace LaserGRBL.UserControls
 		private float mCurF;
 		private float mCurS;
 		private bool mFSTrig;
+		private Image penImg;
 
-		public GrblPanel()
+        private static global::System.Resources.ResourceManager resourceMan;
+
+        private static global::System.Globalization.CultureInfo resourceCulture; /// <summary>
+                                                                  ///   重写当前线程的 CurrentUICulture 属性，对
+                                                                  ///   使用此强类型资源类的所有资源查找执行重写。
+                                                                  /// </summary>
+        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
+        internal static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
+                return resourceCulture;
+            }
+            set
+            {
+                resourceCulture = value;
+            }
+        }
+        public GrblPanel()
 		{
 			InitializeComponent();
 
@@ -37,9 +57,11 @@ namespace LaserGRBL.UserControls
 
 			forcez = Settings.GetObject("Enale Z Jog Control", false);
 			SettingsForm.SettingsChanged += SettingsForm_SettingsChanged;
-		}
+            penImg = Strings.penImg;
 
-		private void SettingsForm_SettingsChanged(object sender, EventArgs e)
+        }
+
+        private void SettingsForm_SettingsChanged(object sender, EventArgs e)
 		{
 			bool newforce = Settings.GetObject("Enale Z Jog Control", false);
 			if (newforce != forcez)
@@ -69,12 +91,14 @@ namespace LaserGRBL.UserControls
 					PointF p = MachineToDraw(mLastWPos.ToPointF());
 					e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 					e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+					e.Graphics.DrawImage(penImg, (int)p.X, (int)p.Y-48 , 48,48);
+					//using (Pen px = GetPen(ColorScheme.PreviewCross, 2f))
+					//{
+						
 
-					using (Pen px = GetPen(ColorScheme.PreviewCross, 2f))
-					{
-						e.Graphics.DrawLine(px, (int)p.X, (int)p.Y - 5, (int)p.X, (int)p.Y - 5 + 10);
-						e.Graphics.DrawLine(px, (int)p.X - 5, (int)p.Y, (int)p.X - 5 + 10, (int)p.Y);
-					}
+					//	//e.Graphics.DrawLine(px, (int)p.X, (int)p.Y - 5, (int)p.X, (int)p.Y - 5 + 10);
+					//	//e.Graphics.DrawLine(px, (int)p.X - 5, (int)p.Y, (int)p.X - 5 + 10, (int)p.Y);
+					//}
 
 					using (Brush b = GetBrush(ColorScheme.PreviewText))
 					{
@@ -244,7 +268,7 @@ namespace LaserGRBL.UserControls
 			if (Core != null && (mLastWPos != Core.WorkPosition || mLastMPos != Core.MachinePosition || mCurF != Core.CurrentF || mCurS != Core.CurrentS))
 			{
 				mLastWPos = Core.WorkPosition;
-				mLastMPos = Core.MachinePosition;
+                mLastMPos = Core.MachinePosition;
 				mCurF = Core.CurrentF;
 				mCurS = Core.CurrentS;
 				Invalidate();

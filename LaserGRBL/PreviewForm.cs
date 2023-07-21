@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Resources;
 
 namespace LaserGRBL
 {
@@ -53,8 +54,10 @@ namespace LaserGRBL
 			BtnStop.Enabled = Core.CanFeedHold;
 			BtnResume.Enabled = Core.CanResumeHold;
 			BtnZeroing.Enabled = Core.CanDoZeroing;
+            BtnPenUp.Enabled = Core.CanResetGrbl;
+            Btn_SetLineLen.Enabled = Core.CanResetGrbl;
 
-			foreach (CustomButtonIB ib in CustomButtonArea.Controls)
+            foreach (CustomButtonIB ib in CustomButtonArea.Controls)
 				ib.RefreshEnabled();
 
 			ResumeLayout();
@@ -316,9 +319,12 @@ namespace LaserGRBL
 			{
 				if (!_isDragging)
 				{
-					// This is a check to see if the mouse is moving while pressed.
-					// Without this, the DragDrop is fired directly when the control is clicked, now you have to drag a few pixels first.
-					if (e.Button == MouseButtons.Left && _DDradius > 0 && PositionUnlocked)
+                    // This is a check to see if the mouse is moving while pressed.
+                    // Without this, the DragDrop is fired directly when the control is clicked, now you have to drag a few pixels first.
+                    //检查按下鼠标时鼠标是否在移动
+
+                    //如果没有这个，DragDrop会在单击控件时直接触发，现在你必须先拖动几个像素。
+                    if (e.Button == MouseButtons.Left && _DDradius > 0 && PositionUnlocked)
 					{
 						int num1 = _mX - e.X;
 						int num2 = _mY - e.Y;
@@ -522,16 +528,47 @@ namespace LaserGRBL
 
         }
 
-        private void BtnPenDown_Click(object sender, EventArgs e)
-        {
-
-            Core.SetPenDown();
-        }
-
+      
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PreviewForm));
         private void BtnPenUp_Click(object sender, EventArgs e)
         {
 
-            Core.SetPenUp();
+            if ("BtnPenDown".Equals(this.BtnPenUp.Tag))
+			{
+				this.BtnPenUp.Tag = "BtnPenUp";
+                this.BtnPenUp.Image = (System.Drawing.Image)(resources.GetObject("BtnPenUp.Image"));
+                Core.SetPenUp();
+            }
+			else {
+
+                this.BtnPenUp.Tag = "BtnPenDown";
+                this.BtnPenUp.Image = (System.Drawing.Image)(resources.GetObject("BtnPenDown.Image"));
+                Core.SetPenDown();
+            }
+           /// resources.ApplyResources(this.BtnUnlock, "BtnUnlock");
+            BtnPenUp.ResumeLayout(false);
+        }
+
+        private void tableLayoutPanel8_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void BtnSetLineLenth_Click(object sender, EventArgs e)
+        {
+            //Core.SetLineLength(int.Parse(textBox_LineLength.Text));
+        }
+
+        private void CustomButtonArea_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void Btn_SetLineLen_Click(object sender, EventArgs e)
+        {
+			var lenForm = new SetLineLenForm();
+
+            lenForm.ShowDialog(ParentForm, Core);
         }
     }
 

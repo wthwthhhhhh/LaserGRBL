@@ -21,7 +21,7 @@ namespace LaserGRBL.RasterConverter
 		GrblCore mCore;
 		bool supportPWM = Settings.GetObject("Support Hardware PWM", false);
 
-		public ComboboxItem[] LaserOptions = new ComboboxItem[] { new ComboboxItem("Z轴落笔", "G1 Z-5"), new ComboboxItem("固定功率", "M3"), new ComboboxItem("动态功率", "M4") };
+		public ComboboxItem[] LaserOptions = new ComboboxItem[] { new ComboboxItem("固定落笔距离", "G1"),  new ComboboxItem("递增落笔", "M4") };
 		public class ComboboxItem
 		{
 			public string Text { get; set; }
@@ -98,23 +98,24 @@ namespace LaserGRBL.RasterConverter
 			IIBorderTracing.CurrentValue = IP.BorderSpeed = Settings.GetObject("GrayScaleConversion.VectorizeOptions.BorderSpeed", 1000);
 			IILinearFilling.CurrentValue = IP.MarkSpeed = Settings.GetObject("GrayScaleConversion.Gcode.Speed.Mark", 1000);
 
-			IP.LaserOn = Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.LaserOn", "G1 Z-5");
-			switch (IP.LaserOn)
-            {
-                case "M3":
-                case "M4":
-                    if (IP.LaserOn == "M3" || !GrblCore.Configuration.LaserMode)
-                        CBLaserON.SelectedItem = LaserOptions[1];
-                    else
-                        CBLaserON.SelectedItem = LaserOptions[2];
-                    IP.LaserOff = "M5";break;
-                case "G1 Z-5":
-                    CBLaserON.SelectedItem = LaserOptions[0];
-                    IP.LaserOff = "G1 Z5"; break;
-                default:
-                    IP.LaserOff = "G1 Z5"; 
-                    break;
-			}
+			IP.LaserOn = "G0 Z-5 F8000";// Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.LaserOn", "G0 Z-5 F8000");
+            IP.LaserOff = "G0 Z0 F8000";//
+   //         switch (IP.LaserOn)
+   //         {
+   //             case "M3":
+   //             case "M4":
+   //                 if (IP.LaserOn == "M3" || !GrblCore.Configuration.LaserMode)
+   //                     CBLaserON.SelectedItem = LaserOptions[1];
+   //                 else
+   //                     CBLaserON.SelectedItem = LaserOptions[2];
+   //                 IP.LaserOff = "M5";break;
+   //             case "G0 Z-5 F8000":
+   //                 CBLaserON.SelectedItem = LaserOptions[0];
+   //                 IP.LaserOff = "G1 Z0 F8000"; break;
+   //             default:
+   //                 IP.LaserOff = "G0 Z0 F8000"; 
+   //                 break;
+			//}
 			
 
 			

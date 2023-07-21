@@ -15,6 +15,8 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Web.UI.WebControls;
+using static LaserGRBL.RasterConverter.ImageProcessor;
 
 namespace LaserGRBL
 {
@@ -267,7 +269,8 @@ namespace LaserGRBL
 				return string.Format("X{0}", formatnumber(cumX, c.oX, c));
 			}
 
-			public override bool IsSeparator
+			public override bool 
+				IsSeparator
 			{ get { return true; } }
 		}
 
@@ -437,25 +440,47 @@ namespace LaserGRBL
 				OnFileLoading(0, filename);
 		}
 
-		public class L2LConf
-		{
-			public double res;
-			public float oX;
-			public float oY;
-			public int markSpeed;
-			public int borderSpeed;
-			public int minPower;
-			public int maxPower;
-			public string lOn;
-			public string lOff;
-			public RasterConverter.ImageProcessor.Direction dir;
-			public bool pwm { get { return false; } set { } }
-			public double fres;
-			public bool vectorfilling;
-			public Firmware firmwareType;
-		}
-
-		private string skipcmd = "G0";
+        public class L2LConf
+        {
+            public double res;  // 分辨率
+            public float oX;  // 原点X坐标
+            public float oY;  // 原点Y坐标
+            public int markSpeed;  // 标记速度
+            public int borderSpeed;  // 边界速度
+            public int minPower;  // 最小功率
+            public int maxPower;  // 最大功率
+            public string lOn;  // 激光打开指令
+            public string lOff;  // 激光关闭指令
+            public RasterConverter.ImageProcessor.Direction dir;  // 方向
+            public bool pwm { get { return false; } set { } }  // 脉宽调制
+            public double fres;  // 刷新频率
+            public bool vectorfilling;  // 矢量填充
+            public Firmware firmwareType;  // 固件类型
+            public int resolution;  // 分辨率
+            public float randomThreshold;  // 随机阈值
+            public float amplitude;  // 振幅
+            public float frequency;  // 频率
+            public float lineWidth;  // 线宽
+            public RasterConverter.ImageProcessor.LineTypeEnum lineType;  // 线宽
+        }
+        public class RandomLineConf
+        {
+            public double res;
+            public float oX;
+            public float oY;
+            public int markSpeed;
+            public int borderSpeed;
+            public int minPower;
+            public int maxPower;
+            public string lOn;
+            public string lOff;
+            public RasterConverter.ImageProcessor.Direction dir;
+            public bool pwm { get { return false; } set { } }
+            public double fres;
+            public bool vectorfilling;
+            public Firmware firmwareType;
+        }
+        private string skipcmd = "G0";
 		public void LoadImageL2L(Bitmap bmp, string filename, L2LConf c, bool append, GrblCore core)
 		{
 
@@ -472,22 +497,22 @@ namespace LaserGRBL
 
 			mRange.ResetRange();
 
-			//absolute
-			//list.Add(new GrblCommand("G90")); //(Moved to custom Header)
+            //absolute
+            //list.Add(new GrblCommand("G90")); //(Moved to custom Header)
 
-			//move fast to offset (or slow if disable G0) and set mark speed
-			list.Add(new GrblCommand(String.Format("{0} X{1} Y{2} F{3}", skipcmd, formatnumber(c.oX), formatnumber(c.oY), c.markSpeed)));
+            //快速移动到offset(如果禁用G0则缓慢移动)，并设置标记速度
+            list.Add(new GrblCommand(String.Format("{0} X{1} Y{2} F{3}", skipcmd, formatnumber(c.oX), formatnumber(c.oY), c.markSpeed)));
 			if (c.pwm)
-				list.Add(new GrblCommand(String.Format("{0} S0", c.lOn))); //laser on and power to zero
-			else
-				list.Add(new GrblCommand($"{c.lOff} S{GrblCore.Configuration.MaxPWM}")); //laser off and power to maxpower
+				list.Add(new GrblCommand(String.Format("{0} S0", c.lOn))); //激光打开，功率归零laser on and power to zero
+            else
+				list.Add(new GrblCommand($"{c.lOff} S{GrblCore.Configuration.MaxPWM}")); //关闭激光，将电源调至最大功率laser off and power to maxpower
 
-			//set speed to markspeed						
-			// For marlin, need to specify G1 each time :
-			//list.Add(new GrblCommand(String.Format("G1 F{0}", c.markSpeed)));
-			//list.Add(new GrblCommand(String.Format("F{0}", c.markSpeed))); //replaced by the first move to offset and set speed
+            //设置速度为markspeed						
+            // For marlin, need to specify G1 each time :
+            //list.Add(new GrblCommand(String.Format("G1 F{0}", c.markSpeed)));
+            //list.Add(new GrblCommand(String.Format("F{0}", c.markSpeed))); //replaced by the first move to offset and set speed
 
-			ImageLine2Line(bmp, c);
+            ImageLine2Line(bmp, c);
 
 			//laser off
 			list.Add(new GrblCommand(c.lOff));
@@ -550,9 +575,376 @@ namespace LaserGRBL
 			temp = OptimizeLine2Line(temp, c);
 			list.AddRange(temp);
 		}
+        private void ImageRandomLine(Bitmap bmp, L2LConf c)
+        {
+            bool fast = true;
+            List<PointF> points = new List<PointF>();
+            for (int y = 0; y < bmp.Height; y += c.resolution)
+            {
+                for (int x = 0; x < bmp.Width; x += (int)c.randomThreshold)
+                {
+                    float brightnessValue = GetBrightness(bmp.GetPixel(x, y));
+                    if (brightnessValue < 127)
+                    {
+                        points.Add(new PointF(x, y));
+                    }
+                }
+            }
+            List<GrblCommand> temp = new List<GrblCommand>();
+
+            Pen pen = new Pen(Color.FromArgb(80, 0, 0, 0), c.lineWidth);
+            PointF prevPoint = PointF.Empty;
+
+            foreach (PointF point in points)
+            {
+                float x = point.X;
+                float y = point.Y;
+
+                float angle = Map(Noise(x * c.frequency, y * c.frequency), 0, 1, 0, (float)(2 * Math.PI));
+                float xOffset = (float)Math.Cos(angle) * c.amplitude;
+                float yOffset = (float)Math.Sin(angle) * c.amplitude;
+               
+                    List<PointF> curvePoints = new List<PointF>();
+                    curvePoints.Add(new PointF(x, y));
+
+                    for (int j = 0; j <= c.resolution; j++)
+                    {
+                        float t = Map(j, 0, c.resolution, 0, 1);
+                        float cx = x + xOffset * t;
+                        float cy = y + yOffset * t;
+                        curvePoints.Add(new PointF(cx, cy));
+                    }
+
+                    curvePoints.Add(new PointF(x + xOffset, y + yOffset));
+					var begin = true;
+					foreach (var nextPoint in curvePoints)
+					{
+                        if (!nextPoint.IsEmpty)
+                        {
+                            temp.Add(new GrblCommand(String.Format("{0} {1}", fast ? skipcmd : "G1", string.Format("X{0} Y{1} ", formatnumber((int)nextPoint.X, c.oX, c), formatnumber((int)nextPoint.Y, c.oY, c)))));
+                            if (begin)
+							{
+								temp.Add(new GrblCommand(c.lOn));
+                                begin = false;
+							}
+							//else
+							//{
+							//    temp.Add(new GrblCommand(String.Format("{0} {1}", fast ? skipcmd : "G1", string.Format("X{0} Y{1}", formatnumber((int)nextPoint.X, c.oX, c), formatnumber((int)nextPoint.Y, c.oY, c)))));
+							//}
+							//g.DrawLine(pen, prevPoint, nextPoint);
+
+						}
+                    }
+                    temp.Add(new GrblCommand(c.lOff));
+               
+
+            }
+            temp.Add(new GrblCommand(c.lOff));
+            //foreach (ColorSegment seg in segments)
+            //{
+            //	bool changeGMode = (fast != seg.Fast(c)); //se veloce != dafareveloce
+
+            //	if (seg.IsSeparator && !fast) //fast = previous segment contains S0 color 前一段包含S0颜色
+            //	{
+            //		if (c.pwm)
+            //			temp.Add(new GrblCommand("S0"));
+            //		else
+            //			temp.Add(new GrblCommand(c.lOff)); //laser off
+            //	}
+
+            //	fast = seg.Fast(c);
+
+            //	// For marlin firmware, we must defined laser power before moving (unsing M106 or M107)
+            //	// So we have to speficy gcode (G0 or G1) each time....
+            //	//if (c.firmwareType == Firmware.Marlin)
+            //	//{
+            //	//	// Add M106 only if color has changed
+            //	//	if (lastColorSend != seg.mColor)
+            //	//		temp.Add(new GrblCommand(String.Format("M106 P1 S{0}", fast ? 0 : seg.mColor)));
+            //	//	lastColorSend = seg.mColor;
+            //	//	temp.Add(new GrblCommand(String.Format("{0} {1}", fast ? "G0" : "G1", seg.ToGCodeNumber(ref cumX, ref cumY, c))));
+            //	//}
+            //	//else
+            //	//{
+
+            //	if (changeGMode)
+            //		temp.Add(new GrblCommand(String.Format("{0} {1}", fast ? skipcmd : "G1", seg.ToGCodeNumber(ref cumX, ref cumY, c))));
+            //	else
+            //		temp.Add(new GrblCommand(seg.ToGCodeNumber(ref cumX, ref cumY, c)));
+            //	return string.Format("X{0} {1}", formatnumber(cumX, c.oX, c), Fast(c) ? c.lOff : c.lOn);
+            //	//}
+            //}
+
+            temp = OptimizeLine2Line(temp, c);
+            list.AddRange(temp);
+        }
+        private void ImageOneLine(Bitmap bmp, L2LConf c)
+        {
+            bool fast = true;
+            List<PointF> points = new List<PointF>();
+            List<GrblCommand> temp = new List<GrblCommand>();
+            switch (c.lineType)
+            {
+                case LineTypeEnum.Spiral:
+					{
+                        //float radius = 1.0f;
+                        //float px = 0, py = 0, deg = 0, xc = bmp.Width / 2, yc = bmp.Height / 2, offset = c.frequency * 10, FrequencyCount = 1, x1 = 0, y1 = 0, arcLength = 0;
 
 
-		private List<GrblCommand> OptimizeLine2Line(List<GrblCommand> temp, L2LConf c)
+                        //while (px < bmp.Width && py < bmp.Height)
+                        //{
+                        //    float angle = (float)(deg * Math.PI / 180);
+                        //    px = xc + (float)(Math.Cos(angle) * radius);
+                        //    py = yc + (float)(Math.Sin(angle) * radius);
+                        //    if (px > 0 && py > 0 && px < bmp.Width && py < bmp.Height)
+                        //    {
+                        //        float brightnessValue = GetBrightness(bmp.GetPixel((int)px, (int)py));
+                        //        if (x1 > 0 && y1 > 0)
+                        //        {
+                        //            // 计算两个点相对于圆心的夹角
+                        //            double angle1 = Math.Atan2(y1 - yc, x1 - xc);
+                        //            double angle2 = Math.Atan2(py - yc, px - xc);
+
+                        //            // 调整夹角为正值
+                        //            if (angle1 < 0)
+                        //            {
+                        //                angle1 += 2 * Math.PI;
+                        //            }
+                        //            if (angle2 < 0)
+                        //            {
+                        //                angle2 += 2 * Math.PI;
+                        //            }
+
+                        //            // 计算弧长
+                        //            arcLength = (float)Math.Abs(radius * (angle1 - angle2));
+                        //        }
+                        //        else
+                        //        {
+                        //            x1 = px;
+                        //            y1 = py;
+                        //        }
+                        //        if (brightnessValue < 127 && arcLength > c.amplitude / 10)
+                        //        {
+
+                        //            // 计算角度
+                        //            double anglec = Math.Atan2(py - yc, px - xc);
+
+                        //            // 向圆心偏移的坐标
+                        //            double r_inward = Math.Sqrt(Math.Pow(px - xc, 2) + Math.Pow(py - yc, 2));
+                        //            double x_inward = xc + (r_inward - offset) * Math.Cos(angle);
+                        //            double y_inward = yc + (r_inward - offset) * Math.Sin(angle);
+
+                        //            points.Add(new PointF((float)x_inward, (float)y_inward));
+                        //            points.Add(new PointF(px, py));
+                        //            // 向外偏移的坐标
+                        //            double r_outward = Math.Sqrt(Math.Pow(px - xc, 2) + Math.Pow(py - yc, 2));
+                        //            double x_outward = xc + (r_outward + offset) * Math.Cos(angle);
+                        //            double y_outward = yc + (r_outward + offset) * Math.Sin(angle);
+
+                        //            points.Add(new PointF((float)x_outward, (float)y_outward));
+
+                        //            x1 = px;
+                        //            y1 = py;
+
+                        //        }
+                        //        else
+                        //        {
+                        //            points.Add(new PointF(px, py));
+                        //        }
+                        //    }
+                        //    //螺旋半径每转动2度增加一次
+                        //    radius = radius + (c.resolution / 1000f);
+                        //    deg += c.randomThreshold / 10;
+                        //    FrequencyCount++;
+                        //}
+
+                        points = GenerateSpiral(bmp, c.resolution / 100f, c.frequency, c.randomThreshold, c.amplitude);
+						//temp.AddRange(ConvertPointsToGCode(points,c));
+						foreach (PointF point in points)
+						{
+							float x = point.X;
+							float y = point.Y;
+
+
+							temp.Add(new GrblCommand(String.Format("{0} {1}", fast ? skipcmd : "G1", string.Format("X{0} Y{1} ", formatnumber((int)x, c.oX, c), formatnumber((int)y, c.oY, c)))));
+							if (fast)
+							{
+								temp.Add(new GrblCommand(c.lOn));
+								fast = false;
+							}
+
+						}
+					}
+                    break;
+				default: {
+                        for (int y = 0; y < bmp.Height; y += c.resolution)
+                        {
+                            for (int x = 0; x < bmp.Width; x += (int)c.randomThreshold)
+                            {
+                                float brightnessValue = GetBrightness(bmp.GetPixel(x, y));
+                                if (brightnessValue < 127)
+                                {
+                                    points.Add(new PointF(x, y));
+                                }
+                            }
+                        }
+
+                        PointF prevPoint = PointF.Empty;
+
+                        foreach (PointF point in points)
+                        {
+                            float x = point.X;
+                            float y = point.Y;
+
+                            float angle = Map(Noise(x * c.frequency, y * c.frequency), 0, 1, 0, (float)(2 * Math.PI));
+                            float xOffset = (float)Math.Cos(angle) * c.amplitude;
+                            float yOffset = (float)Math.Sin(angle) * c.amplitude;
+
+
+                            PointF nextPoint = new PointF(x + xOffset, y + yOffset);
+
+                            if (!nextPoint.IsEmpty)
+                            {
+                                temp.Add(new GrblCommand(String.Format("{0} {1}", fast ? skipcmd : "G1", string.Format("X{0} Y{1} ", formatnumber((int)nextPoint.X, c.oX, c), formatnumber((int)nextPoint.Y, c.oY, c)))));
+                                if (fast)
+                                {
+                                    temp.Add(new GrblCommand(c.lOn));
+                                    fast = false;
+                                }
+
+                            }
+
+                            prevPoint = nextPoint;
+
+
+                        }
+                    }break;
+			}
+            temp.Add(new GrblCommand(c.lOff));
+            //foreach (ColorSegment seg in segments)
+            //{
+            //	bool changeGMode = (fast != seg.Fast(c)); //se veloce != dafareveloce
+
+            //	if (seg.IsSeparator && !fast) //fast = previous segment contains S0 color 前一段包含S0颜色
+            //	{
+            //		if (c.pwm)
+            //			temp.Add(new GrblCommand("S0"));
+            //		else
+            //			temp.Add(new GrblCommand(c.lOff)); //laser off
+            //	}
+
+            //	fast = seg.Fast(c);
+
+            //	// For marlin firmware, we must defined laser power before moving (unsing M106 or M107)
+            //	// So we have to speficy gcode (G0 or G1) each time....
+            //	//if (c.firmwareType == Firmware.Marlin)
+            //	//{
+            //	//	// Add M106 only if color has changed
+            //	//	if (lastColorSend != seg.mColor)
+            //	//		temp.Add(new GrblCommand(String.Format("M106 P1 S{0}", fast ? 0 : seg.mColor)));
+            //	//	lastColorSend = seg.mColor;
+            //	//	temp.Add(new GrblCommand(String.Format("{0} {1}", fast ? "G0" : "G1", seg.ToGCodeNumber(ref cumX, ref cumY, c))));
+            //	//}
+            //	//else
+            //	//{
+
+            //	if (changeGMode)
+            //		temp.Add(new GrblCommand(String.Format("{0} {1}", fast ? skipcmd : "G1", seg.ToGCodeNumber(ref cumX, ref cumY, c))));
+            //	else
+            //		temp.Add(new GrblCommand(seg.ToGCodeNumber(ref cumX, ref cumY, c)));
+            //	return string.Format("X{0} {1}", formatnumber(cumX, c.oX, c), Fast(c) ? c.lOff : c.lOn);
+            //	//}
+            //}
+
+            temp = OptimizeLine2Line(temp, c);
+            list.AddRange(temp);
+        }
+        public  List<GrblCommand> ConvertPointsToGCode(List<PointF> points, L2LConf c)
+        {
+            List<GrblCommand> gcode = new List<GrblCommand>();
+
+            PointF previousPoint = PointF.Empty;
+            bool inArcMode = true;
+
+            foreach (PointF point in points)
+            {
+                if (previousPoint == PointF.Empty)
+                {
+					gcode.Add(new GrblCommand(String.Format("{0} {1}", "G0", string.Format("X{0} Y{1} ", formatnumber((int)point.X, c.oX, c), formatnumber((int)point.Y, c.oY, c)))));
+                    // 第一个点
+                   // gcodeBuilder.AppendFormat("G0 X{0} Y{1}", point.X, point.Y);
+                }
+                else
+                {
+                    if (inArcMode)
+                    {
+                        // 当前是圆弧模式，检查是否可以继续使用圆弧
+                        float radius = GetDistance(previousPoint, point) / 2;
+                        PointF center = CalculateArcCenter(previousPoint, point, radius);
+
+                        if (center != PointF.Empty)
+                        {
+                            gcode.Add(new GrblCommand(String.Format("{0} {1}", "G2", string.Format("X{0} Y{1} I{2} J{3}", formatnumber((int)point.X, c.oX, c), formatnumber((int)point.Y, c.oY, c), center.X - previousPoint.X, center.Y - previousPoint.Y))));
+
+                            // 可以继续使用圆弧
+                            //gcodeBuilder.AppendFormat(" G2 X{0} Y{1} I{2} J{3}",
+                            //    point.X, point.Y, center.X - previousPoint.X, center.Y - previousPoint.Y);
+                            previousPoint = point;
+                            continue;
+                        }
+                        //else
+                        //{
+                        //    // 无法继续使用圆弧，结束圆弧模式
+                        //    //gcode.Add(gcodeBuilder.ToString());
+                        //    //gcodeBuilder.Clear();
+                        //    inArcMode = false;
+                        //}
+                    }
+                    gcode.Add(new GrblCommand(String.Format("{0} {1}", "G1", string.Format("X{0} Y{1} ", formatnumber((int)point.X, c.oX, c), formatnumber((int)point.Y, c.oY, c)))));
+
+                    // 使用直线运动
+                    //gcodeBuilder.AppendFormat("G1 X{0} Y{1}", point.X, point.Y);
+                }
+
+                previousPoint = point;
+            }
+
+            //if (gcodeBuilder.Length > 0)
+            //{
+            //    // 添加最后一个指令
+            //    gcode.Add(gcodeBuilder.ToString());
+            //}
+
+            return gcode;
+        }
+
+        public static float GetDistance(PointF p1, PointF p2)
+        {
+            float dx = p2.X - p1.X;
+            float dy = p2.Y - p1.Y;
+            return (float)Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        public static PointF CalculateArcCenter(PointF p1, PointF p2, float radius)
+        {
+            float dx = p2.X - p1.X;
+            float dy = p2.Y - p1.Y;
+
+            float d = dx * dx + dy * dy;
+            float determinant = radius * radius / d - 0.25f;
+
+            if (determinant < 0)
+            {
+                return PointF.Empty; // 无法继续使用圆弧
+            }
+
+            float h = (float)Math.Sqrt(determinant);
+            float centerX = 0.5f * (p1.X + p2.X) + h * (p1.Y - p2.Y);
+            float centerY = 0.5f * (p1.Y + p2.Y) + h * (p2.X - p1.X);
+
+            return new PointF(centerX, centerY);
+        }
+        private List<GrblCommand> OptimizeLine2Line(List<GrblCommand> temp, L2LConf c)
 		{
 			List<GrblCommand> rv = new List<GrblCommand>();
 
@@ -612,23 +1004,167 @@ namespace LaserGRBL
 
 			return rv;
 		}
+        private float Map(float value, float start1, float stop1, float start2, float stop2)
+        {
+            return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
+        }
 
-		private List<ColorSegment> GetSegments(Bitmap bmp, L2LConf c)
+        private float GetBrightness(Color color)
+        {
+            return (color.R + color.G + color.B) / 3.0f;
+        }
+        Random r = new Random();
+        private float Noise(float x, float y)
+        {
+            // 实现你的 noise 函数
+            return (float)r.Next(50) / 100f;
+        }
+    //    private List<ColorSegment> GetSegmentsRandomLine(Bitmap bmp, L2LConf c)
+    //    {
+    //        bool uni = Settings.GetObject("Unidirectional Engraving", false);
+
+    //        List<ColorSegment> rv = new List<ColorSegment>();
+			
+    //        if (!MustExitTH)
+    //        {
+               
+    //        }
+    //        if (c.dir == RasterConverter.ImageProcessor.Direction.Horizontal || c.dir == RasterConverter.ImageProcessor.Direction.Vertical)
+    //        {
+    //            bool h = (c.dir == RasterConverter.ImageProcessor.Direction.Horizontal); //horizontal/vertical水平垂直
+
+    //            for (int i = 0; i < (h ? bmp.Height : bmp.Width); i++)
+    //            //水平= i=row
+    //            //--------
+    //            //--------
+    //            //--------
+    //            //--------
+    //            {
+    //                bool d = uni || IsEven(i); //direct/reverse 正反 或单向绘制
+    //                int prevCol = -1;
+    //                int len = -1;
+
+    //                for (int j = d ? 0 : (h ? bmp.Width - 1 : bmp.Height - 1); d ? (j < (h ? bmp.Width : bmp.Height)) : (j >= 0); j = (d ? j + 1 : j - 1))
+    //                    //水平绘制 x= 
+    //                    ExtractSegment(bmp, h ? j : i, h ? i : j, !d, ref len, ref prevCol, rv, c); //extract different segments
+
+    //                if (h)
+    //                    rv.Add(new XSegment(prevCol, len + 1, !d)); //close last segment
+    //                else
+    //                    rv.Add(new YSegment(prevCol, len + 1, !d)); //close last segment
+
+    //                if (uni) // add "go back"
+    //                {
+    //                    if (h) rv.Add(new XSegment(0, bmp.Width, true));
+    //                    else rv.Add(new YSegment(0, bmp.Height, true));
+    //                }
+
+    //                if (i < (h ? bmp.Height - 1 : bmp.Width - 1))
+    //                {
+    //                    if (h)
+    //                        rv.Add(new VSeparator()); //new line
+    //                    else
+    //                        rv.Add(new HSeparator()); //new line
+    //                }
+    //            }
+    //        }
+    //        else if (c.dir == RasterConverter.ImageProcessor.Direction.Diagonal)
+    //        {
+    //            //based on: http://stackoverflow.com/questions/1779199/traverse-matrix-in-diagonal-strips
+    //            //based on: http://stackoverflow.com/questions/2112832/traverse-rectangular-matrix-in-diagonal-strips
+
+    //            /*
+
+				//+------------+
+				//|  -         |
+				//|  -  -      |
+				//+-------+    |
+				//|  -  - |  - |
+				//+-------+----+
+
+				//*/
+
+
+    //            //the algorithm runs along the matrix for diagonal lines (slice index)
+    //            //z1 and z2 contains the number of missing elements in the lower right and upper left
+    //            //the length of the segment can be determined as "slice - z1 - z2"
+    //            //my modified version of algorithm reverses travel direction each slice
+
+    //            rv.Add(new VSeparator()); //new line
+
+    //            int w = bmp.Width;
+    //            int h = bmp.Height;
+    //            for (int slice = 0; slice < w + h - 1; ++slice)
+    //            {
+    //                bool d = uni || IsEven(slice); //direct/reverse
+
+    //                int prevCol = -1;
+    //                int len = -1;
+
+    //                int z1 = slice < h ? 0 : slice - h + 1;
+    //                int z2 = slice < w ? 0 : slice - w + 1;
+
+    //                for (int j = (d ? z1 : slice - z2); d ? j <= slice - z2 : j >= z1; j = (d ? j + 1 : j - 1))
+    //                    ExtractSegment(bmp, j, slice - j, !d, ref len, ref prevCol, rv, c); //extract different segments
+    //                rv.Add(new DSegment(prevCol, len + 1, !d)); //close last segment
+
+    //                //System.Diagnostics.Debug.WriteLine(String.Format("sl:{0} z1:{1} z2:{2}", slice, z1, z2));
+
+    //                if (uni) // add "go back"
+    //                {
+    //                    int slen = (slice - z1 - z2) + 1;
+    //                    rv.Add(new DSegment(0, slen, true));
+    //                    //System.Diagnostics.Debug.WriteLine(slen);
+    //                }
+
+    //                if (slice < Math.Min(w, h) - 1) //first part of the image
+    //                {
+    //                    if (d && !uni)
+    //                        rv.Add(new HSeparator()); //new line
+    //                    else
+    //                        rv.Add(new VSeparator()); //new line
+    //                }
+    //                else if (slice >= Math.Max(w, h) - 1) //third part of image
+    //                {
+    //                    if (d && !uni)
+    //                        rv.Add(new VSeparator()); //new line
+    //                    else
+    //                        rv.Add(new HSeparator()); //new line
+    //                }
+    //                else //central part of the image
+    //                {
+    //                    if (w > h)
+    //                        rv.Add(new HSeparator()); //new line
+    //                    else
+    //                        rv.Add(new VSeparator()); //new line
+    //                }
+    //            }
+    //        }
+
+    //        return rv;
+    //    }
+        private List<ColorSegment> GetSegments(Bitmap bmp, L2LConf c)
 		{
 			bool uni = Settings.GetObject("Unidirectional Engraving", false);
 
 			List<ColorSegment> rv = new List<ColorSegment>();
 			if (c.dir == RasterConverter.ImageProcessor.Direction.Horizontal || c.dir == RasterConverter.ImageProcessor.Direction.Vertical)
 			{
-				bool h = (c.dir == RasterConverter.ImageProcessor.Direction.Horizontal); //horizontal/vertical
+				bool h = (c.dir == RasterConverter.ImageProcessor.Direction.Horizontal); //horizontal/vertical水平垂直
 
-				for (int i = 0; i < (h ? bmp.Height : bmp.Width); i++)
-				{
-					bool d = uni || IsEven(i); //direct/reverse
+                for (int i = 0; i < (h ? bmp.Height : bmp.Width); i++)
+                //水平= i=row
+                //--------
+                //--------
+                //--------
+                //--------
+                {
+                    bool d = uni || IsEven(i); //direct/reverse 正反 或单向绘制
 					int prevCol = -1;
 					int len = -1;
 
 					for (int j = d ? 0 : (h ? bmp.Width - 1 : bmp.Height - 1); d ? (j < (h ? bmp.Width : bmp.Height)) : (j >= 0); j = (d ? j + 1 : j - 1))
+						//水平绘制 x= 
 						ExtractSegment(bmp, h ? j : i, h ? i : j, !d, ref len, ref prevCol, rv, c); //extract different segments
 
 					if (h)
@@ -920,8 +1456,12 @@ namespace LaserGRBL
 			else
 				return rv;
 		}
-
-		public string formatnumber(double number)
+        public string formatnumber(int number, float offset, L2LConf c)
+        {
+            double dval = Math.Round(number / (c.vectorfilling ? c.fres : c.res) + offset, 3);
+            return dval.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+        public string formatnumber(double number)
 		{ return number.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture); }
 
 		private static bool IsEven(int value)
@@ -1068,8 +1608,95 @@ namespace LaserGRBL
 			RiseOnFileLoaded(filename, elapsed);
 
 		}
+        public void LoadImageRandomLine(Bitmap bmp, string filename, L2LConf c, bool append, GrblCore core)
+        {
 
-		private void Analyze() //analyze the file and build global range and timing for each command
+            skipcmd = Settings.GetObject("Disable G0 fast skip", false) ? "G1" : "G0";
+
+            RiseOnFileLoading(filename);
+
+            bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+            long start = Tools.HiResTimer.TotalMilliseconds;
+
+            if (!append)
+                list.Clear();
+
+            mRange.ResetRange();
+
+            //absolute
+            //list.Add(new GrblCommand("G90")); //(Moved to custom Header)
+
+            //快速移动到offset(如果禁用G0则缓慢移动)，并设置标记速度
+            list.Add(new GrblCommand(String.Format("{0} X{1} Y{2} F{3}", skipcmd, formatnumber(c.oX), formatnumber(c.oY), c.markSpeed)));
+            if (c.pwm)
+                list.Add(new GrblCommand(String.Format("{0} S0", c.lOn))); //激光打开，功率归零laser on and power to zero
+            else
+                list.Add(new GrblCommand($"{c.lOff} S{GrblCore.Configuration.MaxPWM}")); //关闭激光，将电源调至最大功率laser off and power to maxpower
+
+            //设置速度为markspeed						
+            // For marlin, need to specify G1 each time :
+            //list.Add(new GrblCommand(String.Format("G1 F{0}", c.markSpeed)));
+            //list.Add(new GrblCommand(String.Format("F{0}", c.markSpeed))); //replaced by the first move to offset and set speed
+
+            ImageRandomLine(bmp, c);
+
+            //laser off
+            list.Add(new GrblCommand(c.lOff));
+
+            //move fast to origin
+            //list.Add(new GrblCommand("G0 X0 Y0")); //moved to custom footer
+
+            Analyze();
+            long elapsed = Tools.HiResTimer.TotalMilliseconds - start;
+
+            RiseOnFileLoaded(filename, elapsed);
+        }
+        public void LoadImageOneLine(Bitmap bmp, string filename, L2LConf c, bool append, GrblCore core)
+        {
+
+            skipcmd = Settings.GetObject("Disable G0 fast skip", false) ? "G1" : "G0";
+
+            RiseOnFileLoading(filename);
+
+            bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+            long start = Tools.HiResTimer.TotalMilliseconds;
+
+            if (!append)
+                list.Clear();
+
+            mRange.ResetRange();
+
+            //absolute
+            //list.Add(new GrblCommand("G90")); //(Moved to custom Header)
+
+            //快速移动到offset(如果禁用G0则缓慢移动)，并设置标记速度
+            list.Add(new GrblCommand(String.Format("{0} X{1} Y{2} F{3}", skipcmd, formatnumber(c.oX), formatnumber(c.oY), c.markSpeed)));
+            if (c.pwm)
+                list.Add(new GrblCommand(String.Format("{0} S0", c.lOn))); //激光打开，功率归零laser on and power to zero
+            else
+                list.Add(new GrblCommand($"{c.lOff} S{GrblCore.Configuration.MaxPWM}")); //关闭激光，将电源调至最大功率laser off and power to maxpower
+
+            //设置速度为markspeed						
+            // For marlin, need to specify G1 each time :
+            //list.Add(new GrblCommand(String.Format("G1 F{0}", c.markSpeed)));
+            //list.Add(new GrblCommand(String.Format("F{0}", c.markSpeed))); //replaced by the first move to offset and set speed
+
+            ImageOneLine(bmp, c);
+
+            //laser off
+            list.Add(new GrblCommand(c.lOff));
+
+            //move fast to origin
+            //list.Add(new GrblCommand("G0 X0 Y0")); //moved to custom footer
+
+            Analyze();
+            long elapsed = Tools.HiResTimer.TotalMilliseconds - start;
+
+            RiseOnFileLoaded(filename, elapsed);
+        }
+        private void Analyze() //analyze the file and build global range and timing for each command
 		{
 			GrblCommand.StatePositionBuilder spb = new GrblCommand.StatePositionBuilder();
 

@@ -147,7 +147,7 @@
   <data name="BtnUnlockProportion.AltImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1
-        MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAACxAAAAsQAa0jvXUAAAM4SURBVDhPdZB/TMxxGMc/KZH8
+        MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAACw4AAAsOAUC+4UEAAAM4SURBVDhPdZB/TMxxGMc/KZH8
         uDqS6kqdCpHqrlPuiiM1Kv3UtZwb6kqXJFzuuqtsl65o/URC06y1wj8x05gYjSmbH80fdKG1ZTNN7c5h
         us/jOd+tY/jjtc8fn+f9ej97CAD8Ijn5MElLU5KMDJWjQlETX1Fx8X5//8u3L14Y6IMHz6Cn5+F4a2tP
         o1rdElhUVG8nl58gVmYESUnFJCGhyEEq1Urb229MmExfwWw2w9jYB5ia+jxtsXyH169Hoba28xYKPP8S
@@ -187,7 +187,7 @@
 </value>
   </data>
   <data name="BtnUnlockProportion.Location" type="System.Drawing.Point, System.Drawing">
-    <value>199, 30</value>
+    <value>199, 31</value>
   </data>
   <data name="BtnUnlockProportion.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 2, 0</value>
@@ -226,7 +226,7 @@
     <value>NoControl</value>
   </data>
   <data name="label9.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 55</value>
+    <value>3, 56</value>
   </data>
   <data name="label9.Size" type="System.Drawing.Size, System.Drawing">
     <value>41, 12</value>
@@ -259,7 +259,7 @@
     <value>NoControl</value>
   </data>
   <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 33</value>
+    <value>3, 34</value>
   </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>29, 12</value>
@@ -286,7 +286,7 @@
     <value>Left</value>
   </data>
   <data name="IIOffsetX.Location" type="System.Drawing.Point, System.Drawing">
-    <value>65, 53</value>
+    <value>65, 54</value>
   </data>
   <data name="IIOffsetX.Size" type="System.Drawing.Size, System.Drawing">
     <value>55, 16</value>
@@ -307,7 +307,7 @@
     <value>3</value>
   </data>
   <data name="IIOffsetY.Location" type="System.Drawing.Point, System.Drawing">
-    <value>141, 53</value>
+    <value>141, 54</value>
   </data>
   <data name="IIOffsetY.Size" type="System.Drawing.Size, System.Drawing">
     <value>55, 16</value>
@@ -328,7 +328,7 @@
     <value>4</value>
   </data>
   <data name="IISizeH.Location" type="System.Drawing.Point, System.Drawing">
-    <value>141, 31</value>
+    <value>141, 32</value>
   </data>
   <data name="IISizeH.Size" type="System.Drawing.Size, System.Drawing">
     <value>55, 16</value>
@@ -349,7 +349,7 @@
     <value>5</value>
   </data>
   <data name="IISizeW.Location" type="System.Drawing.Point, System.Drawing">
-    <value>65, 31</value>
+    <value>65, 32</value>
   </data>
   <data name="IISizeW.Size" type="System.Drawing.Size, System.Drawing">
     <value>55, 16</value>
@@ -379,7 +379,7 @@
     <value>NoControl</value>
   </data>
   <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>50, 33</value>
+    <value>50, 34</value>
   </data>
   <data name="label6.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 0, 0</value>
@@ -418,7 +418,7 @@
     <value>NoControl</value>
   </data>
   <data name="label10.Location" type="System.Drawing.Point, System.Drawing">
-    <value>50, 55</value>
+    <value>50, 56</value>
   </data>
   <data name="label10.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 0, 0</value>
@@ -457,7 +457,7 @@
     <value>NoControl</value>
   </data>
   <data name="label7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>126, 33</value>
+    <value>126, 34</value>
   </data>
   <data name="label7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 0, 0</value>
@@ -496,7 +496,7 @@
     <value>NoControl</value>
   </data>
   <data name="label11.Location" type="System.Drawing.Point, System.Drawing">
-    <value>126, 55</value>
+    <value>126, 56</value>
   </data>
   <data name="label11.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 0, 0</value>
@@ -642,7 +642,7 @@
   <data name="BtnDPI.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wQAADsEBuJFr7QAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAASXSURBVEhLrZVt
+        vwAADr8BOAVTJAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAASXSURBVEhLrZVt
         UFRVGMd32ru7OjXT1JTThyKEWt6SonQIhxBaZF/u7rKAu8suyJu7oEOCu7wvlEGgfig1m/rQZB9smsk+
         WAwY4O4qllOSJVmZJKI5pGIBM8UM8v7vnHPvcjeyb56Z/9zzPPec8/zuOc95rkxm7DPJ+MCkzBC8c+8V
         +H/xgQkZ7+dltKPIvwhl4RUot16Dsug6lMWjUJbcILoFVekY0W2oyv4QRfrEVhK/suQmGUvG0fF03tar
@@ -669,7 +669,7 @@
     <value>168, 3</value>
   </data>
   <data name="BtnDPI.Size" type="System.Drawing.Size, System.Drawing">
-    <value>33, 16</value>
+    <value>33, 17</value>
   </data>
   <data name="BtnDPI.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
@@ -696,7 +696,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>204, 22</value>
+    <value>204, 23</value>
   </data>
   <data name="tableLayoutPanel2.TabIndex" type="System.Int32, mscorlib">
     <value>25</value>
@@ -731,7 +731,7 @@
   <data name="BtnReset.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAABGdBTUEAAJxAIA3kywAAACBjSFJNAABu
-        lQAAdA4AAPGBAACFRgAAZO0AAPeGAABJ4gAAHljF0QxvAAAACXBIWXMAAAsQAAALEAGtI711AAAFk0lE
+        lQAAdA4AAPGBAACFRgAAZO0AAPeGAABJ4gAAHljF0QxvAAAACXBIWXMAAAsOAAALDgFAvuFBAAAFk0lE
         QVRIS32VaVBTVxTHX7WbtqU6Tj+4oQIhoKytgLYWENEv1VJbnRZmqnyoilrcRkgiAlKFmY4LalEHx9YF
         raKygyKGQAiLAhJZkpAQAknIQkJASQJhkX/vi0sbxd6ZM+/d++77nXP/59x7KQB28/fxo1avWk3FbIuh
         jh09Tt7DKaePPqbmz5lHebp7UJ5MJuXu6vbOF37+lNfiJZTbIhdq86ZoannQcupMxhlK2i59yfqAfv4X
@@ -789,7 +789,7 @@
   <data name="BtnCenter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wQAADsEBuJFr7QAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEbSURBVDhPY8AH
+        vwAADr8BOAVTJAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEbSURBVDhPY8AH
         TExMGkAYyiUd+Pr6/gdhKBc/+M/O7vafja38PyurPhgD2cWqqtNBGF0cREO1IQBQIhyIO5AUduQ5OPwH
         YXRxIG0IdBYzVCtYcwQIQ7lwgCsMgK4tBWEoF2xANQhDuWAA8z+2cAC6IB2EoVygAAMDFwhDuXCA0wVA
         58O9AFLQZWLyf46MzBqQTSA+jAbiA1AMFwPRW8TFd83X1QXzwQYs1tb+v11MbC+xBqyQkNg81cAAYgAI
@@ -804,7 +804,7 @@
     <value>0, 0, 2, 0</value>
   </data>
   <data name="BtnCenter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>17, 16</value>
+    <value>17, 17</value>
   </data>
   <data name="BtnCenter.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
@@ -834,7 +834,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanel4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>38, 16</value>
+    <value>38, 17</value>
   </data>
   <data name="tableLayoutPanel4.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
@@ -864,7 +864,7 @@
     <value>4</value>
   </data>
   <data name="tableLayoutPanel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>283, 72</value>
+    <value>283, 73</value>
   </data>
   <data name="tableLayoutPanel3.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -891,7 +891,7 @@
     <value>3, 165</value>
   </data>
   <data name="GbSize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>289, 92</value>
+    <value>289, 93</value>
   </data>
   <data name="GbSize.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1118,7 +1118,7 @@
   <data name="BtnPSHelper.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGOfPtRkwAAACBjSFJNAAB6
-        JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAACXBIWXMAAAsQAAALEAGtI711AAACrUlE
+        JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAACXBIWXMAAAsOAAALDgFAvuFBAAACrUlE
         QVQ4T6WO60uTYRjG3/+kz0F9iMjEMnClhZonEMdi1WxoHoZzMzE3DTwhKttCN0MqZROdluiMSkQdw8OG
         ZjrJaZ42Z21NrWnbxJ2eq/d1JH7wQ+ED1/PcXPf1/O6bAnAmnWr+j44LaftaWNFnDzf22OZrOtevngw1
         dC6zZL3rqzKtJVys+ERbJwClrfPDtCDtWGEa+OkDGTS5iWpwc1emnoqVa5dGjF8PyYoTGJ07gFRpQE1z
@@ -1134,10 +1134,10 @@
 </value>
   </data>
   <data name="BtnPSHelper.Location" type="System.Drawing.Point, System.Drawing">
-    <value>263, 14</value>
+    <value>263, 13</value>
   </data>
   <data name="BtnPSHelper.Size" type="System.Drawing.Size, System.Drawing">
-    <value>17, 16</value>
+    <value>17, 17</value>
   </data>
   <data name="BtnPSHelper.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
@@ -1248,10 +1248,10 @@
 </value>
   </data>
   <data name="BtnModulationInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>263, 38</value>
+    <value>263, 37</value>
   </data>
   <data name="BtnModulationInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>17, 16</value>
+    <value>17, 17</value>
   </data>
   <data name="BtnModulationInfo.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
@@ -1383,10 +1383,10 @@ Click for more information...</value>
 </value>
   </data>
   <data name="BtnOnOffInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>263, 5</value>
+    <value>263, 4</value>
   </data>
   <data name="BtnOnOffInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>17, 16</value>
+    <value>17, 17</value>
   </data>
   <data name="BtnOnOffInfo.TabIndex" type="System.Int32, mscorlib">
     <value>22</value>
@@ -1602,6 +1602,9 @@ Click for more information...</value>
   <data name="GbLaser.Text" xml:space="preserve">
     <value>Laser Options</value>
   </data>
+  <data name="GbLaser.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="&gt;&gt;GbLaser.Name" xml:space="preserve">
     <value>GbLaser</value>
   </data>
@@ -1681,13 +1684,13 @@ Click for more information...</value>
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 263</value>
+    <value>3, 264</value>
   </data>
   <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>289, 30</value>
+    <value>289, 29</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
