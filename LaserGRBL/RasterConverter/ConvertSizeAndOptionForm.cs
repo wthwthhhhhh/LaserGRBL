@@ -98,8 +98,8 @@ namespace LaserGRBL.RasterConverter
 			IIBorderTracing.CurrentValue = IP.BorderSpeed = Settings.GetObject("GrayScaleConversion.VectorizeOptions.BorderSpeed", 1000);
 			IILinearFilling.CurrentValue = IP.MarkSpeed = Settings.GetObject("GrayScaleConversion.Gcode.Speed.Mark", 1000);
 
-			IP.LaserOn = "G0 Z-5 F8000";// Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.LaserOn", "G0 Z-5 F8000");
-            IP.LaserOff = "G0 Z0 F8000";//
+			IP.LaserOn = "G0 Z0";// Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.LaserOn", "G0 Z-5 F8000");
+            IP.LaserOff = "G0 Z5";//
    //         switch (IP.LaserOn)
    //         {
    //             case "M3":
@@ -326,6 +326,7 @@ namespace LaserGRBL.RasterConverter
 
 		private void BtnCreate_Click(object sender, EventArgs e)
 		{
+			IP.OptimizeSVG = IIOptimizeSVG.CurrentValue;
 			if (ConfirmOutOfBoundary())
 				DialogResult = DialogResult.OK;
 		}
@@ -373,5 +374,10 @@ namespace LaserGRBL.RasterConverter
 					IISizeW.CurrentValue = IP.HeightToWidht(IISizeH.CurrentValue);
 			}
 		}
-	}
+
+        private void IIOptimizeSVG_CurrentValueChanged(object sender, int OldValue, int NewValue, bool ByUser)
+        {
+            IP.OptimizeSVG = NewValue;
+        }
+    }
 }

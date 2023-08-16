@@ -17,6 +17,13 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Web.UI.WebControls;
 using static LaserGRBL.RasterConverter.ImageProcessor;
+using CsPotrace.BezierToBiarc;
+using System.Text.RegularExpressions;
+using System.IO;
+using Svg;
+using Svg.Transforms;
+using Svg.Pathing;
+using System.Globalization;
 
 namespace LaserGRBL
 {
@@ -387,10 +394,10 @@ namespace LaserGRBL
 			}
 
 
-			//trace borders
-			if (plist != null) //always true
+			//跟踪边界
+			if (plist != null) //总是正确的
 			{
-				//Optimize fast movement
+				//优化快速运动
 				if (useOptimizeFast)
 					plist = OptimizePaths(plist, 0 /*ComputeDirectionChangeCost(c, core, true)*/);
 				else
@@ -462,6 +469,7 @@ namespace LaserGRBL
             public float frequency;  // 频率
             public float lineWidth;  // 线宽
             public RasterConverter.ImageProcessor.LineTypeEnum lineType;  // 线宽
+            public int optimizeSVG;  // 路径优化程度
         }
         public class RandomLineConf
         {
@@ -520,7 +528,7 @@ namespace LaserGRBL
 			//move fast to origin
 			//list.Add(new GrblCommand("G0 X0 Y0")); //moved to custom footer
 
-			Analyze();
+			Analyze();//计算耗时
 			long elapsed = Tools.HiResTimer.TotalMilliseconds - start;
 
 			RiseOnFileLoaded(filename, elapsed);
@@ -1165,14 +1173,14 @@ namespace LaserGRBL
 
 					for (int j = d ? 0 : (h ? bmp.Width - 1 : bmp.Height - 1); d ? (j < (h ? bmp.Width : bmp.Height)) : (j >= 0); j = (d ? j + 1 : j - 1))
 						//水平绘制 x= 
-						ExtractSegment(bmp, h ? j : i, h ? i : j, !d, ref len, ref prevCol, rv, c); //extract different segments
+						ExtractSegment(bmp, h ? j : i, h ? i : j, !d, ref len, ref prevCol, rv, c); //提取不同的片段
 
 					if (h)
-						rv.Add(new XSegment(prevCol, len + 1, !d)); //close last segment
+						rv.Add(new XSegment(prevCol, len + 1, !d)); //关闭最后一段
 					else
-						rv.Add(new YSegment(prevCol, len + 1, !d)); //close last segment
+						rv.Add(new YSegment(prevCol, len + 1, !d)); //关闭最后一段
 
-					if (uni) // add "go back"
+					if (uni) // 添加“返回”
 					{
 						if (h) rv.Add(new XSegment(0, bmp.Width, true));
 						else rv.Add(new YSegment(0, bmp.Height, true));
@@ -1181,9 +1189,9 @@ namespace LaserGRBL
 					if (i < (h ? bmp.Height - 1 : bmp.Width - 1))
 					{
 						if (h)
-							rv.Add(new VSeparator()); //new line
+							rv.Add(new VSeparator()); //新行
 						else
-							rv.Add(new HSeparator()); //new line
+							rv.Add(new HSeparator()); //新行
 					}
 				}
 			}
@@ -1204,10 +1212,10 @@ namespace LaserGRBL
 				*/
 
 
-				//the algorithm runs along the matrix for diagonal lines (slice index)
-				//z1 and z2 contains the number of missing elements in the lower right and upper left
-				//the length of the segment can be determined as "slice - z1 - z2"
-				//my modified version of algorithm reverses travel direction each slice
+				//的算法沿着矩阵对角线(切片索引)
+				//z1, z2包含缺失的元素的数量在右下角,左上角
+				//线段的长度可以确定为“片- z1 z2”
+				//我的修改版本每个切片算法改变旅行的方向
 
 				rv.Add(new VSeparator()); //new line
 
@@ -1333,27 +1341,27 @@ namespace LaserGRBL
 			int nearestToZero = 0;
 			double bestDistanceToZero = Double.MaxValue;
 
-			double[,] costs = new double[list.Count, list.Count];   //array bidimensionale dei costi di viaggio dal punto finale della curva 1 al punto iniziale della curva 2
-			for (int c1 = 0; c1 < list.Count; c1++)                 //ciclo due volte sulla lista di curve
-			{
-				dPoint c1fa = list[c1].First().A;	//punto iniziale del primo segmento del percorso (per calcolo distanza dallo zero)
-				//dPoint c1la = list[c1].Last().A;	//punto iniziale dell'ulimo segmento del percorso (per calcolo direzione di uscita)
-				dPoint c1lb = list[c1].Last().B;	//punto finale dell'ultimo segmento del percorso (per calcolo distanza tra percorsi e direzione di uscita e ingresso)
-				
+			double[,] costs = new double[list.Count, list.Count];   //从曲线1的终点到曲线2的起点的二维旅行成本数组
+            for (int c1 = 0; c1 < list.Count; c1++)                 //循环due volte在曲线列表
+            {
+				dPoint c1fa = list[c1].First().A;   //percorso第一段的起始点(每calcolo距离dallo零)
+                                                    //dPoint c1la = list[c1].Last().A;	//percorso l'ulimo段的起始点(每calcolo direzione di uscita)
+                dPoint c1lb = list[c1].Last().B;    //最后一段旅程的终点(计算到旅程的距离和游客和门票的方向)
 
-				for (int c2 = 0; c2 < list.Count; c2++)             //con due indici diversi c1, c2
-				{
-					dPoint c2fa = list[c2].First().A;     //punto iniziale del primo segmento del percorso (per calcolo distanza tra percorsi e direzione di ingresso)
-					//dPoint c2fb = list[c2].First().B;     //punto finale del primo segmento del percorso (per calcolo direzione di continuazione)
 
-					if (c1 == c2)
-						costs[c1, c2] = double.MaxValue;  //distanza del punto con se stesso (caso degenere)
-					else
+                for (int c2 = 0; c2 < list.Count; c2++)             //有适当的指示diversi c1, c2
+                {
+					dPoint c2fa = list[c2].First().A;     //percorso第一段的起始点(距离percorsi和入口方向的计算)
+                                                          //dPoint c2fb = list[c2].First().B;     //percorso第一段的终点(继续计算)
+
+                    if (c1 == c2)
+						costs[c1, c2] = double.MaxValue;  //点与stesso的距离(简并情况)
+                    else
 						costs[c1, c2] = SquareDistance(c1lb, c2fa); //TravelCost(c1la, c1lb, c2fa, c2fb, changecost);
 				}
 
-				//trova quello che parte più vicino allo zero
-				double distZero = SquareDistanceZero(c1fa);
+                //你会发现这是最糟糕的部分
+                double distZero = SquareDistanceZero(c1fa);
 				if (distZero < bestDistanceToZero)
 				{
 					nearestToZero = c1;
@@ -1361,14 +1369,14 @@ namespace LaserGRBL
 				}
 			}
 
-			//Create a list of unvisited places
+			//创建一个列表未浏览的地方
 			List<int> unvisited = Enumerable.Range(0, list.Count).ToList();
 
-			//Pick nearest points
+			//选择最近的点
 			List<List<CsPotrace.Curve>> bestPath = new List<List<Curve>>();
 
-			//parti da quello individuato come "il più vicino allo zero"
-			bestPath.Add(list[nearestToZero]);
+            //派对的个人是“最糟糕的零”
+            bestPath.Add(list[nearestToZero]);
 			unvisited.Remove(nearestToZero);
 			int lastIndex = nearestToZero;
 			
@@ -1377,24 +1385,27 @@ namespace LaserGRBL
 				int bestIndex = 0;
 				double bestDistance = double.MaxValue;
 
-				foreach (int nextIndex in unvisited)                    //cicla tutti gli "unvisited" rimanenti
-				{
+				foreach (int nextIndex in unvisited)                    //所有关于“未访问”的信息
+                {
 					double dist = costs[lastIndex, nextIndex];
 					if (dist < bestDistance)
 					{
-						bestIndex = nextIndex;                    //salva il bestIndex
-						bestDistance = dist;                      //salva come risultato migliore                        
-					}
+						bestIndex = nextIndex;                    //保存bestIndex
+
+                        bestDistance = dist;                      //保存到risultato migliore                        
+                    }
 				}
 
 				bestPath.Add(list[bestIndex]);
 				unvisited.Remove(bestIndex);
 
-				//Save nearest point
-				lastIndex = bestIndex;                   //l'ultimo miglior indice trovato diventa il prossimo punto da analizzare			
-			}
+				//保存最近的点
+				lastIndex = bestIndex;                   //最后一个最好的trovato指数在接下来的分析点
 
-			return bestPath;
+
+            }
+
+            return bestPath;
 		}
 
 		////questa funzione calcola il "costo" di un cambio di direzione
@@ -1502,8 +1513,8 @@ namespace LaserGRBL
 			GrblCommand.StatePositionBuilder spb = new GrblCommand.StatePositionBuilder();
 			ProgramRange.XYRange scaleRange = mRange.MovingRange;
 
-			//Get scale factors for both directions. To preserve the aspect ratio, use the smaller scale factor.
-			float zoom = scaleRange.Width > 0 && scaleRange.Height > 0 ? Math.Min((float)size.Width / (float)scaleRange.Width, (float)size.Height / (float)scaleRange.Height) * 0.95f : 1;
+            //得到两个方向的比例因子。要保持长宽比，请使用较小的比例因子。Get scale factors for both directions. To preserve the aspect ratio, use the smaller scale factor.
+            float zoom = scaleRange.Width > 0 && scaleRange.Height > 0 ? Math.Min((float)size.Width / (float)scaleRange.Width, (float)size.Height / (float)scaleRange.Height) * 0.95f : 1;
 
 
 			ScaleAndPosition(g, size, scaleRange, zoom);
@@ -1526,7 +1537,8 @@ namespace LaserGRBL
 					if (spb.TrueMovement())
 					{
 						Color linecolor = Color.FromArgb(spb.GetCurrentAlpha(mRange.SpindleRange), firstline ? ColorScheme.PreviewFirstMovement : spb.LaserBurning ? ColorScheme.PreviewLaserPower : ColorScheme.PreviewOtherMovement);
-						using (Pen pen = GetPen(linecolor))
+
+						using (Pen pen = GetPen(Color.Red))
 						{
 							pen.ScaleTransform(1 / zoom, 1 / zoom);
 
@@ -1535,6 +1547,7 @@ namespace LaserGRBL
 								pen.DashStyle = DashStyle.Dash;
 								pen.DashPattern = new float[] { 1f, 1f };
 							}
+						
 
 							if (spb.G0G1 && cmd.IsLinearMovement && pen.Color.A > 0)
 							{
@@ -1574,15 +1587,15 @@ namespace LaserGRBL
 			mRange.ResetRange();
 
 			string content = "";
-
-			try
-			{
-				content = Autotrace.BitmapToSvgString(bmp, useCornerThreshold, cornerThreshold, useLineThreshold, lineThreshold);
-			}
+            try
+            {
+                string optimizedSvgText = (Autotrace.BitmapToSvgString(bmp, useCornerThreshold, cornerThreshold, useLineThreshold, lineThreshold));//SvgOptimizer.OptimizeSvg
+                content = SvgOptimizer.OptimizeSvg(optimizedSvgText,conf.optimizeSVG);
+            }
 			catch (Exception ex) { Logger.LogException("Centerline", ex); }
 
 			SvgConverter.GCodeFromSVG converter = new SvgConverter.GCodeFromSVG();
-			converter.GCodeXYFeed = Settings.GetObject("GrayScaleConversion.VectorizeOptions.BorderSpeed", 1000);
+			converter.GCodeXYFeed = Settings.GetObject("GrayScaleConversion.VectorizeOptions.BorderSpeed", 3000);
 			converter.SvgScaleApply = true;
 			converter.SvgMaxSize = (float)Math.Max(bmp.Width / 10.0, bmp.Height / 10.0);
 			converter.UserOffset.X = Settings.GetObject("GrayScaleConversion.Gcode.Offset.X", 0F);
@@ -1591,7 +1604,8 @@ namespace LaserGRBL
 
 			string gcode = converter.convertFromText(content, core);
 			string[] lines = gcode.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-			foreach (string l in lines)
+           // ShortestPathOptimizer.OptimizePath(lines);
+            foreach (string l in lines)
 			{
 				string line = l;
 				if ((line = line.Trim()).Length > 0)
@@ -1696,19 +1710,35 @@ namespace LaserGRBL
 
             RiseOnFileLoaded(filename, elapsed);
         }
-        private void Analyze() //analyze the file and build global range and timing for each command
+        private void Analyze() //分析文件,并为每个命令构建全球范围和时机
 		{
 			GrblCommand.StatePositionBuilder spb = new GrblCommand.StatePositionBuilder();
 
 			mRange.ResetRange();
 			mRange.UpdateXYRange("X0", "Y0", false);
 			mEstimatedTotalTime = TimeSpan.Zero;
+			GrblCommand prevCommand = new GrblCommand("G0 Z5");
 
-			foreach (GrblCommand cmd in list)
-			{
-				try
+            for ( int i=0;i< list.Count;i++)
+            {
+                GrblCommand cmd = list[i];
+                try
 				{
-					GrblConfST conf =  GrblCore.Configuration;
+
+                    GrblConfST conf = GrblCore.Configuration;
+                    if (cmd.Command.Contains("G0") && !cmd.Command.Contains("Z") && !prevCommand.Command.Contains("Z5"))
+					{
+						list.Insert(i, new GrblCommand("G0 Z5"));
+						cmd = list[i];
+					}
+					else if(cmd.Command.Contains("Z5")&& list.Count>i +1) 
+					{
+						if (spb.AnalyzeCommand(list[i+1], true, conf).Milliseconds < 50) {
+                            list.RemoveAt(i);
+                            cmd = list[i];
+                        }
+					}
+					prevCommand = cmd;
 					TimeSpan delay = spb.AnalyzeCommand(cmd, true, conf);
 
 					mRange.UpdateSRange(spb.S);
@@ -1790,7 +1820,7 @@ namespace LaserGRBL
 			{
 				using (Pen pen = GetPen(ColorScheme.PreviewJobRange))
 				{
-					pen.DashStyle = DashStyle.Dash;
+					pen.DashStyle = DashStyle.Solid;
 					pen.DashPattern = new float[] { 1.0f / zoom, 2.0f / zoom }; //pen.DashPattern = new float[] { 1f / zoom, 2f / zoom};
 					pen.ScaleTransform(1.0f / zoom, 1.0f / zoom);
 
@@ -2073,7 +2103,575 @@ namespace LaserGRBL
 		}
 
 	}
+    public class GCodeLine
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
+        // Other properties that represent G-code information (e.g., G, M, F, etc.)
 
+        public GCodeLine(double x, double y, double z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
+    }
+
+    public class ShortestPathOptimizer
+    {
+        public static List<GCodeLine> OptimizePath(List<GCodeLine> lines)
+        {
+            List<GCodeLine> optimizedLines = new List<GCodeLine>();
+
+            GCodeLine currentPosition = new GCodeLine(0, 0, 0); // Starting position
+
+            while (lines.Count > 0)
+            {
+                double minDistance = double.MaxValue;
+                int minIndex = -1;
+
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    double distance = CalculateDistance(currentPosition, lines[i]);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        minIndex = i;
+                    }
+                }
+
+                if (minIndex != -1)
+                {
+                    GCodeLine nextLine = lines[minIndex];
+                    optimizedLines.Add(nextLine);
+                    currentPosition = nextLine;
+                    lines.RemoveAt(minIndex);
+                }
+            }
+
+            return optimizedLines;
+        }
+
+        private static double CalculateDistance(GCodeLine point1, GCodeLine point2)
+        {
+            // Simple Euclidean distance calculation
+            double dx = point2.X - point1.X;
+            double dy = point2.Y - point1.Y;
+            double dz = point2.Z - point1.Z;
+
+            return Math.Sqrt(dx * dx + dy * dy + dz * dz);
+        }
+    }
+ 
+    public class SvgPathOptimizer
+    {
+        //public static SvgPathSegmentList OptimizePath(SvgPathSegmentList segments)
+        //{
+        //    SvgPathSegmentList optimizedSegments = new SvgPathSegmentList();
+
+        //    List<PointF> points = new List<PointF>();
+
+        //    // 每个段的开始点和结束点转换为点的列表
+        //    foreach (var segment in segments)
+        //    {
+        //        points.Add(segment.Start);
+        //        points.Add(segment.End);
+        //    }
+
+        //    // 找点的凸包
+        //    List<PointF> convexHull = ChristofidesTSP.FindTSPPath(points);
+
+        //    // 重组优化的部分
+        //    for (int i = 0; i < convexHull.Count - 1; i++)
+        //    {
+        //        optimizedSegments.Add(new SvgLineSegment(new PointF(convexHull[i].X, convexHull[i].Y), new PointF(convexHull[i + 1].X, convexHull[i + 1].Y)));
+        //    }
+
+        //    // 连最后一点与第一点关闭路径
+        //    optimizedSegments.Add(new SvgLineSegment(new PointF(convexHull[convexHull.Count - 1].X, convexHull[convexHull.Count - 1].Y), new PointF(convexHull[0].X, convexHull[0].Y)));
+
+        //    return optimizedSegments;
+        //}
+
+        //凸包算法——格雷厄姆扫描
+        private static List<PointF> GrahamScan(List<PointF> points)
+        {
+            // 找到最低的点坐标(如果系和左边的)
+            PointF pivot = points[0];
+            foreach (var point in points)
+            {
+                if (point.Y < pivot.Y || (point.Y == pivot.Y && point.X < pivot.X))
+                {
+                    pivot = point;
+                }
+            }
+
+            // 对点的极角排序轴心点
+            points.Sort((a, b) => CompareByPolarAngle(pivot, a, b));
+
+            // 创建一个堆栈跟踪点的凸包
+            Stack<PointF> stack = new Stack<PointF>();
+            stack.Push(points[0]);
+            stack.Push(points[1]);
+
+            // Build the convex hull
+            for (int i = 2; i < points.Count; i++)
+            {
+                while (stack.Count >= 2 && Orientation(stack.SecondFromTop(), stack.Peek(), points[i]) != 2)
+                {
+                    stack.Pop();
+                }
+                stack.Push(points[i]);
+            }
+
+            return new List<PointF>(stack);
+        }
+      
+        // Compare points by polar angle from the pivot point
+        private static int CompareByPolarAngle(PointF pivot, PointF a, PointF b)
+        {
+            int orientation = Orientation(pivot, a, b);
+            if (orientation == 0)
+            {
+                // If points are collinear, choose the one closer to the pivot point
+                double distA = DistanceSquared(pivot, a);
+                double distB = DistanceSquared(pivot, b);
+                return distA.CompareTo(distB);
+            }
+            return orientation;
+        }
+
+        // Calculate the orientation of three points (clockwise, counterclockwise, or collinear)
+        private static int Orientation(PointF p, PointF q, PointF r)
+        {
+            double val = (q.Y - p.Y) * (r.X - q.X) - (q.X - p.X) * (r.Y - q.Y);
+            if (Math.Abs(val) < 1e-6)
+            {
+                return 0; // Collinear
+            }
+            return (val > 0) ? 1 : 2; // Clockwise or Counterclockwise
+        }
+
+        // Calculate the squared distance between two points
+        private static double DistanceSquared(PointF p1, PointF p2)
+        {
+            double dx = p2.X - p1.X;
+            double dy = p2.Y - p1.Y;
+            return dx * dx + dy * dy;
+        }
+		public static SvgPathSegmentList OptimizePath(SvgPathSegmentList segments, int optimizeSVGPercent)
+		{
+			SvgPathSegmentList optimizedSegments = new SvgPathSegmentList();
+            SvgPathSegment currentPosition = new SvgMoveToSegment(new PointF(0, 0)); // Starting position
+            List<SvgPathSegmentList> optimizedSegmentsList = new List<SvgPathSegmentList>();
+			SvgPathSegmentList tempLi = new SvgPathSegmentList();
+            for (int i = 0; i < segments.Count; i++)
+			{
+				if (segments[i] is SvgMoveToSegment&& tempLi.Count > 0)
+				{
+					//if( CalculateDistance(tempLi.Last, segments[i]) > 1000) { 
+                    optimizedSegmentsList.Add(tempLi);
+					tempLi = new SvgPathSegmentList() { segments[i] };
+                    //}
+                }
+				else {
+                    tempLi.Add(segments[i]);
+                }
+
+            }
+            optimizedSegmentsList.Add(tempLi);
+            while (optimizedSegmentsList.Count > 0)
+			{
+				double minDistance = double.MaxValue;
+				int minIndex = -1;
+				int seed = 1000;//(int)(segments.Count * (optimizeSVGPercent/100f))+1;
+
+                int fNum = (segments.Count > seed ? seed : segments.Count);
+
+                for (int i = 0; i < optimizedSegmentsList.Count; i++)
+				{
+					double distance = CalculateDistance(currentPosition, optimizedSegmentsList[i]);
+					if (distance < minDistance)
+					{
+						minDistance = distance;
+						minIndex = i;
+					}
+				}
+
+				if (minIndex != -1)
+				{
+                    SvgPathSegmentList nextSegment = optimizedSegmentsList[minIndex];
+					for (int i = 0; i < nextSegment.Count; i++)
+					{
+                        optimizedSegments.Add(nextSegment[i]);
+                    }
+					currentPosition = nextSegment.Last;
+                    optimizedSegmentsList.RemoveAt(minIndex);
+				}
+			}
+
+			return optimizedSegments;
+		}
+
+		private static double CalculateDistance(SvgPathSegment segment1, SvgPathSegmentList segment2)
+        {
+            // 简单的终点之间的欧氏距离计算第一段和第二段的起点
+            double dx = segment2.FirstOrDefault().Start.X - segment1.End.X;
+            double dy = segment2.FirstOrDefault().Start.Y - segment1.End.Y;
+
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+        private static double CalculateDistance(SvgPathSegment segment1, SvgPathSegment segment2)
+        {
+            // 简单的终点之间的欧氏距离计算第一段和第二段的起点
+            double dx = segment2.Start.X - segment1.End.X;
+            double dy = segment2.Start.Y - segment1.End.Y;
+
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+    }
+
+    public class Edge
+    {
+        public int Start { get; set; }
+        public int End { get; set; }
+        public double Weight { get; set; }
+
+        public Edge(int start, int end, double weight)
+        {
+            Start = start;
+            End = end;
+            Weight = weight;
+        }
+    }
+
+    public class ChristofidesTSP
+    {
+        public static List<PointF> FindTSPPath(List<PointF> points)
+        {
+            int numPoints = points.Count;
+            double[][] distanceMatrix = new double[numPoints][];
+            for (int i = 0; i < numPoints; i++)
+            {
+                distanceMatrix[i] = new double[numPoints];
+                for (int j = 0; j < numPoints; j++)
+                {
+                    distanceMatrix[i][j] = Distance(points[i], points[j]);
+                }
+            }
+
+            // 构建完全图
+            List<Edge> edges = new List<Edge>();
+            for (int i = 0; i < numPoints; i++)
+            {
+                for (int j = i + 1; j < numPoints; j++)
+                {
+                    edges.Add(new Edge(i, j, distanceMatrix[i][j]));
+                }
+            }
+
+            // 1. 找到最小生成树
+            List<Edge> mst = FindMinimumSpanningTree(edges, numPoints);
+
+            // 2. 找到最小权重完备匹配
+            List<Edge> mwpm = FindMinimumWeightPerfectMatching(points,mst, numPoints);
+
+            // 合并最小生成树和最小权重完备匹配
+            List<Edge> mergedEdges = mst.Concat(mwpm).ToList();
+
+            // 3. 找到欧拉回路
+            List<int> eulerianPath = FindEulerianPath(mergedEdges, numPoints);
+
+            // 4. 从欧拉回路得到TSP路径
+            List<PointF> tspPath = new List<PointF>();
+            foreach (int node in eulerianPath)
+            {
+                tspPath.Add(points[node]);
+            }
+
+            return tspPath;
+        }
+
+        private static double Distance(PointF p1, PointF p2)
+        {
+            double dx = p2.X - p1.X;
+            double dy = p2.Y - p1.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        // 1. 找到最小生成树
+        private static List<Edge> FindMinimumSpanningTree(List<Edge> edges, int numPoints)
+        {
+            List<Edge> mst = new List<Edge>();
+            edges.Sort((a, b) => a.Weight.CompareTo(b.Weight));
+
+            int[] parents = new int[numPoints];
+            for (int i = 0; i < numPoints; i++)
+            {
+                parents[i] = i;
+            }
+
+            int numEdgesAdded = 0;
+            foreach (Edge edge in edges)
+            {
+                int rootStart = FindRoot(parents, edge.Start);
+                int rootEnd = FindRoot(parents, edge.End);
+                if (rootStart != rootEnd)
+                {
+                    mst.Add(edge);
+                    parents[rootStart] = rootEnd;
+                    numEdgesAdded++;
+                    if (numEdgesAdded == numPoints - 1)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return mst;
+        }
+
+        private static int FindRoot(int[] parents, int node)
+        {
+            if (parents[node] != node)
+            {
+                parents[node] = FindRoot(parents, parents[node]);
+            }
+            return parents[node];
+        }
+
+        // 2. 找到最小权重完备匹配
+        private static List<Edge> FindMinimumWeightPerfectMatching(List<PointF> points, List<Edge> mst, int numPoints)
+        {
+            List<Edge> mwpm = new List<Edge>();
+            List<int> oddDegreeNodes = new List<int>();
+            int[] degreeCounts = new int[numPoints];
+
+            // 计算每个节点的度数
+            foreach (Edge edge in mst)
+            {
+                degreeCounts[edge.Start]++;
+                degreeCounts[edge.End]++;
+            }
+
+            // 找到所有奇数度节点
+            for (int i = 0; i < numPoints; i++)
+            {
+                if (degreeCounts[i] % 2 != 0)
+                {
+                    oddDegreeNodes.Add(i);
+                }
+            }
+
+            // 通过两两匹配，构建最小权重完备匹配
+            for (int i = 0; i < oddDegreeNodes.Count; i++)
+            {
+                int node1 = oddDegreeNodes[i];
+                double minWeight = double.MaxValue;
+                int minNode = -1;
+                for (int j = i + 1; j < oddDegreeNodes.Count; j++)
+                {
+                    int node2 = oddDegreeNodes[j];
+                    double weight = Distance(points[node1], points[node2]);
+                    if (weight < minWeight)
+                    {
+                        minWeight = weight;
+                        minNode = node2;
+                    }
+                }
+                mwpm.Add(new Edge(node1, minNode, minWeight));
+            }
+
+            return mwpm;
+        }
+
+        // 3. 找到欧拉回路
+        private static List<int> FindEulerianPath(List<Edge> edges, int numPoints)
+        {
+            Dictionary<int, List<int>> graph = new Dictionary<int, List<int>>();
+            foreach (Edge edge in edges)
+            {
+                if (!graph.ContainsKey(edge.Start))
+                {
+                    graph[edge.Start] = new List<int>();
+                }
+                graph[edge.Start].Add(edge.End);
+
+                if (!graph.ContainsKey(edge.End))
+                {
+                    graph[edge.End] = new List<int>();
+                }
+                graph[edge.End].Add(edge.Start);
+            }
+
+            List<int> eulerianPath = new List<int>();
+            Stack<int> stack = new Stack<int>();
+            stack.Push(0);
+
+            while (stack.Count > 0)
+            {
+                int node = stack.Peek();
+                if (graph[node].Count > 0)
+                {
+                    int nextNode = graph[node][0];
+                    stack.Push(nextNode);
+                    graph[node].Remove(nextNode);
+                    graph[nextNode].Remove(node);
+                }
+                else
+                {
+                    eulerianPath.Insert(0, stack.Pop());
+                }
+            }
+
+            return eulerianPath;
+        }
+    }
+    public static class StackExtensions
+    {
+        public static T SecondFromTop<T>(this Stack<T> stack)
+        {
+            if (stack.Count < 2)
+            {
+                throw new InvalidOperationException("Stack has less than two elements.");
+            }
+
+            T top = stack.Pop();
+            T secondTop = stack.Peek();
+            stack.Push(top);
+
+            return secondTop;
+        }
+    }
+
+    public class SvgOptimizer
+    {
+        public static string OptimizeSvg(string svgText, int optimizeSVGPercent)
+        {
+            SvgDocument svgDocument = SvgDocument.FromSvg<SvgDocument>(svgText);
+
+            if (svgDocument != null)
+            {
+                // 从SVG文档中提取所有路径
+                var paths = svgDocument.Children.OfType<SvgPath>().ToList();
+
+                // SVG路径转换为自定义路径段
+                SvgPathSegmentList segments = ConvertToSvgPathSegments(paths);
+
+                // 优化路径片段
+                SvgPathSegmentList optimizedSegments = SvgPathOptimizer.OptimizePath(segments,  optimizeSVGPercent);
+
+                // 重组优化SVG路径
+                svgDocument.Children.Clear(); 
+				svgDocument.Children.Add(new SvgPath()
+                {
+                    PathData = optimizedSegments,
+                    Fill = SvgPaintServer.None,
+                    Stroke = new SvgColourServer(System.Drawing.Color.Black),
+                    StrokeWidth = 1
+                });
+
+                // Serialize the optimized SVG document back to SVG text
+                using (var stream = new MemoryStream())
+                {
+                    svgDocument.Write(stream);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    using (var reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private static SvgPathSegmentList ConvertToSvgPathSegments(List<SvgPath> paths)
+        {
+            SvgPathSegmentList segments = new SvgPathSegmentList();
+
+            foreach (var path in paths)
+            {
+                SvgPathSegmentList d = path.Attributes["d"] as SvgPathSegmentList;
+				if (segments == null || segments.Count == 0) {
+					segments = d;
+				}
+				else {
+					foreach (var segment in d) {
+						segments.Add(segment);
+
+                    }
+				}
+     //           if (d.Count > 0)
+     //           {
+                    
+     //               int objCount = 0;
+					//foreach (SvgPathSegment svgPath in d)
+					//{
+     //                   segments.Add(svgPath);
+     // //                  var command = svgPath.Take(1).Single();
+     // //                  char cmd = char.ToUpper(command);
+     // //                  bool absolute = (cmd == command);
+     // //                  string remainingargs = svgPath.Substring(1);
+     // //                  string argSeparators = @"[\s,]|(?=(?<!e)-)";// @"[\s,]|(?=-)|(-{,2})";        // support also -1.2e-3 orig. @"[\s,]|(?=-)"; 
+     // //                  var splitArgs = Regex
+     // //                      .Split(remainingargs, argSeparators)
+     // //                      .Where(t => !string.IsNullOrEmpty(t));
+     // //                  // get command coordinates
+     // //                  float[] floatArgs = splitArgs.Select(arg => ConvertToPixel(arg)).ToArray();
+					//	//for (int i = 0; i < floatArgs.Length; i += 2)
+					//	//{
+					//	//	var currentX = floatArgs[i]; 
+					//	//	var currentY = floatArgs[i + 1];
+					//	//}
+     //               }
+     //           }
+                //PointF start = path.PathData?.FirstOrDefault()?.Start ?? new PointF(0, 0);
+                //PointF end = path.PathData?.LastOrDefault()?.End ?? new PointF(0, 0);
+
+                
+            }
+
+            return segments;
+        }
+        private static float factor_In2Px = 96;
+        private static float factor_Mm2Px = 96f / 25.4f;
+        private static float factor_Cm2Px = 96f / 2.54f;
+        private static float factor_Pt2Px = 96f / 72f;
+        private static float factor_Pc2Px = 12 * 96f / 72f;
+        private static float factor_Em2Px = 150;
+        private static float ConvertToPixel(string str, float ext = 1)        // return value in px
+        {       // https://www.w3.org/TR/SVG/coords.html#Units          // in=90 or 96 ???
+            bool percent = false;
+            //       Logger.Trace( "convert to pixel in {0}", str);
+            float factor = 1;   // no unit = px
+            if (str.IndexOf("mm") > 0) { factor = factor_Mm2Px; }               // Millimeter
+            else if (str.IndexOf("cm") > 0) { factor = factor_Cm2Px; }          // Centimeter
+            else if (str.IndexOf("in") > 0) { factor = factor_In2Px; }          // Inch    72, 90 or 96?
+            else if (str.IndexOf("pt") > 0) { factor = factor_Pt2Px; }          // Point
+            else if (str.IndexOf("pc") > 0) { factor = factor_Pc2Px; }          // Pica
+            else if (str.IndexOf("em") > 0) { factor = factor_Em2Px; }          // Font size
+            else if (str.IndexOf("%") > 0) { percent = true; }
+            str = str.Replace("pt", "").Replace("pc", "").Replace("mm", "").Replace("cm", "").Replace("in", "").Replace("em ", "").Replace("%", "").Replace("px", "");
+            double test;
+            if (str.Length > 0)
+            {
+                if (percent)
+                {
+                    if (double.TryParse(str, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out test))
+                    { return ((float)test * ext / 100); }
+                }
+                else
+                {
+                    if (double.TryParse(str, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out test))
+                    { return ((float)test * factor); }
+                }
+            }
+
+            return 0f;
+        }
+    }
 }
 
 /*

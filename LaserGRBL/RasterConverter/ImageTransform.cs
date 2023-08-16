@@ -211,13 +211,13 @@ namespace LaserGRBL.RasterConverter
 
 					current = originalData[index];
 
-					// transform the pixel - normally this would be some form of color
-					// reduction. For this sample it's simple threshold based
-					// monochrome conversion
+					// 变换的像素,通常这是某种形式的颜色
+					// 减少。对于此示例很简单阈值的基础
+					// 单色 转换
 					transformed = TransformPixel(current);
 					originalData[index] = transformed;
 
-					// apply a dither algorithm to this pixel
+					// 应用这个像素抖动算法
 					if (dither != null)
 					{
 						dither.Diffuse(originalData, current, transformed, col, row, size.Width, size.Height);
@@ -233,9 +233,9 @@ namespace LaserGRBL.RasterConverter
 			byte gray = (byte)(0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B);
 
 			/*
-			 * I'm leaving the alpha channel untouched instead of making it fully opaque
-			 * otherwise the transparent areas become fully black, and I was getting annoyed
-			 * by this when testing images with large swathes of transparency!
+			 * 我离开alpha通道不变,而不是使它完全不透明
+			 * 否则透明区域成为完全黑,我生气
+			 * 当测试图像与透明度的大片!
 			 */
 
 			return gray < 128 ? new Cyotek.Drawing.ArgbColor(pixel.A, 0, 0, 0) : new Cyotek.Drawing.ArgbColor(pixel.A, 255, 255, 255);
@@ -246,7 +246,7 @@ namespace LaserGRBL.RasterConverter
 		{
 			ColorMatrix cm = default(ColorMatrix);
 
-			// Apply selected grayscale formula
+			// 应用灰度选择公式
 
 			float RedFactor = 0;
 			float GreenFactor = 0;

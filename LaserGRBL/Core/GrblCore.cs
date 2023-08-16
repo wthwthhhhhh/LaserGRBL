@@ -29,7 +29,7 @@ namespace LaserGRBL
 
 		public static string GCODE_STD_HEADER = "G90 (use absolute coordinates)";
 		public static string GCODE_STD_PASSES = ";(Uncomment if you want to sink Z axis)\r\n;G91 (use relative coordinates)\r\n;G0 Z-1 (sinks the Z axis, 1mm)\r\n;G90 (use absolute coordinates)";
-		public static string GCODE_STD_FOOTER = "G0 X0 Y0 Z0 (move back to origin)";
+		public static string GCODE_STD_FOOTER = "G0 X0 Y0 Z5 (move back to origin)";
 
 		[Serializable]
 		public class ThreadingMode
@@ -2760,9 +2760,9 @@ namespace LaserGRBL
 		internal void SetNewZero()
 		{ if (CanDoZeroing) EnqueueCommand(new GrblCommand("G92 X0 Y0 Z0")); }
         internal void SetPenDown()
-        { EnqueueCommand(new GrblCommand("G0 Z-5 F8000")); }
+        { EnqueueCommand(new GrblCommand("G0 Z0")); }
         internal void SetPenUp()
-        {  EnqueueCommand(new GrblCommand("G0 Z0 F8000")); }
+        {  EnqueueCommand(new GrblCommand("G0 Z5")); }
         internal void SetLineLength(int length)
         { EnqueueCommand(new GrblCommand(string.Format("G99 X{0} Y{0}",length))); }
 
@@ -3333,8 +3333,9 @@ namespace LaserGRBL
 		public bool HomingEnabled => ReadDecimal(Version9 ? 22 : 17, 1) != 0;
 		public decimal MaxRateX => ReadDecimal(Version9 ? 110 : 4, 4000);
 		public decimal MaxRateY => ReadDecimal(Version9 ? 111 : 5, 4000);
+        public decimal MaxRateZ => ReadDecimal(Version9 ? 112 : 6, 4000);
 
-		public bool LaserMode
+        public bool LaserMode
 		{
 			get
 			{

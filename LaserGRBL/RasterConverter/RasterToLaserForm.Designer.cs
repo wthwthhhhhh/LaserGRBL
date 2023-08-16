@@ -1105,7 +1105,7 @@
             this.UDFillingQuality.Name = "UDFillingQuality";
             this.TT.SetToolTip(this.UDFillingQuality, resources.GetString("UDFillingQuality.ToolTip"));
             this.UDFillingQuality.Value = new decimal(new int[] {
-            3,
+            1,
             0,
             0,
             0});
@@ -1217,9 +1217,14 @@
             // UDQuality
             // 
             this.UDQuality.DecimalPlaces = 3;
+            this.UDQuality.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             resources.ApplyResources(this.UDQuality, "UDQuality");
             this.UDQuality.Maximum = new decimal(new int[] {
-            50,
+            1,
             0,
             0,
             0});
@@ -1227,14 +1232,14 @@
             1,
             0,
             0,
-            0});
+            65536});
             this.UDQuality.Name = "UDQuality";
             this.TT.SetToolTip(this.UDQuality, resources.GetString("UDQuality.ToolTip"));
             this.UDQuality.Value = new decimal(new int[] {
-            3,
+            5,
             0,
             0,
-            0});
+            65536});
             this.UDQuality.ValueChanged += new System.EventHandler(this.UDQuality_ValueChanged);
             // 
             // CbLinePreview

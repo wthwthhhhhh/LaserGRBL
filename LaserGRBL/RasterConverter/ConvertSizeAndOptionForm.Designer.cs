@@ -91,6 +91,9 @@ namespace LaserGRBL.RasterConverter
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.BtnReset = new LaserGRBL.UserControls.ImageButton();
             this.BtnCenter = new LaserGRBL.UserControls.ImageButton();
+            this.IIOptimizeSVG = new LaserGRBL.UserControls.NumericInput.IntegerInputRanged();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.GbSpeed = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.LblBorderTracing = new System.Windows.Forms.Label();
@@ -160,6 +163,9 @@ namespace LaserGRBL.RasterConverter
             this.tableLayoutPanel3.Controls.Add(this.label11, 3, 3);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel2, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 5, 3);
+            this.tableLayoutPanel3.Controls.Add(this.IIOptimizeSVG, 2, 4);
+            this.tableLayoutPanel3.Controls.Add(this.label2, 0, 4);
+            this.tableLayoutPanel3.Controls.Add(this.label3, 3, 4);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             // 
             // BtnUnlockProportion
@@ -338,6 +344,27 @@ namespace LaserGRBL.RasterConverter
             this.TT.SetToolTip(this.BtnCenter, resources.GetString("BtnCenter.ToolTip"));
             this.BtnCenter.UseAltImage = false;
             this.BtnCenter.Click += new System.EventHandler(this.BtnCenter_Click);
+            // 
+            // IIOptimizeSVG
+            // 
+            resources.ApplyResources(this.IIOptimizeSVG, "IIOptimizeSVG");
+            this.IIOptimizeSVG.CurrentValue = 50;
+            this.IIOptimizeSVG.ForcedText = null;
+            this.IIOptimizeSVG.ForceMinMax = false;
+            this.IIOptimizeSVG.MinValue = 1;
+            this.IIOptimizeSVG.Name = "IIOptimizeSVG";
+            this.IIOptimizeSVG.NormalBorderColor = System.Drawing.SystemColors.ActiveBorder;
+            this.IIOptimizeSVG.CurrentValueChanged += new LaserGRBL.UserControls.NumericInput.IntegerInputBase.CurrentValueChangedEventHandler(this.IIOptimizeSVG_CurrentValueChanged);
+            // 
+            // label2
+            // 
+            resources.ApplyResources(this.label2, "label2");
+            this.label2.Name = "label2";
+            // 
+            // label3
+            // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
             // 
             // GbSpeed
             // 
@@ -600,5 +627,8 @@ namespace LaserGRBL.RasterConverter
 		private System.Windows.Forms.Label LblMinPerc;
 		private System.Windows.Forms.Label LblMaxPerc;
 		private UserControls.ImageButton BtnUnlockProportion;
-	}
+        private UserControls.NumericInput.IntegerInputRanged IIOptimizeSVG;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+    }
 }

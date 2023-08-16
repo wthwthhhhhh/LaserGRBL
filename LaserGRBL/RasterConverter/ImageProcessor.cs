@@ -84,6 +84,7 @@ namespace LaserGRBL.RasterConverter
         public int MarkSpeed;
         public int MinPower;
         public int MaxPower;
+        public int OptimizeSVG;
 
         private string mFileName;
         private bool mAppend;
@@ -1435,10 +1436,10 @@ namespace LaserGRBL.RasterConverter
         {
             try
             {
-                int maxSize = Tools.OSHelper.Is64BitProcess ? 22000 * 22000 : 6000 * 7000; //on 32bit OS we have memory limit - allow Higher value on 64bit
+                int maxSize = Tools.OSHelper.Is64BitProcess ? 22000 * 22000 : 6000 * 7000; //在32位操作系统我们有64位内存限制,允许更高的价值
 
                 double filesize = TargetSize.Width * TargetSize.Height;
-                double maxRes = Math.Sqrt(maxSize / filesize); //limit res if resultimg bmp size is to big
+                double maxRes = Math.Sqrt(maxSize / filesize); //限制res如果resultimg bmp大小要大
                 double fres = Math.Min(maxRes, (double)FillingQuality);
 
                 double res = 10.0;
@@ -1487,7 +1488,7 @@ namespace LaserGRBL.RasterConverter
                         conf.borderSpeed = BorderSpeed;
                         conf.pwm = Settings.GetObject("Support Hardware PWM", false);
                         conf.firmwareType = Settings.GetObject("Firmware Type", Firmware.Grbl);
-
+                        conf.optimizeSVG = OptimizeSVG;
 
 
                         if (SelectedTool == Tool.Line2Line || SelectedTool == Tool.Dithering || SelectedTool == Tool.NoProcessing)
@@ -1524,7 +1525,7 @@ namespace LaserGRBL.RasterConverter
                 else
                 {
                     if (GenerationComplete != null)
-                        GenerationComplete(new System.InvalidOperationException("Target size too big for processing!"));
+                        GenerationComplete(new System.InvalidOperationException("目标大小太大!"));
                 }
             }
             catch (Exception ex)

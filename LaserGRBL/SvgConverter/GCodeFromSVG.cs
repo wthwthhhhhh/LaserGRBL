@@ -271,15 +271,15 @@ namespace LaserGRBL.SvgConverter
 		}
 
 		/// <summary>
-		/// Parse Transform information - more information here: http://www.w3.org/TR/SVG/coords.html
-		/// transform will be applied in gcodeMove
+		/// 解析变换信息,更多的信息: http://www.w3.org/TR/SVG/coords.html
+		/// 变换将应用于gcode移动
 		/// </summary>
 		private Matrix parseTransform(XElement element, bool isGroup, int level)
 		{
 			Matrix finalMatrix = new Matrix(1, 0, 0, 1, 0, 0); // m11, m12, m21, m22, offsetx, offsety
 			if (element.Attribute("transform") != null)
 			{
-				// tranform elements must be processed in given order
+				// 水谷元素必须在给定的顺序被处理
 				string[] separatingStrings = { "trans", "sca", "rot", "mat" };
 				string transform = element.Attribute("transform").Value;
 
@@ -625,11 +625,11 @@ namespace LaserGRBL.SvgConverter
 						id = pathElement.Attribute("id").Value;
 
 					oldMatrixElement = matrixElement;
-					parseTransform(pathElement, false, level);        // transform will be applied in gcodeMove
+					parseTransform(pathElement, false, level);        // 变换将应用于gcode移动
 
 					if (d.Length > 0)
 					{
-						// split complete path in to command-tokens
+						// 完整路径分裂command-tokens
 						if (svgPauseElement || svgPausePenDown) { /*gcode.Pause(gcodeString, "Pause before path");*/ }
 						string separators = @"(?=[A-Za-z-[e]])";
 						var tokens = Regex.Split(d, separators).Where(t => !string.IsNullOrEmpty(t));

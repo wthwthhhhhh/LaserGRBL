@@ -40,7 +40,7 @@ namespace LaserGRBL.SvgConverter
 		private static float gcodeDragRadius = 5;
 		private static float gcodeDragAngle = 30;
 
-		private static float gcodeXYFeed = 1999;        // XY feed to apply for G1
+		private static float gcodeXYFeed = 8000;        // XY feed to apply for G1
 
 		//private static bool gcodeSpindleToggle = true; // Switch on/off spindle for Pen down/up (M3/M5)
 		private static float gcodeSpindleSpeed = 999; // Spindle speed to apply
@@ -65,7 +65,7 @@ namespace LaserGRBL.SvgConverter
 
 			setDecimalPlaces(mDecimalPlaces);
 
-			gcodeXYFeed = Settings.GetObject("GrayScaleConversion.VectorizeOptions.BorderSpeed", 1000);
+			gcodeXYFeed = 8000;// Settings.GetObject("GrayScaleConversion.VectorizeOptions.BorderSpeed", 8000);
 			
 			if (SupportPWM)
 				gcodeSpindleSpeed = Settings.GetObject("GrayScaleConversion.Gcode.LaserOptions.PowerMax", 255);
@@ -199,7 +199,7 @@ namespace LaserGRBL.SvgConverter
 			//if (gcodeComments) { gcodeString.Append("\r\n"); }
 			if (cmt.Length > 0) { cmt = string.Format("({0})", cmt); }
 
-			applyXYFeedRate = true;     // apply XY Feed Rate after each PenDown command (not just after Z-axis)
+			applyXYFeedRate = true;     // 应用XY加料速度每笔下来后命令(不只是在z轴)
 
 			//if (gcodeSpindleToggle)
 			//{   if (gcodeComments) gcodeString.AppendFormat("({0})\r\n", "Pen down: Spindle-On");

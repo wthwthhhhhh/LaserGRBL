@@ -157,8 +157,14 @@ namespace CsPotrace
 			List<IntPoint> subject = new List<IntPoint>(psubject.PathPoints.Count());
 			foreach (PointF p in psubject.PathPoints)
 				subject.Add(new IntPoint(p.X * resolution, p.Y * resolution));
+			//for (int i = 0; i < psubject.PathPoints.Count(); i++)
+			//{
+			//	if (i % 8 == 0) {
 
-			c.AddPath(subject, JoinType.jtRound, EndType.etClosedPolygon);
+			//                 subject.Add(new IntPoint(psubject.PathPoints[i].X * resolution, psubject.PathPoints[i].Y * resolution));
+			//             }
+			//         }
+			c.AddPath(subject, JoinType.jtSquare, EndType.etClosedPolygon);
 		}
 
 		static void AddGridSubject(Clipper c, double w, double h, LaserGRBL.GrblFile.L2LConf cnf)

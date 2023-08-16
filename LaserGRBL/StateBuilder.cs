@@ -129,7 +129,13 @@ namespace LaserGRBL
 				{
 					mCurX.Update(cmd.X, ABS, mWcoX);
 					mCurY.Update(cmd.Y, ABS, mWcoY);
-					mCurZ.Update(cmd.Z, ABS, mWcoZ);
+					if (cmd.Command.Contains("G0"))
+					{
+						mCurZ.Update(new Element('Z', 5), ABS, mWcoZ);
+					}
+					//else {
+                      mCurZ.Update(cmd.Z, ABS, mWcoZ);
+     //               }
 				}
 			}
 
@@ -180,7 +186,7 @@ namespace LaserGRBL
 				decimal f = cmd is JogCommand && cmd.F != null ? cmd.F.Number : mCurF.Number;
 
 				if (G0 && cmd.IsLinearMovement)
-					return TimeSpan.FromMinutes((double)GetSegmentLenght(cmd) / (double)conf.MaxRateX); //todo: use a better computation of xy if different x/y max speed
+					return TimeSpan.FromMinutes((double)GetSegmentLenght(cmd) / (double)(cmd.Command.Contains("Z") ? conf.MaxRateZ : conf.MaxRateX)); //todo: use a better computation of xy if different x/y max speed
 				else if (G1G2G3 && cmd.IsMovement && f != 0)
 					return TimeSpan.FromMinutes((double)GetSegmentLenght(cmd) / (double)Math.Min(f, conf.MaxRateX));
 				else if (cmd.IsPause)
@@ -194,7 +200,7 @@ namespace LaserGRBL
 				LastArcHelperResult = null;
 
 				if (cmd.IsLinearMovement)
-					return Tools.MathHelper.LinearDistance(mCurX.Previous, mCurY.Previous, mCurX.Number, mCurY.Number);
+					return cmd.Command.Contains("Z") ? Tools.MathHelper.LinearDistance(mCurZ.Previous, 0, mCurZ.Number, 0) : Tools.MathHelper.LinearDistance(mCurX.Previous, mCurY.Previous, mCurX.Number, mCurY.Number);
 				else if (cmd.IsArcMovement) //arc of given radius
 					return (decimal)GetArcHelper(cmd).AbsLenght;
 				else
