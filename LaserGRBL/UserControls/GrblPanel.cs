@@ -94,7 +94,7 @@ namespace LaserGRBL.UserControls
 					e.Graphics.DrawImage(penImg, (int)p.X, (int)p.Y-48 , 48,48);
 					//using (Pen px = GetPen(ColorScheme.PreviewCross, 2f))
 					//{
-						
+
 
 					//	//e.Graphics.DrawLine(px, (int)p.X, (int)p.Y - 5, (int)p.X, (int)p.Y - 5 + 10);
 					//	//e.Graphics.DrawLine(px, (int)p.X - 5, (int)p.Y, (int)p.X - 5 + 10, (int)p.Y);
@@ -115,16 +115,16 @@ namespace LaserGRBL.UserControls
 
 						String position = string.Format("X: {0:0.000} Y: {1:0.000}", Core != null ? mLastMPos.X : 0, Core != null ? mLastMPos.Y : 0);
 
-                        if (Core != null && (mLastWPos.Z != 0 || mLastMPos.Z != 0 || forcez))
-                            position = position + string.Format(" Z: {0:0.000}", mLastMPos.Z);
+						if (Core != null && (mLastWPos.Z != 0 || mLastMPos.Z != 0 || forcez))
+							position = position + string.Format(" Z: {0:0.000}", mLastMPos.Z);
 
-                        if (Core != null && Core.WorkingOffset != GPoint.Zero)
+						if (Core != null && Core.WorkingOffset != GPoint.Zero)
 							position = position + "\n" + string.Format("X: {0:0.000} Y: {1:0.000}", Core != null ? mLastWPos.X : 0, Core != null ? mLastWPos.Y : 0);
 
-                        if (Core != null && Core.WorkingOffset != GPoint.Zero  && (mLastWPos.Z != 0 || mLastMPos.Z != 0 || forcez))
-                            position = position + string.Format(" Z: {0:0.000}", mLastWPos.Z);
+						if (Core != null && Core.WorkingOffset != GPoint.Zero && (mLastWPos.Z != 0 || mLastMPos.Z != 0 || forcez))
+							position = position + string.Format(" Z: {0:0.000}", mLastWPos.Z);
 
-                        if (mCurF != 0 || mCurS != 0 || mFSTrig)
+						if (mCurF != 0 || mCurS != 0 || mFSTrig)
 						{
 							mFSTrig = true;
 							String fs = string.Format("F: {0:00000.##} S: {1:000.##}", Core != null ? mCurF : 0, Core != null ? mCurS : 0);

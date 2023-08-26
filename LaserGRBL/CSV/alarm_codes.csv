@@ -1,9 +1,9 @@
-1,Hard limit,Hard limit has been triggered. Machine position is likely lost due to sudden halt. Re-homing is highly recommended.
-2,Soft limit,Soft limit alarm. G-code motion target exceeds machine travel. Machine position retained. Alarm may be safely unlocked.
-3,Abort during cycle,Reset while in motion. Machine position is likely lost due to sudden halt. Re-homing is highly recommended.
-4,Probe fail,Probe fail. Probe is not in the expected initial state before starting probe cycle when G38.2 and G38.3 is not triggered and G38.4 and G38.5 is triggered.
-5,Probe fail,Probe fail. Probe did not contact the workpiece within the programmed travel for G38.2 and G38.4.
-6,Homing fail,Homing fail. The active homing cycle was reset.
-7,Homing fail,Homing fail. Safety door was opened during homing cycle.
-8,Homing fail,Homing fail. Pull off travel failed to clear limit switch. Try increasing pull-off setting or check wiring.
-9,Homing fail,Homing fail. Could not find limit switch within search distances. Try increasing max travel or decreasing pull-off distance or check wiring.
+1,Hard limit,硬限位已触发。机器位置可能因突然停止而丢失。强烈建议重新归位。
+2,Soft limit,软限位警报。G 代码运动目标超出机器行程。机器位置保持不变。可以安全解锁警报。
+3,Abort during cycle,在运动中复位。机器位置可能因突然停止而丢失。强烈建议重新归位。
+4,Probe fail,探针失败。在启动 G38.2 和 G38.3 时，探针未处于预期的初始状态，而触发了 G38.4 和 G38.5。
+5,Probe fail,探针失败。在 G38.2 和 G38.4 的编程行程内，探针未与工件接触。
+6,Homing fail,归位失败。活动归位循环已重置。
+7,Homing fail,归位失败。安全门在归位循环期间被打开。
+8,Homing fail,归位失败。回退行程未能解除限位开关。尝试增加回退设置或检查接线。
+9,Homing fail,归位失败。在搜索距离内找不到限位开关。尝试增加最大行程或减小回退距离，或检查接线。

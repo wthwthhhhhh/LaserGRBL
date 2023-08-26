@@ -31,9 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.ConnectionForm = new LaserGRBL.ConnectLogForm();
-            this.JogForm = new LaserGRBL.JogForm();
-            this.PreviewForm = new LaserGRBL.PreviewForm();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
             this.TTLLines = new System.Windows.Forms.ToolStripStatusLabel();
             this.TTTLines = new System.Windows.Forms.ToolStripStatusLabel();
@@ -135,6 +132,9 @@
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.AwakeTimer = new System.Windows.Forms.Timer(this.components);
             this.MultipleInstanceTimer = new System.Windows.Forms.Timer(this.components);
+            this.ConnectionForm = new LaserGRBL.ConnectLogForm();
+            this.JogForm = new LaserGRBL.JogForm();
+            this.PreviewForm = new LaserGRBL.PreviewForm();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -158,23 +158,6 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.PreviewForm);
             this.splitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
-            // 
-            // ConnectionForm
-            // 
-            resources.ApplyResources(this.ConnectionForm, "ConnectionForm");
-            this.ConnectionForm.Name = "ConnectionForm";
-            this.ConnectionForm.Load += new System.EventHandler(this.ConnectionForm_Load);
-            // 
-            // JogForm
-            // 
-            resources.ApplyResources(this.JogForm, "JogForm");
-            this.JogForm.Name = "JogForm";
-            // 
-            // PreviewForm
-            // 
-            resources.ApplyResources(this.PreviewForm, "PreviewForm");
-            this.PreviewForm.Name = "PreviewForm";
-            this.PreviewForm.Load += new System.EventHandler(this.PreviewForm_Load);
             // 
             // StatusBar
             // 
@@ -294,6 +277,7 @@
             // 
             // UpdateTimer
             // 
+            this.UpdateTimer.Interval = 20;
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
             // 
             // MMn
@@ -877,6 +861,23 @@
             // 
             this.MultipleInstanceTimer.Interval = 1000;
             this.MultipleInstanceTimer.Tick += new System.EventHandler(this.MultipleInstanceTimer_Tick);
+            // 
+            // ConnectionForm
+            // 
+            resources.ApplyResources(this.ConnectionForm, "ConnectionForm");
+            this.ConnectionForm.Name = "ConnectionForm";
+            this.ConnectionForm.Load += new System.EventHandler(this.ConnectionForm_Load);
+            // 
+            // JogForm
+            // 
+            resources.ApplyResources(this.JogForm, "JogForm");
+            this.JogForm.Name = "JogForm";
+            // 
+            // PreviewForm
+            // 
+            resources.ApplyResources(this.PreviewForm, "PreviewForm");
+            this.PreviewForm.Name = "PreviewForm";
+            this.PreviewForm.Load += new System.EventHandler(this.PreviewForm_Load);
             // 
             // MainForm
             // 

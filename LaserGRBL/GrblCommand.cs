@@ -451,8 +451,26 @@ namespace LaserGRBL
 		public override string ToString()
 		{ return this.mLine; }
 	}
+    public class ConfigEntry
+    {
+        public int Index { get; set; }
+        public string F { get; set; }
+        public string Label { get; set; }
+        public string DefaultValue { get; set; }
+        public string Cmd { get; set; }
+        public List<Option> Options { get; set; }
+        public int MinValue { get; set; }
+        public int MaxValue { get; set; }
+        public string Type { get; set; }
+        public string Position { get; set; }
+    }
 
-	public class GrblMessage : IGrblRow
+    public class Option
+    {
+        public string Id { get; set; }
+        public string Display { get; set; }
+    }
+    public class GrblMessage : IGrblRow
 	{
 		public enum MessageType
 		{Startup, Config, Alarm, Feedback, Position, Others}

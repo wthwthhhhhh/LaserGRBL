@@ -1,17 +1,17 @@
-1,Hard limit,Hard limit has been triggered. Machine position is likely lost due to sudden halt. Re-homing is highly recommended.
-2,Soft limit,Soft limit alarm. G-code motion target exceeds machine travel. Machine position retained. Alarm may be safely unlocked.
-3,Abort during cycle,Reset while in motion. Machine position is likely lost due to sudden halt. Re-homing is highly recommended.
-4,Probe fail,Probe fail. Probe is not in the expected initial state before starting probe cycle when G38.2 and G38.3 is not triggered and G38.4 and G38.5 is triggered.
-5,Probe fail,Probe fail. Probe did not contact the workpiece within the programmed travel for G38.2 and G38.4.
-6,Homing fail,Homing fail. The active homing cycle was reset.
-7,Homing fail,Homing fail. Safety door was opened during homing cycle.
-8,Homing fail,Homing fail. Pull off travel failed to clear limit switch. Try increasing pull-off setting or check wiring.
-9,Homing fail,Homing fail. Could not find limit switch within search distances. Try increasing max travel or decreasing pull-off distance or check wiring.
-10,EStop fail,EStop asserted. Clear and reset  
-11,Homing required,Homing required. Execute homing command ($H) to continue.  
-12,Hard limit,Limit switch engaged. Clear before continuing.  
-13,Probe fail,Probe protection triggered. Clear before continuing.  
-14,Spindle timeout,Spindle at speed timeout. Clear before continuing.  
-15,Homing fail,Homing fail. Could not find second limit switch for auto squared axis within search distances. Try increasing max travel decreasing pull-off distance or check wiring.  
-16,POS fail,Power on selftest (POS) failed.  
-17,Motor fault,Motor fault.  
+1,Hard limit,硬限位已触发。机器位置可能因突然停止而丢失。强烈建议重新归位。
+2,Soft limit,软限位警报。G 代码运动目标超出机器行程。机器位置保留。警报可以安全解锁。
+3,Abort during cycle,在运动中复位。机器位置可能因突然停止而丢失。强烈建议重新归位。
+4,Probe fail,探针失败。在启动探针循环时，探针未处于预期的初始状态，未触发 G38.2 和 G38.3，但触发了 G38.4 和 G38.5。
+5,Probe fail,探针失败。探针在程序化行程内未与工件接触，适用于 G38.2 和 G38.4。
+6,Homing fail,归位失败。活动归位循环已重置。
+7,Homing fail,归位失败。在归位循环期间打开了安全门。
+8,Homing fail,归位失败。拉离行程未能清除限位开关。尝试增加拉离设置或检查接线。
+9,Homing fail,归位失败。在搜索距离内找不到限位开关。尝试增加最大行程或减小拉离距离，或检查接线。
+10,EStop fail,急停已断开。清除并重新设置。
+11,Homing required,需要进行归位。执行归位命令（$H）以继续。
+12,Hard limit,限位开关已触发。在继续之前清除。
+13,Probe fail,探测保护已触发。在继续之前清除。
+14,Spindle timeout,主轴速度超时。在继续之前清除。
+15,Homing fail,归位失败。无法在搜索距离内找到自动平方轴的第二个限位开关。尝试增加最大行程，减小拉离距离或检查接线。
+16,POS fail,上电自检（POS）失败。
+17,Motor fault,电机故障。

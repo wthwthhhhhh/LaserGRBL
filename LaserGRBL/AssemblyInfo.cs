@@ -32,4 +32,4 @@ using System.Resources;
 // utilizzando l'asterisco (*) come descritto di seguito:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion ("4.9.4")]
-[assembly: NeutralResourcesLanguage("en")]
+[assembly: NeutralResourcesLanguage("zh-Hans")]

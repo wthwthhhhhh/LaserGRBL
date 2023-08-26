@@ -515,7 +515,7 @@
     <value>37</value>
   </data>
   <data name="label6.Text" xml:space="preserve">
-    <value>线程模式:超快、快、静、慢。(默认快)
+    <value>预览视图刷新速度:超快、快、静、慢。(默认快)
 此设置会影响发送线程的速度和状态报告请求的频率。
 如果遇到问题，请设置较慢的值。</value>
   </data>

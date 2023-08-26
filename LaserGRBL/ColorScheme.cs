@@ -220,7 +220,7 @@ namespace LaserGRBL
 		}
 
 		public static Color PreviewBackColor
-		{ get { return GetColor(2); } }
+		{ get { return Color.White; } }
 		public static Color PreviewText
 		{ get { return GetColor(3); } }
 		public static Color PreviewRuler

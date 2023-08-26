@@ -112,30 +112,30 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tableLayoutPanel2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="tableLayoutPanel2.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
     <value>GrowAndShrink</value>
   </data>
   <data name="tableLayoutPanel2.ColumnCount" type="System.Int32, mscorlib">
     <value>7</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="BtnWrite.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1
-        MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAaCSURBVFhHxVcJUFNHGEZAQG4U
+        MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAaCSURBVFhHxVcJUFNHGEZAQG4U
         lAAGCgqKXBFEFAgIchOCiE69KojjiEAEkiigJoAggoAio47YMgIKKFo8EauC9QSPesxota3aVq1XtS2K
         U23r190H4pGto50O/Wa+bPLt/v/37+57b1/UAPyvZIq9SabYm2SLb4OvpjV37tx5CkW2YsGCBYrcvDzF
         nqYmRVNzs6KpqVmxa88eRW5uHunLUNAxcxITk63UrLS7o3vA9GKKb0EoDPCJnzUbaWlSpEhSkUrajVU1
@@ -173,7 +173,7 @@
     <value>116, 3</value>
   </data>
   <data name="BtnWrite.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 42</value>
+    <value>107, 39</value>
   </data>
   <data name="BtnWrite.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -188,7 +188,7 @@
     <value>BtnWrite</value>
   </data>
   <data name="&gt;&gt;BtnWrite.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;BtnWrite.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -199,7 +199,7 @@
   <data name="BtnRead.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1
-        MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAZTSURBVFhHxVd7UFRlFFdEIVPB
+        MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAZTSURBVFhHxVd7UFRlFFdEIVPB
         ERSClIEGFBUQlRCWhxAPgWURN6dIE8QxiWUFdxdEbRcYBFFxRZrRYcpEFHQwX4NApdj4AMy3aZPvwibf
         poimhv4632W57WVvqP1Bv5kfl3Pud77f+b5zvnvv9gLwv1LU2ZMUdfYkxZ1dMbxXv3nz5n2q1eZoMzMz
         tXn5+dqa2lptbX29tra2Xru7pkabl5dP9xZq2Zi5KSkKx16OFoZoHqJaos4uCAwMkSTNnoOMDBXSlOlI
@@ -237,7 +237,7 @@
     <value>3, 3</value>
   </data>
   <data name="BtnRead.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 42</value>
+    <value>107, 39</value>
   </data>
   <data name="BtnRead.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -252,7 +252,7 @@
     <value>BtnRead</value>
   </data>
   <data name="&gt;&gt;BtnRead.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;BtnRead.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -311,7 +311,7 @@
     <value>695, 3</value>
   </data>
   <data name="BtnCancel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 42</value>
+    <value>107, 39</value>
   </data>
   <data name="BtnCancel.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -326,7 +326,7 @@
     <value>BtnCancel</value>
   </data>
   <data name="&gt;&gt;BtnCancel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;BtnCancel.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -344,10 +344,10 @@
     <value>NoControl</value>
   </data>
   <data name="LblConnect.Location" type="System.Drawing.Point, System.Drawing">
-    <value>507, 11</value>
+    <value>495, 10</value>
   </data>
   <data name="LblConnect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 26</value>
+    <value>173, 24</value>
   </data>
   <data name="LblConnect.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -363,7 +363,7 @@ only when connected and idle</value>
     <value>LblConnect</value>
   </data>
   <data name="&gt;&gt;LblConnect.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LblConnect.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -418,7 +418,7 @@ only when connected and idle</value>
         XTesb3QPLh88M+QwdP6m681Lt7xuXbu94vbgcOjwnZHokdE77DtTd1PuvriXeW/h/sYH6AdFD6UeVjxS
         fNTws+7PbaOWo6fHXMf6Hwc/vj/OGn/2S8Yv7ycKnpCfVEyqTDZPmU2dmnafvvF05dOJZ+nPFmYKf5X+
         tfa5zvMffnP8rX82YnbiBf/Fp99LXsq/PPRq2aueuYC5R69TXy/MF72Rf3P4LeNt37vwd5MLWe+x7ys/
-        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAAOxAAADsQBlSsOGwAACpdJREFUWEfdmAlUFEca
+        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAAOwwAADsMBx2+oZAAACpdJREFUWEfdmAlUFEca
         x/EEj0TzgI2urHEhTyMo4BkPBIUIBAQ80EVNjKAJKDhyiucQXMQTlSOCrA6XCgnIkR0ONUIUBAw3UQMi
         aECFGVAEEQMC//2qmQEZATXvZfdl/+/9u4vuqur6dX1fVQ9yAP4v3HmQ1Xi5oXZ2dpv5/K/527Zt4+/1
         8uILk5L4SSkp/KSkFP73QiF/714vuredz+p8tWmTg4qcirykdZdkH/ZHuvMgI11dfR1rm41wcnLBFp4j
@@ -474,7 +474,7 @@ only when connected and idle</value>
     <value>249, 3</value>
   </data>
   <data name="BtnExport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 42</value>
+    <value>107, 39</value>
   </data>
   <data name="BtnExport.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -489,7 +489,7 @@ only when connected and idle</value>
     <value>BtnExport</value>
   </data>
   <data name="&gt;&gt;BtnExport.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;BtnExport.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -544,7 +544,7 @@ only when connected and idle</value>
         XTesb3QPLh88M+QwdP6m681Lt7xuXbu94vbgcOjwnZHokdE77DtTd1PuvriXeW/h/sYH6AdFD6UeVjxS
         fNTws+7PbaOWo6fHXMf6Hwc/vj/OGn/2S8Yv7ycKnpCfVEyqTDZPmU2dmnafvvF05dOJZ+nPFmYKf5X+
         tfa5zvMffnP8rX82YnbiBf/Fp99LXsq/PPRq2aueuYC5R69TXy/MF72Rf3P4LeNt37vwd5MLWe+x7ys/
-        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAAOxAAADsQBlSsOGwAACx9JREFUWEfdmHk8V9kb
+        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAAOwwAADsMBx2+oZAAACx9JREFUWEfdmHk8V9kb
         x+9IWmQbmkipYaYmSpRpzNjaLBNipEaZpqiZKClbkfqqRgtFodIqW1EpKcQ0GEOW7F4tVFqJ71eILEX5
         zDmXrzCY6jfzx/ye1+tzz3HvOec+7/s857nXlwHwfyH2EBgYWHL8eBDvRFA49/CRMO6hwFDuoUNEB0O5
         Bw50yj+ElT/V/mCu/75grl9f8qUiY/1CuYEHg3iBgYdLet/03xB7IBAt0bF/4EpKFY4EP4L3/nvYvbcM
@@ -602,7 +602,7 @@ only when connected and idle</value>
     <value>362, 3</value>
   </data>
   <data name="BtnImport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 42</value>
+    <value>107, 39</value>
   </data>
   <data name="BtnImport.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -617,7 +617,7 @@ only when connected and idle</value>
     <value>BtnImport</value>
   </data>
   <data name="&gt;&gt;BtnImport.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;BtnImport.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -629,13 +629,13 @@ only when connected and idle</value>
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 418</value>
+    <value>3, 385</value>
   </data>
   <data name="tableLayoutPanel2.RowCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>805, 48</value>
+    <value>805, 45</value>
   </data>
   <data name="tableLayoutPanel2.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -644,7 +644,7 @@ only when connected and idle</value>
     <value>tableLayoutPanel2</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel2.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -665,7 +665,7 @@ only when connected and idle</value>
     <value>NoControl</value>
   </data>
   <data name="LblAction.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 388</value>
+    <value>6, 356</value>
   </data>
   <data name="LblAction.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 16</value>
@@ -683,7 +683,7 @@ only when connected and idle</value>
     <value>LblAction</value>
   </data>
   <data name="&gt;&gt;LblAction.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LblAction.Parent" xml:space="preserve">
     <value>GB</value>
@@ -691,7 +691,7 @@ only when connected and idle</value>
   <data name="&gt;&gt;LblAction.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <metadata name="DollarNumber.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="DollarNumber.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="DollarNumber.HeaderText" xml:space="preserve">
@@ -700,7 +700,7 @@ only when connected and idle</value>
   <data name="DollarNumber.Width" type="System.Int32, mscorlib">
     <value>39</value>
   </data>
-  <metadata name="Parameter.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="Parameter.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="Parameter.HeaderText" xml:space="preserve">
@@ -709,7 +709,7 @@ only when connected and idle</value>
   <data name="Parameter.Width" type="System.Int32, mscorlib">
     <value>95</value>
   </data>
-  <metadata name="Value.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="Value.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="Value.HeaderText" xml:space="preserve">
@@ -718,7 +718,7 @@ only when connected and idle</value>
   <data name="Value.Width" type="System.Int32, mscorlib">
     <value>67</value>
   </data>
-  <metadata name="Unit.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="Unit.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="Unit.HeaderText" xml:space="preserve">
@@ -727,13 +727,13 @@ only when connected and idle</value>
   <data name="Unit.Width" type="System.Int32, mscorlib">
     <value>60</value>
   </data>
-  <metadata name="Description.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="Description.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="Description.HeaderText" xml:space="preserve">
     <value>Description</value>
   </data>
-  <metadata name="Number.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="Number.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="Number.HeaderText" xml:space="preserve">
@@ -749,7 +749,7 @@ only when connected and idle</value>
     <value>3, 16</value>
   </data>
   <data name="DGV.Size" type="System.Drawing.Size, System.Drawing">
-    <value>799, 390</value>
+    <value>799, 357</value>
   </data>
   <data name="DGV.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -758,7 +758,7 @@ only when connected and idle</value>
     <value>DGV</value>
   </data>
   <data name="&gt;&gt;DGV.Type" xml:space="preserve">
-    <value>LaserGRBL.MyDatagridView, LaserGRBL, Version=3.7.1.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>LaserGRBL.MyDatagridView, LaserGRBL, Version=4.9.4.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;DGV.Parent" xml:space="preserve">
     <value>GB</value>
@@ -776,7 +776,7 @@ only when connected and idle</value>
     <value>3, 3</value>
   </data>
   <data name="GB.Size" type="System.Drawing.Size, System.Drawing">
-    <value>805, 409</value>
+    <value>805, 376</value>
   </data>
   <data name="GB.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -788,7 +788,7 @@ only when connected and idle</value>
     <value>GB</value>
   </data>
   <data name="&gt;&gt;GB.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;GB.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -806,7 +806,7 @@ only when connected and idle</value>
     <value>2</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>811, 469</value>
+    <value>811, 433</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -815,7 +815,7 @@ only when connected and idle</value>
     <value>tableLayoutPanel1</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -826,20 +826,20 @@ only when connected and idle</value>
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanel2" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="GB" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0" /&gt;&lt;Rows Styles="Percent,100,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <metadata name="ActionTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="ActionTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>12, 16</value>
   </metadata>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>50</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+    <value>6, 12</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>811, 469</value>
+    <value>811, 433</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -927,48 +927,48 @@ only when connected and idle</value>
     <value>DollarNumber</value>
   </data>
   <data name="&gt;&gt;DollarNumber.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Parameter.Name" xml:space="preserve">
     <value>Parameter</value>
   </data>
   <data name="&gt;&gt;Parameter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Value.Name" xml:space="preserve">
     <value>Value</value>
   </data>
   <data name="&gt;&gt;Value.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Unit.Name" xml:space="preserve">
     <value>Unit</value>
   </data>
   <data name="&gt;&gt;Unit.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Description.Name" xml:space="preserve">
     <value>Description</value>
   </data>
   <data name="&gt;&gt;Description.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Number.Name" xml:space="preserve">
     <value>Number</value>
   </data>
   <data name="&gt;&gt;Number.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;ActionTimer.Name" xml:space="preserve">
     <value>ActionTimer</value>
   </data>
   <data name="&gt;&gt;ActionTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>GrblConfig</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

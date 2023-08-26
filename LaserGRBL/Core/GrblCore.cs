@@ -4,6 +4,9 @@
 // This program is distributed in the hope that it will be useful, but  WITHOUT ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GPLv3  General Public License for more details.
 // You should have received a copy of the GPLv3 General Public License  along with this program; if not, write to the Free Software  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307,  USA. using System;
 
+using ExCSS;
+using Fizzler;
+using Newtonsoft.Json.Linq;
 using Sound;
 using System;
 using System.Collections.Generic;
@@ -11,7 +14,10 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Tools;
 
 namespace LaserGRBL
@@ -57,7 +63,7 @@ namespace LaserGRBL
 			{ get { return new ThreadingMode(250, 1, 0, 0, 0, "UltraFast"); } }
 
 			public static ThreadingMode Insane
-			{ get { return new ThreadingMode(200, 1, 0, 0, 0, "Insane"); } }
+			{ get { return new ThreadingMode(50, 1, 0, 0, 0, "Insane"); } }
 
 			public override string ToString()
 			{ return Name; }
@@ -269,8 +275,9 @@ namespace LaserGRBL
 
 		private System.Collections.Generic.Queue<GrblCommand> mQueuePtr; //puntatore a coda di quelli da mandare (normalmente punta a mQueue, salvo per import/export configurazione)
 		private System.Collections.Generic.List<IGrblRow> mSentPtr; //puntatore a lista di quelli mandati (normalmente punta a mSent, salvo per import/export configurazione)
+        private StringBuilder mSentStr; //puntatore a lista di quelli mandati (normalmente punta a mSent, salvo per import/export configurazione)
 
-		private string mWelcomeSeen = null;
+        private string mWelcomeSeen = null;
 		private string mVersionSeen = null;
 		protected int mUsedBuffer;
 
@@ -400,7 +407,7 @@ namespace LaserGRBL
 			}
 		}
 
-		internal string ValidateConfig(int parid, object value)
+		internal string ValidateConfig(string parid, object value)
 		{
 			if (Configuration == null)
 				return null;
@@ -853,7 +860,8 @@ namespace LaserGRBL
 					lock (this)
 					{
 						mSentPtr = new System.Collections.Generic.List<IGrblRow>(); //assign sent queue
-						mQueuePtr = new System.Collections.Generic.Queue<GrblCommand>();
+                        mSentStr = new StringBuilder(); //assign sent queue
+                        mQueuePtr = new System.Collections.Generic.Queue<GrblCommand>();
 						mQueuePtr.Enqueue(cmd);
 					}
 
@@ -946,20 +954,265 @@ namespace LaserGRBL
 				Logger.LogException("VersionMessage", ex);
 			}
 		}
+         List<ConfigEntry> scl = new List<ConfigEntry>();
+         bool setup_is_done = true; // Placeholder value
 
-		public virtual void RefreshConfig()
+         bool ProcessSettingsAnswer(string responseText)
+        {
+            bool result = true;
+            try
+            {
+                JObject response = JObject.Parse(responseText);
+                if (response["EEPROM"] == null)
+                {
+                    result = false;
+                    Console.WriteLine("No EEPROM");
+                }
+                else
+                {
+                    JArray eepromArray = (JArray)response["EEPROM"];
+                    if (eepromArray.Count > 0)
+                    {
+                        int vi = 0;
+                        foreach (JObject entryObject in eepromArray)
+                        {
+                            vi = CreateSettingEntry(entryObject, vi);
+                        }
+
+                        if (vi <= 0)
+                        {
+                            result = false;
+                        }
+                        else
+                        {
+                            //if (setup_is_done)
+                            //{
+                            //    BuildHTMLSettingList(current_setting_filter);
+                            //}
+                        }
+                    }
+                    else
+                    {
+                        result = false;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Parsing error: " + e);
+                result = false;
+            }
+            return result;
+        }
+
+         int CreateSettingEntry(JObject sentry, int vi)
+        {
+            if (!IsSettingEntry(sentry))
+            {
+                return vi;
+            }
+
+            string slabel = sentry["H"].ToString();
+
+			if (!current_setting_filter.Contains(slabel)) {
+                return vi;
+            }
+                string svalue = sentry["V"].ToString();
+            string scmd = "[ESP401]P=" + sentry["P"] + " T=" + sentry["T"] + " V=";
+            List<Option> options = new List<Option>();
+            int min, max;
+
+            if (sentry["M"] != null)
+            {
+                min = sentry["M"].ToObject<int>();
+            }
+            else
+            {
+                switch (sentry["T"].ToString())
+                {
+                    case "B":
+                        min = -127;
+                        break;
+                    case "S":
+                        min = 0;
+                        break;
+                    case "A":
+                        min = 7;
+                        break;
+                    case "I":
+                        min = 0;
+                        break;
+                    default:
+                        min = 0;
+                        break;
+                }
+            }
+
+            if (sentry["S"] != null)
+            {
+                max = sentry["S"].ToObject<int>();
+            }
+            else
+            {
+                switch (sentry["T"].ToString())
+                {
+                    case "B":
+                    case "S":
+                        max = 255;
+                        break;
+                    case "A":
+                        max = 15;
+                        break;
+                    case "I":
+                        max = int.MaxValue;
+                        break;
+                    default:
+                        max = 255;
+                        break;
+                }
+            }
+
+            if (sentry["O"] != null)
+            {
+                foreach (JToken optionToken in sentry["O"])
+                {
+                    foreach (JProperty optionProperty in optionToken.Children<JProperty>())
+                    {
+                        Option option = new Option
+                        {
+                            Id = optionProperty.Value.ToString().Trim(),
+                            Display = optionProperty.Name.Trim()
+                        };
+                        options.Add(option);
+                    }
+                }
+            }
+
+            svalue = svalue.Trim();
+            ConfigEntry configEntry = new ConfigEntry
+            {
+                Index = vi,
+                F = sentry.ContainsKey("F") ? sentry["F"].ToString():"",
+                Label = slabel,
+                DefaultValue = svalue,
+                Cmd = scmd,
+                Options = options,
+                MinValue = min,
+                MaxValue = max,
+                Type = sentry.ContainsKey("T") ? sentry["T"].ToString():"S",
+                Position = sentry.ContainsKey("P")? sentry["P"].ToString(): svalue
+            };
+
+            scl.Add(configEntry);
+            vi++;
+            return vi;
+        }
+
+         bool IsSettingEntry(JObject sentry)
+        {
+            return sentry["H"] != null && sentry["V"] != null && sentry["P"] != null && sentry["T"] != null;
+        }
+
+
+        private string BuildHTMLSettingList(string filter)
+        {
+           
+
+            StringBuilder contentBuilder = new StringBuilder();
+            current_setting_filter = filter;
+            // Set the checked state of your checkbox control based on your UI setup
+            // id(current_setting_filter + "_setting_filter").checked = true;
+
+            foreach (ConfigEntry entry in scl)
+            {
+                string fname = entry.F.Trim().ToLower();
+                if (fname == "network" || fname == filter || filter == "all")
+                {
+                    contentBuilder.Append("<tr>");
+                    contentBuilder.Append("<td style='vertical-align:middle'>");
+                    contentBuilder.Append((entry.Label));
+                    contentBuilder.Append("</td>");
+                    contentBuilder.Append("<td style='vertical-align:middle'>");
+                    contentBuilder.Append("<table><tr><td>");
+                    contentBuilder.Append(BuildControlFromIndex(scl.IndexOf(entry)));
+                    contentBuilder.Append("</td></tr></table>");
+                    contentBuilder.Append("</td>");
+                    contentBuilder.Append("</tr>\n");
+                }
+            }
+			return contentBuilder.ToString();
+            // Set the inner HTML of your settings_list_data element
+            // id('settings_list_data').innerHTML = contentBuilder.ToString();
+        }
+
+        private string BuildControlFromIndex(int index)
+        {
+            StringBuilder controlContentBuilder = new StringBuilder();
+            if (index < scl.Count)
+            {
+                int nbsub = scl[index].Type == "F" ? scl[index].Options.Count : 1;
+                for (int j = 0; j < nbsub; j++)
+                {
+                    if (j > 0)
+                    {
+                        controlContentBuilder.Append("<tr><td style='height:10px;'></td></tr>");
+                    }
+                    controlContentBuilder.Append("<tr><td style='vertical-align: middle;'>");
+                    if (scl[index].Type == "F")
+                    {
+                        controlContentBuilder.Append((scl[index].Options[j].Display));
+                        controlContentBuilder.Append("</td><td>&nbsp;</td><td>");
+                    }
+
+                    controlContentBuilder.Append("<div id='status_setting_" + index + "_" + j + "' class='form-group has-feedback' style='margin: auto;'>");
+                    controlContentBuilder.Append("<div class='item-flex-row'>");
+                    controlContentBuilder.Append("<table><tr><td>");
+                    controlContentBuilder.Append("<div class='input-group'>");
+                    controlContentBuilder.Append("<div class='input-group-btn'>");
+                    // ... Other code ...
+                    controlContentBuilder.Append("</div>");
+                    controlContentBuilder.Append("</div>");
+                    controlContentBuilder.Append("</td><td>");
+                    // ... Other code ...
+                    controlContentBuilder.Append("</td></tr></table>");
+                    // ... Other code ...
+                    controlContentBuilder.Append("</td></tr>");
+                }
+            }
+            controlContentBuilder.Append("</table>");
+            return controlContentBuilder.ToString();
+        }
+
+        
+
+        static string current_setting_filter = "" +
+			"$/axes/x/max_rate_mm_per_min," +
+			"$/axes/x/acceleration_mm_per_sec2," +
+			"$/axes/y/max_rate_mm_per_min," +
+			"$/axes/y/acceleration_mm_per_sec2," +
+			"$/axes/z/max_rate_mm_per_min," +
+            "$/axes/z/acceleration_mm_per_sec2"+
+			"/start/must_home"+
+			"/axes/x/max_rate_mm_per_min"+
+			"/axes/y/max_rate_mm_per_min"+
+			"/axes/z/max_rate_mm_per_min"+
+			"/kinematics/WallPlotter/right_anchor_x"+
+			"/kinematics/WallPlotter/right_anchor_y"; // Placeholder value
+
+        public virtual void RefreshConfig()
 		{
 			if (CanReadWriteConfig)
 			{
 				try
 				{
 					GrblConfST conf = new GrblConfST(GrblVersion);
-					GrblCommand cmd = new GrblCommand("$$");
+					GrblCommand cmd = new GrblCommand("$ESP400");
 
 					lock (this)
 					{
 						mSentPtr = new List<IGrblRow>(); //assign sent queue
-						mQueuePtr = new Queue<GrblCommand>();
+                        mSentStr = new StringBuilder(); //assign sent queue
+                        mQueuePtr = new Queue<GrblCommand>();
 						mQueuePtr.Enqueue(cmd);
 					}
 
@@ -990,14 +1243,22 @@ namespace LaserGRBL
 							else
 								System.Threading.Thread.Sleep(10);
 						}
+						if (ProcessSettingsAnswer(mSentStr.ToString())) {
+                            
+							 foreach (ConfigEntry row in scl)
+                            {
+								
+									conf.AddOrUpdate(row);// (((GrblMessage)row).GetNativeMessage());
+                            }
+                        }
 
-						foreach (IGrblRow row in mSentPtr)
-						{
-							if (row is GrblMessage)
-								conf.AddOrUpdate(((GrblMessage)row).GetNativeMessage());
-						}
+						//foreach (IGrblRow row in mSentPtr)
+						//{
+						//	if (row is GrblMessage)
+						//		conf.AddOrUpdate(((GrblMessage)row).GetNativeMessage());
+						//}
 
-						if (conf.Count >= conf.ExpectedCount)
+						if (conf.Count >0)
 							Configuration = conf;
 						else
 							throw new TimeoutException(string.Format("Wrong number of config param found! ({0}/{1})", conf.Count, conf.ExpectedCount));
@@ -1104,7 +1365,8 @@ namespace LaserGRBL
 				lock (this)
 				{
 					mSentPtr = new System.Collections.Generic.List<IGrblRow>(); //assign sent queue
-					mQueuePtr = new System.Collections.Generic.Queue<GrblCommand>();
+                    mSentStr = new StringBuilder(); //assign sent queue
+                    mQueuePtr = new System.Collections.Generic.Queue<GrblCommand>();
 
 					foreach (GrblConfST.GrblConfParam p in config)
 						mQueuePtr.Enqueue(new GrblCommand(string.Format("${0}={1}", p.Number, p.Value), 0, true));
@@ -1910,7 +2172,7 @@ namespace LaserGRBL
 					}
 				}
 
-				RX.SleepTime = HasIncomingData() ? CurrentThreadingMode.RxShort : CurrentThreadingMode.RxLong;
+				RX.SleepTime =  HasIncomingData() ? CurrentThreadingMode.RxShort : CurrentThreadingMode.RxLong;
 			}
 			catch (Exception ex)
 			{ Logger.LogException("ThreadRX", ex); }
@@ -2017,7 +2279,7 @@ namespace LaserGRBL
 
 		private void ManageGenericMessage(string rline)
 		{
-			try { mSentPtr.Add(new GrblMessage(rline, SupportCSV)); }
+			try { mSentPtr.Add(new GrblMessage(rline, SupportCSV)); mSentStr.Append(rline); }
 			catch (Exception ex)
 			{
 				Logger.LogMessage("GenericMessage", "Ex on [{0}] message", rline);
@@ -2894,7 +3156,7 @@ namespace LaserGRBL
 				GrblConfST conf = Configuration;
 				if (conf != null)
 				{
-					foreach (KeyValuePair<int, string> p in conf)
+					foreach (KeyValuePair<string, string> p in conf)
 					{
 						if (double.TryParse(p.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double tod )) //aggiungi solo ciò che si riesce a convertire in double
 							exp.AddSetVariable("$" + p.Key, tod);
@@ -3255,21 +3517,21 @@ namespace LaserGRBL
 	}
 
 	[Serializable]
-	public class GrblConfST : IEnumerable<KeyValuePair<int, string>>
+	public class GrblConfST : IEnumerable<KeyValuePair<string, string>>
 	{
 		public class GrblConfParam : ICloneable
 		{
-			private int mNumber;
+			private string mNumber;
 			private string mValue;
 
-			public GrblConfParam(int number, string value)
+			public GrblConfParam(string number, string value)
 			{ mNumber = number; mValue = value; }
 
-			public int Number
+			public string Number
 			{ get { return mNumber; } }
 
 			public string DollarNumber
-			{ get { return "$" + mNumber.ToString(); } }
+			{ get { return  mNumber.ToString(); } }
 
 			public string Parameter
 			{ get { return CSVD.Settings.GetItem(mNumber.ToString(), 0); } }
@@ -3297,13 +3559,13 @@ namespace LaserGRBL
 
 		}
 
-		private Dictionary<int, string> mData;
+		private Dictionary<string, string> mData;
 		private GrblCore.GrblVersionInfo mVersion;
 
 
 		public GrblConfST()
 		{
-			mData = new Dictionary<int, string>();
+			mData = new Dictionary<string, string>();
 		}
 
 		public GrblConfST(GrblCore.GrblVersionInfo GrblVersion) : this()
@@ -3311,16 +3573,16 @@ namespace LaserGRBL
 			mVersion = GrblVersion;
 		}
 
-		public GrblConfST(GrblCore.GrblVersionInfo GrblVersion, Dictionary<int, string> configTable) : this(GrblVersion)
+		public GrblConfST(GrblCore.GrblVersionInfo GrblVersion, Dictionary<string, string> configTable) : this(GrblVersion)
 		{
-			foreach (KeyValuePair<int, string> kvp in configTable)
+			foreach (KeyValuePair<string, string> kvp in configTable)
 				mData.Add(kvp.Key, kvp.Value);
 		}
 
 		public GrblConfST(GrblConf old) : this(old?.GrblVersion)
 		{
 			if (old != null)
-				foreach (KeyValuePair<int, decimal> kvp in old)
+				foreach (KeyValuePair<string, decimal> kvp in old)
 					mData.Add(kvp.Key, kvp.Value.ToString(CultureInfo.InvariantCulture));
 		}
 
@@ -3330,68 +3592,68 @@ namespace LaserGRBL
 		private bool Version9 => mVersion != null && mVersion >= new GrblCore.GrblVersionInfo(0, 9);
 
 		public int ExpectedCount => Version11 ? 34 : Version9 ? 31 : 23;
-		public bool HomingEnabled => ReadDecimal(Version9 ? 22 : 17, 1) != 0;
-		public decimal MaxRateX => ReadDecimal(Version9 ? 110 : 4, 4000);
-		public decimal MaxRateY => ReadDecimal(Version9 ? 111 : 5, 4000);
-        public decimal MaxRateZ => ReadDecimal(Version9 ? 112 : 6, 4000);
+		public bool HomingEnabled => ReadDecimal("/start/must_home", 0) != 0;
+		public decimal MaxRateX => ReadDecimal("/axes/x/max_rate_mm_per_min", 4000);
+		public decimal MaxRateY => ReadDecimal("/axes/y/max_rate_mm_per_min", 4000);
+        public decimal MaxRateZ => ReadDecimal("/axes/z/max_rate_mm_per_min", 2000);
 
         public bool LaserMode
 		{
 			get
 			{
-				if (NoVersionInfo)
-					return true;
-				else
-					return ReadDecimal(Version11 ? 32 : -1, 0) != 0;
-			}
+                return false;
+            }
 		}
 
-		public decimal MinPWM => ReadDecimal(Version11 ? 31 : -1, 0);
-		public decimal MaxPWM => ReadDecimal(Version11 ? 30 : -1, 1000);
-		public decimal ResolutionX => ReadDecimal(Version9 ? 100 : 0, 250);
-		public decimal ResolutionY => ReadDecimal(Version9 ? 101 : 1, 250);
-		public decimal TableWidth => ReadDecimal(Version9 ? 130 : -1, 300);
-		public decimal TableHeight => ReadDecimal(Version9 ? 131 : -1, 200);
-		public bool SoftLimit => ReadDecimal(20, 0) != 0;
+		public decimal MinPWM =>0;
+		public decimal MaxPWM => 1000;
+		public decimal ResolutionX => ReadDecimal("/kinematics/WallPlotter/right_anchor_x", 250);
+		public decimal ResolutionY => ReadDecimal("/kinematics/WallPlotter/right_anchor_y", 250);
+		public decimal TableWidth => ReadDecimal("/kinematics/WallPlotter/right_anchor_x", 300);
+		public decimal TableHeight => ReadDecimal("/kinematics/WallPlotter/right_anchor_y", 200);
+		public bool SoftLimit => ReadDecimal("/axes/x/soft_limits", 0) != 0;
 
 		public decimal AccelerationXY => (AccelerationX + AccelerationY) / 2;
-		private decimal AccelerationX => ReadDecimal(Version9 ? 120 : -1, 2000);
-		private decimal AccelerationY => ReadDecimal(Version9 ? 121 : -1, 2000);
+		private decimal AccelerationX => ReadDecimal("/axes/x/acceleration_mm_per_sec2", 2000);
+		private decimal AccelerationY => ReadDecimal("/axes/y/acceleration_mm_per_sec2", 2000);
 
-		public string WiFi_SSID => ReadString(74, null);
-		public string WiFi_Pwd => ReadString(75, null);
-		public string TelnetPort => ReadString(305, "23");
+		public string WiFi_SSID => ReadString("Sta/SSID", null);
+		public string WiFi_Pwd => ReadString("Sta/Password", null);
+		public string TelnetPort => ReadString("Telnet/Port", "23");
 
 
 		private decimal ReadDecimal(int key, decimal defval)
 		{
-			if (mVersion == null)
-				return defval;
-			else if (!mData.ContainsKey(key))
-				return defval;
-			else
-			{
-				try
-				{
-					return decimal.Parse(mData[key], CultureInfo.InvariantCulture);
-				}
-				catch
-				{
-					try //proviamo a pulire la stringa con una regex?!
-					{
-						System.Text.RegularExpressions.Regex ExtractNumber = new System.Text.RegularExpressions.Regex(@"(\d+\.?\d*)");
-						System.Text.RegularExpressions.MatchCollection matches = ExtractNumber.Matches(mData[key]);
-						return decimal.Parse(matches[0].Groups[1].Value);
-					}
-					catch
-					{
-						return defval; 
-					}
-				}
-			}
+			return ReadDecimal(key.ToString(),defval);
 		}
-
-		private string ReadString(int number, string defval)
+        private decimal ReadDecimal(string key, decimal defval)
+        {
+            if (mVersion == null)
+                return defval;
+            else if (!mData.ContainsKey(key))
+                return defval;
+            else
+            {
+                try
+                {
+                    return decimal.Parse(mData[key], CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    try //proviamo a pulire la stringa con una regex?!
+                    {
+                        System.Text.RegularExpressions.Regex ExtractNumber = new System.Text.RegularExpressions.Regex(@"(\d+\.?\d*)");
+                        System.Text.RegularExpressions.MatchCollection matches = ExtractNumber.Matches(mData[key]);
+                        return decimal.Parse(matches[0].Groups[1].Value);
+                    }
+                    catch
+                    {
+                        return defval;
+                    }
+                }
+            }
+        }
+        private string ReadString(string number, string defval)
 		{
 			if (mVersion == null)
 				return defval;
@@ -3400,11 +3662,14 @@ namespace LaserGRBL
 			else
 				return mData[number];
 		}
-
-		public List<GrblConfParam> ToList()
+        private string ReadString(int number, string defval)
+        {
+			return ReadString(number.ToString(), defval);
+        }
+        public List<GrblConfParam> ToList()
 		{
 			List<GrblConfParam> rv = new List<GrblConfParam>();
-			foreach (KeyValuePair<int, string> kvp in mData)
+			foreach (KeyValuePair<string, string> kvp in mData)
 				rv.Add(new GrblConfParam(kvp.Key, kvp.Value));
 			return rv;
 		}
@@ -3423,13 +3688,13 @@ namespace LaserGRBL
 				return false;
 		}
 
-		private bool ContainsKey(int key)
+		private bool ContainsKey(string key)
 		{
 			return mData.ContainsKey(key);
 		}
 
 
-		public IEnumerator<KeyValuePair<int, string>> GetEnumerator()
+		public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
 		{
 			return mData.GetEnumerator();
 		}
@@ -3440,12 +3705,14 @@ namespace LaserGRBL
 		}
 
 
-		private static System.Text.RegularExpressions.Regex ConfRegEX = new System.Text.RegularExpressions.Regex(@"^[$](\d+)\s*=(.*)");
+		private static System.Text.RegularExpressions.Regex ConfRegEX = new System.Text.RegularExpressions.Regex(@".+");//^[$](\d+)\s*=(.*)
 
-		public static bool IsSetConf(string p)
+        public static bool IsSetConf(string p)
 		{ return ConfRegEX.IsMatch(p); }
+        public static bool IsSetConf(ConfigEntry p)
+        { return p!=null&& !string.IsNullOrWhiteSpace(p.Label); }
 
-		public void AddOrUpdate(string line)
+        public void AddOrUpdate(string line)
 		{
 			try
 			{
@@ -3454,7 +3721,7 @@ namespace LaserGRBL
 					line = FixFoxalienConfig(line);
 
 					System.Text.RegularExpressions.MatchCollection matches = ConfRegEX.Matches(line);
-					int key = int.Parse(matches[0].Groups[1].Value);
+                    string key = (matches[0].Groups[1].Value);
 					string val = matches[0].Groups[2].Value.Trim();
 
 					if (ContainsKey(key))
@@ -3468,8 +3735,28 @@ namespace LaserGRBL
 
 			}
 		}
+        public void AddOrUpdate(ConfigEntry line)
+        {
+            try
+            {
+                if (IsSetConf(line))
+                {
 
-		private static System.Text.RegularExpressions.Regex FoxalienCleanupConfig = new System.Text.RegularExpressions.Regex(@"^[$](\d+)\s*=\s*(\d+\.?\d*)\s*\(.*\)");
+                    string key = line.Label;
+                    string val = line.DefaultValue;
+
+                    if (ContainsKey(key))
+                        mData[key] = val;
+                    else
+                        mData.Add(key, val);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+        private static System.Text.RegularExpressions.Regex FoxalienCleanupConfig = new System.Text.RegularExpressions.Regex(@"^[$](\d+)\s*=\s*(\d+\.?\d*)\s*\(.*\)");
 		private string FixFoxalienConfig(string line)
 		{
 			if (!FoxalienCleanupConfig.IsMatch(line))
@@ -3489,7 +3776,7 @@ namespace LaserGRBL
 				if (IsSetConf(p))
 				{
 					System.Text.RegularExpressions.MatchCollection matches = ConfRegEX.Matches(p);
-					int key = int.Parse(matches[0].Groups[1].Value);
+                    string key = (matches[0].Groups[1].Value);
 					string val = matches[0].Groups[2].Value.Trim();
 
 					if (!ContainsKey(key))
@@ -3507,10 +3794,10 @@ namespace LaserGRBL
 			return false;
 		}
 
-		internal string ValidateConfig(int parid, object value)
+		internal string ValidateConfig(string parid, object value)
 		{
-			if (parid == 33 && mVersion != null && mVersion.IsOrtur)
-				return "This param control an Ortur safety feature. Please do not change this value!";
+			if (parid == "/stepping/engine" && mVersion != null && mVersion.IsOrtur)
+				return "请不要更改此值!";
 
 			return null;
 		}
@@ -3519,22 +3806,22 @@ namespace LaserGRBL
 
 
 	[Serializable, Obsolete]
-	public class GrblConf : IEnumerable<KeyValuePair<int, decimal>>
+	public class GrblConf : IEnumerable<KeyValuePair<string, decimal>>
 	{
 		[Obsolete]
 		public class GrblConfParam : ICloneable
 		{
-			private int mNumber;
+			private string mNumber;
 			private decimal mValue;
 
-			public GrblConfParam(int number, decimal value)
+			public GrblConfParam(string number, decimal value)
 			{ mNumber = number; mValue = value; }
 
-			public int Number
+			public string Number
 			{ get { return mNumber; } }
 
 			public string DollarNumber
-			{ get { return "$" + mNumber.ToString(); } }
+			{ get { return  mNumber.ToString(); } }
 
 			public string Parameter
 			{ get { return CSVD.Settings.GetItem(mNumber.ToString(), 0); } }
@@ -3556,7 +3843,7 @@ namespace LaserGRBL
 
 		}
 
-		private System.Collections.Generic.Dictionary<int, decimal> mData;
+		private System.Collections.Generic.Dictionary<string, decimal> mData;
 		private GrblCore.GrblVersionInfo mVersion;
 
 		public GrblConf(GrblCore.GrblVersionInfo GrblVersion)
@@ -3565,77 +3852,79 @@ namespace LaserGRBL
 			mVersion = GrblVersion;
 		}
 
-		public GrblConf(GrblCore.GrblVersionInfo GrblVersion, System.Collections.Generic.Dictionary<int, decimal> configTable)
+		public GrblConf(GrblCore.GrblVersionInfo GrblVersion, System.Collections.Generic.Dictionary<string, decimal> configTable)
 			: this(GrblVersion)
 		{
-			foreach (System.Collections.Generic.KeyValuePair<int, decimal> kvp in configTable)
+			foreach (System.Collections.Generic.KeyValuePair<string, decimal> kvp in configTable)
 				mData.Add(kvp.Key, kvp.Value);
 		}
 
 		public GrblConf()
-		{ mData = new System.Collections.Generic.Dictionary<int, decimal>(); }
+		{ mData = new System.Collections.Generic.Dictionary<string, decimal>(); }
 
 		public GrblCore.GrblVersionInfo GrblVersion => mVersion; 
 		private bool NoVersionInfo => mVersion == null;
 		private bool Version11 => mVersion != null && mVersion >= new GrblCore.GrblVersionInfo(1, 1);
 		private bool Version9 => mVersion != null && mVersion >= new GrblCore.GrblVersionInfo(0, 9);
 
-		public int ExpectedCount => Version11 ? 34 : Version9 ? 31 : 23; 
-		public bool HomingEnabled => ReadWithDefault(Version9 ? 22 : 17, 1) != 0;
-		public decimal MaxRateX => ReadWithDefault(Version9 ? 110 : 4, 4000);
-		public decimal MaxRateY => ReadWithDefault(Version9 ? 111 : 5, 4000);
+		public int ExpectedCount => Version11 ? 34 : Version9 ? 31 : 23;
+        public bool HomingEnabled => ReadWithDefault("/start/must_home", 0) != 0;
+        public decimal MaxRateX => ReadWithDefault("/axes/x/max_rate_mm_per_min", 4000);
+        public decimal MaxRateY => ReadWithDefault("/axes/y/max_rate_mm_per_min", 4000);
+        public decimal MaxRateZ => ReadWithDefault("/axes/z/max_rate_mm_per_min", 2000);
 
-		public bool LaserMode
+        public bool LaserMode
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public decimal MinPWM => 0;
+        public decimal MaxPWM => 1000;
+        public decimal ResolutionX => ReadWithDefault("/kinematics/WallPlotter/right_anchor_x", 250);
+        public decimal ResolutionY => ReadWithDefault("/kinematics/WallPlotter/right_anchor_y", 250);
+        public decimal TableWidth => ReadWithDefault("/kinematics/WallPlotter/right_anchor_x", 300);
+        public decimal TableHeight => ReadWithDefault("/kinematics/WallPlotter/right_anchor_y", 200);
+        public bool SoftLimit => ReadWithDefault("/axes/x/soft_limits", 0) != 0;
+
+        public decimal AccelerationXY => (AccelerationX + AccelerationY) / 2;
+        private decimal AccelerationX => ReadWithDefault("/axes/x/acceleration_mm_per_sec2", 2000);
+        private decimal AccelerationY => ReadWithDefault("/axes/y/acceleration_mm_per_sec2", 2000);
+
+
+        private decimal ReadWithDefault(int number, decimal defval)
 		{
-			get
-			{
-				if (NoVersionInfo)
-					return true;
-				else
-					return ReadWithDefault(Version11 ? 32 : -1, 0) != 0;
-			}
+			return ReadWithDefault(number.ToString(),defval);
 		}
+        private decimal ReadWithDefault(string number, decimal defval)
+        {
+            if (mVersion == null)
+                return defval;
+            else if (!mData.ContainsKey(number))
+                return defval;
+            else
+                return mData[number];
+        }
+        //public object Clone()
+        //{
+        //	GrblConf rv = new GrblConf();
+        //	rv.mVersion = mVersion != null ? mVersion.Clone() as GrblCore.GrblVersionInfo : null;
+        //	foreach (System.Collections.Generic.KeyValuePair<int, GrblConf.GrblConfParam> kvp in this)
+        //		rv.Add(kvp.Key, kvp.Value.Clone() as GrblConfParam);
+        //	return rv;
+        //}
 
-		public decimal MinPWM => ReadWithDefault(Version11 ? 31 : -1, 0);
-		public decimal MaxPWM => ReadWithDefault(Version11 ? 30 : -1, 1000);
-		public decimal ResolutionX => ReadWithDefault(Version9 ? 100 : 0, 250);
-		public decimal ResolutionY => ReadWithDefault(Version9 ? 101 : 1, 250);
-		public decimal TableWidth => ReadWithDefault(Version9 ? 130 : -1, 300);
-		public decimal TableHeight => ReadWithDefault(Version9 ? 131 : -1, 200);
-		public bool SoftLimit => ReadWithDefault(20, 0) != 0;
-
-		public decimal AccelerationXY => (AccelerationX + AccelerationY) / 2;
-		private decimal AccelerationX => ReadWithDefault(Version9 ? 120 : -1, 2000);
-		private decimal AccelerationY => ReadWithDefault(Version9 ? 121 : -1, 2000);
-
-		private decimal ReadWithDefault(int number, decimal defval)
-		{
-			if (mVersion == null)
-				return defval;
-			else if (!mData.ContainsKey(number))
-				return defval;
-			else
-				return mData[number];
-		}
-
-		//public object Clone()
-		//{
-		//	GrblConf rv = new GrblConf();
-		//	rv.mVersion = mVersion != null ? mVersion.Clone() as GrblCore.GrblVersionInfo : null;
-		//	foreach (System.Collections.Generic.KeyValuePair<int, GrblConf.GrblConfParam> kvp in this)
-		//		rv.Add(kvp.Key, kvp.Value.Clone() as GrblConfParam);
-		//	return rv;
-		//}
-
-		public System.Collections.Generic.List<GrblConf.GrblConfParam> ToList()
+        public System.Collections.Generic.List<GrblConf.GrblConfParam> ToList()
 		{
 			System.Collections.Generic.List<GrblConfParam> rv = new System.Collections.Generic.List<GrblConfParam>();
-			foreach (System.Collections.Generic.KeyValuePair<int, decimal> kvp in mData)
+			foreach (System.Collections.Generic.KeyValuePair<string, decimal> kvp in mData)
 				rv.Add(new GrblConfParam(kvp.Key, kvp.Value));
 			return rv;
 		}
 
-		private void Add(int num, decimal val)
+		private void Add(string num, decimal val)
 		{
 			mData.Add(num, val);
 		}
@@ -3652,17 +3941,17 @@ namespace LaserGRBL
 				return false;
 		}
 
-		private bool ContainsKey(int key)
+		private bool ContainsKey(string key)
 		{
 			return mData.ContainsKey(key);
 		}
 
-		private void SetValue(int key, decimal value)
+		private void SetValue(string key, decimal value)
 		{
 			mData[key] = value;
 		}
 
-		public System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<int, decimal>> GetEnumerator()
+		public System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<string, decimal>> GetEnumerator()
 		{
 			return mData.GetEnumerator();
 		}
@@ -3685,7 +3974,7 @@ namespace LaserGRBL
 				if (IsSetConf(p))
 				{
 					System.Text.RegularExpressions.MatchCollection matches = ConfRegEX.Matches(p);
-					int key = int.Parse(matches[0].Groups[1].Value);
+                    string key = (matches[0].Groups[1].Value);
 					decimal val = decimal.Parse(matches[0].Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture);
 
 					if (ContainsKey(key))
@@ -3707,7 +3996,7 @@ namespace LaserGRBL
 				if (IsSetConf(p))
 				{
 					System.Text.RegularExpressions.MatchCollection matches = ConfRegEX.Matches(p);
-					int key = int.Parse(matches[0].Groups[1].Value);
+                    string key = (matches[0].Groups[1].Value);
 					decimal val = decimal.Parse(matches[0].Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture);
 
 					if (!ContainsKey(key))

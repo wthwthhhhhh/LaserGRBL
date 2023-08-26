@@ -7,6 +7,7 @@
 using System;
 using System.Reflection;
 using System.IO;
+using System.Text;
 
 
 namespace LaserGRBL.CSV
@@ -20,8 +21,8 @@ namespace LaserGRBL.CSV
 		private int mLen;
 		
 		public CsvDictionary(string resource, int len)
-		{
-      		StreamReader sr = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(resource));
+        {
+      		StreamReader sr = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(resource), Encoding.UTF8);
       		mLen = len;
       		string rline = null;
       		while ((rline = sr.ReadLine()) != null)

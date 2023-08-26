@@ -1,0 +1,62 @@
+$-Code, Setting, Units, Setting Description
+0,Step pulse time,microseconds,Sets time length per step. Minimum 3usec.
+1,Step idle delay,milliseconds,Sets a short hold delay when stopping to let dynamics settle before disabling steppers. Value 255 keeps motors enabled with no delay.
+2,Step pulse invert,mask,Inverts the step signal. Set axis bit to invert (00000ZYX).
+3,Step direction invert,mask,Inverts the direction signal. Set axis bit to invert (00000ZYX).
+4,Invert step enable pin,boolean,Inverts the stepper driver enable pin signal.
+5,Invert limit pins,boolean,Inverts the all of the limit input pins.
+6,Invert probe pin,boolean,Inverts the probe input pin signal.
+10,Status report options,mask,Alters data included in status reports.
+11,Junction deviation,millimeters,Sets how fast Grbl travels through consecutive motions. Lower value slows it down.
+12,Arc tolerance,millimeters,Sets the G2 and G3 arc tracing accuracy based on radial error. Beware: A very small value may effect performance.
+13,Report in inches,boolean,Enables inch units when returning any position and rate value that is not a settings value.
+20,Soft limits enable,boolean,Enables soft limits checks within machine travel and sets alarm when exceeded. Requires homing.
+21,Hard limits enable,boolean,Enables hard limits. Immediately halts motion and throws an alarm when switch is triggered.
+22,Homing cycle enable,boolean,Enables homing cycle. Requires limit switches on all axes.
+23,Homing direction invert,mask,Homing searches for a switch in the positive direction. Set axis bit (00000ZYX) to search in negative direction.
+24,Homing locate feed rate,mm/min,Feed rate to slowly engage limit switch to determine its location accurately.
+25,Homing search seek rate,mm/min,Seek rate to quickly find the limit switch before the slower locating phase.
+26,Homing switch debounce delay,milliseconds,Sets a short delay between phases of homing cycle to let a switch debounce.
+27,Homing switch pull-off distance,millimeters,Retract distance after triggering switch to disengage it. Homing will fail if switch isn't cleared.
+30,Maximum spindle speed,RPM,Maximum spindle speed. Sets PWM to 100% duty cycle.
+31,Minimum spindle speed,RPM,Minimum spindle speed. Sets PWM to 0.4% or lowest duty cycle.
+32,Laser-mode enable,boolean,Enables laser mode. Consecutive G1/2/3 commands will not halt when spindle speed is changed.
+100,X-axis travel resolution,step/mm,X-axis travel resolution in steps per millimeter.
+101,Y-axis travel resolution,step/mm,Y-axis travel resolution in steps per millimeter.
+102,Z-axis travel resolution,step/mm,Z-axis travel resolution in steps per millimeter.
+110,X-axis maximum rate,mm/min,X-axis maximum rate. Used as G0 rapid rate.
+111,Y-axis maximum rate,mm/min,Y-axis maximum rate. Used as G0 rapid rate.
+112,Z-axis maximum rate,mm/min,Z-axis maximum rate. Used as G0 rapid rate.
+120,X-axis acceleration,mm/sec^2,X-axis acceleration. Used for motion planning to not exceed motor torque and lose steps.
+121,Y-axis acceleration,mm/sec^2,Y-axis acceleration. Used for motion planning to not exceed motor torque and lose steps.
+122,Z-axis acceleration,mm/sec^2,Z-axis acceleration. Used for motion planning to not exceed motor torque and lose steps.
+130,X-axis maximum travel,millimeters,Maximum X-axis travel distance from homing switch. Determines valid machine space for soft-limits and homing search distances.
+131,Y-axis maximum travel,millimeters,Maximum Y-axis travel distance from homing switch. Determines valid machine space for soft-limits and homing search distances.
+132,Z-axis maximum travel,millimeters,Maximum Z-axis travel distance from homing switch. Determines valid machine space for soft-limits and homing search distances.
+/board,控制板信息,文本,机器所使用的控制板信息。
+/name,机器名称,文本,机器的名称或标识。
+/meta,机器元信息,文本,包含有关机器的其他元信息。
+/stepping/engine,步进引擎设置,文本,步进引擎类型的设置。
+/stepping/idle_ms,空闲毫秒数,数字,步进引擎在空闲状态下的等待时间（毫秒）。
+/stepping/pulse_us,脉冲宽度,数字,步进引擎脉冲信号的宽度（微秒）。
+/stepping/dir_delay_us,方向延迟,数字,步进引擎改变方向的延迟时间（微秒）。
+/stepping/disable_delay_us,关闭延迟,数字,步进引擎关闭信号的延迟时间（微秒）。
+/stepping/segments,步进细分,数字,步进引擎的细分设置。
+/i2c0/frequency,I2C 频率,数字,I2C 通信的频率设置。
+/sdcard/frequency_hz,SD 卡频率,数字,从 SD 卡读取数据的频率（赫兹）。
+/kinematics/WallPlotter/left_axis,墙绘仪左侧轴,文本,墙绘仪左侧轴的设置。
+/kinematics/WallPlotter/left_anchor_x,左锚点 X 坐标,数字,墙绘仪左侧锚点的 X 坐标。
+/kinematics/WallPlotter/left_anchor_y,左锚点 Y 坐标,数字,墙绘仪左侧锚点的 Y 坐标。
+/user_outputs/analog3_hz,用户输出模拟信号 3 频率,数字,用户输出模拟信号 3 的频率设置。
+/oled/i2c_num,OLED 显示屏 I2C 编号,数字,OLED 显示屏的 I2C 编号。
+/oled/i2c_address,OLED 显示屏 I2C 地址,文本,OLED 显示屏的 I2C 地址。
+/oled/width,OLED 显示屏宽度,数字,OLED 显示屏的宽度。
+/oled/height,OLED 显示屏高度,数字,OLED 显示屏的高度。
+/oled/radio_delay_ms,OLED 延迟时间,数字,OLED 显示屏的延迟时间（毫秒）。
+/arc_tolerance_mm,弧线容差,数字,允许的弧线容差值。
+/junction_deviation_mm,连接偏差,数字,连接路径的允许偏差值。
+/verbose_errors,详细错误输出,布尔,是否输出详细错误信息。
+/report_inches,报告单位为英寸,布尔,是否以英寸为单位报告。
+/enable_parking_override_control,启用停车覆盖控制,布尔,是否启用停车位置覆盖控制。
+/use_line_numbers,使用行号,布尔,是否使用行号进行指令编码。
+/planner_blocks,规划器块数,数字,规划器的缓冲块数量。

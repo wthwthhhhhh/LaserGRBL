@@ -243,7 +243,7 @@ namespace LaserGRBL
 							while ((rline = sr.ReadLine()) != null)
 							{
 								string msg = rline; //"$0=10 (Step pulse time)"
-								int num = int.Parse(msg.Split('=')[0].Substring(1));
+                                string num = (msg.Split('=')[0].Substring(1));
 								string val = msg.Split('=')[1].Trim();
 								conf.Add(new GrblConfST.GrblConfParam(num, val));
 							}
@@ -344,7 +344,7 @@ namespace LaserGRBL
 				if (e.ColumnIndex == 3)
 				{
 					object value = DGV[e.ColumnIndex, e.RowIndex].Value;
-					int parid = int.Parse(DGV[1, e.RowIndex].Value.ToString().Trim(new char[] { '$' }));
+					string parid = (DGV[1, e.RowIndex].Value.ToString().Trim(new char[] { '$' }));
 
 					string error = Core.ValidateConfig(parid, value);
 
@@ -360,5 +360,9 @@ namespace LaserGRBL
 			}
 		}
 
-	}
+        private void DGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+    }
 }

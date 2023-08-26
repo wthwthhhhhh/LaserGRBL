@@ -1538,7 +1538,7 @@ namespace LaserGRBL
 					{
 						Color linecolor = Color.FromArgb(spb.GetCurrentAlpha(mRange.SpindleRange), firstline ? ColorScheme.PreviewFirstMovement : spb.LaserBurning ? ColorScheme.PreviewLaserPower : ColorScheme.PreviewOtherMovement);
 
-						using (Pen pen = GetPen(Color.Red))
+						using (Pen pen = GetPen(cmd.G.ToString()=="G0"? Color.LightGray: Color.Black))
 						{
 							pen.ScaleTransform(1 / zoom, 1 / zoom);
 

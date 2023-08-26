@@ -1,61 +1,61 @@
-ï»¿1,Expected command letter,G-code words consist of a letter and a value. Letter was not found.  
-2,Bad number format,Missing the expected G-code word value or numeric value format is not valid.  
-3,Invalid statement,$' system command was not recognized or supported.  
-4,Value < 0,Negative value received for an expected positive value.  
-5,Setting disabled,Homing cycle failure. Homing is not configured via settings.  
-6,Value < 3 usec,Step pulse time must be greater or equal to 2 microseconds.  
-7,EEPROM read fail. Using defaults,A settings read failed. Auto-restoring affected settings to default values.  
-8,Not idle,$' command cannot be used unless controller state is IDLE. Ensures smooth operation during a job.  
-9,G-code lock,G-code commands are locked out during alarm or jog state.  
-10,Homing not enabled,Soft limits cannot be enabled without homing also enabled.  
-11,Line overflow,Max characters per line exceeded. Received command line was not executed.  
-12,Step rate > 30kHz,$' setting value cause the step rate to exceed the maximum supported.  
-13,Check Door,Safety door detected as opened and door state initiated.  
-14,Line length exceeded,Build info or startup line exceeded line length limit. Line not stored.  
-15,Travel exceeded,Jog target exceeds machine travel. Jog command has been ignored.  
-16,Invalid jog command,Jog command has no '=' or contains prohibited g-code.  
-17,PWM is needed,Laser mode requires PWM output.  
-18,Reset asserted  ,Reset asserted  
-19,Non positive value  ,Non positive value  
-20,Unsupported command,Unsupported or invalid g-code command found in block.  
-21,Modal group violation,More than one g-code command from same modal group found in block.  
-22,Undefined feed rate,Feed rate has not yet been set or is undefined.  
-23,Invalid gcode ID:23,G-code command in block requires an integer value.  
-24,Invalid gcode ID:24,More than one g-code command that requires axis words found in block.  
-25,Invalid gcode ID:25,Repeated g-code word found in block.  
-26,Invalid gcode ID:26,No axis words found in block for g-code command or current modal state which requires them.  
-27,Invalid gcode ID:27,Line number value is invalid.  
-28,Invalid gcode ID:28,G-code command is missing a required value word.  
-29,Invalid gcode ID:29,G59.x work coordinate systems are not supported.  
-30,Invalid gcode ID:30,G53 only allowed with G0 and G1 motion modes.  
-31,Invalid gcode ID:31,Axis words found in block when no command or current modal state uses them.  
-32,Invalid gcode ID:32,G2 and G3 arcs require at least one in-plane axis word.  
-33,Invalid gcode ID:33,Motion command target is invalid.  
-34,Invalid gcode ID:34,Arc radius value is invalid.  
-35,Invalid gcode ID:35,G2 and G3 arcs require at least one in-plane offset word.  
-36,Invalid gcode ID:36,Unused value words found in block.  
-37,Invalid gcode ID:37,G43.1 dynamic tool length offset is not assigned to configured tool length axis.  
-38,Invalid gcode ID:38,Tool number greater than max supported value or undefined tool selected.  
-39,Invalid gcode ID:39,Value out of range.  
-40,Invalid gcode ID:40,G-code command not allowed when tool change is pending.  
-41,Invalid gcode ID:41,Spindle not running when motion commanded in CSS or spindle sync mode.  
-42,Invalid gcode ID:42,Plane must be ZX for threading.  
-43,Invalid gcode ID:43,Max. feed rate exceeded.  
-44,Invalid gcode ID:44,RPM out of range.  
-45,Invalid gcode ID:45,Only homing is allowed when a limit switch is engaged.  
-46,Invalid gcode ID:46,Home machine to continue.  
-47,Invalid gcode ID:47,ATC: current tool is not set. Set current tool with M61.  
-48,Invalid gcode ID:48,Value word conflict.  
-49,POST Failed,Power on self test failed. A hard reset is required.  
-50,Emergency stop,Emergency stop active.  
-51,Motor fault,Motor fault.  
-52,Value out of range,Setting value is out of range.  
-53,Invalid gcode ID:53,Setting is not available  possibly due to limited driver support.  
-54,Invalid gcode ID:54,Retract position is less than drill depth.  
-60,SD Error 60,SD Card mount failed.  
-61,SD Error 61,SD Card file open/read failed.  
-62,SD Error 62,SD Card directory listing failed.  
-63,SD Error 63,SD Card directory not found.  
-64,SD Error 64,SD Card file empty.  
-65,Function error,function is error.  
-90,WiFi error,WiFi error.  
+1,Expected command letter,G ´úÂë´ÊÓÉÒ»¸ö×ÖÄ¸ºÍÒ»¸öÖµ×é³É¡£×ÖÄ¸Î´ÕÒµ½¡£
+2,Bad number format,È±ÉÙÔ¤ÆÚµÄ G ´úÂë´ÊÖµ»òÊıÖµ¸ñÊ½ÎŞĞ§¡£
+3,Invalid statement,$' ÏµÍ³ÃüÁîÎ´±»Ê¶±ğ»òÖ§³Ö¡£
+4,Value < 0,½ÓÊÕµ½Ô¤ÆÚÎªÕıÖµµÄ¸ºÖµ¡£
+5,Setting disabled,¹éÎ»Ñ­»·Ê§°Ü¡£Î´Í¨¹ıÉèÖÃÅäÖÃ¹éÎ»¡£
+6,Value < 3 usec,²½½øÂö³åÊ±¼ä±ØĞë´óÓÚ»òµÈÓÚ 2 Î¢Ãë¡£
+7,EEPROM read fail. Using defaults,ÉèÖÃ¶ÁÈ¡Ê§°Ü¡£×Ô¶¯»Ö¸´ÊÜÓ°ÏìµÄÉèÖÃÎªÄ¬ÈÏÖµ¡£
+8,Not idle,³ı·Ç¿ØÖÆÆ÷×´Ì¬Îª IDLE£¬·ñÔòÎŞ·¨Ê¹ÓÃ $' ÃüÁî¡£È·±£×÷ÒµÆÚ¼äÆ½ÎÈÔËĞĞ¡£
+9,G-code lock,ÔÚ±¨¾¯»òµã¶¯×´Ì¬ÏÂ£¬Ëø¶¨ G ´úÂëÃüÁî¡£
+10,Homing not enabled,Èç¹ûÃ»ÓĞÆôÓÃ¹éÎ»£¬ÎŞ·¨ÆôÓÃÈíÏŞÎ»¡£
+11,Line overflow,Ã¿ĞĞ×î´ó×Ö·ûÊıÒÑ³¬¹ı¡£½ÓÊÕµ½µÄÃüÁîĞĞÎ´Ö´ĞĞ¡£
+12,Step rate > 30kHz,$' ÉèÖÃÖµµ¼ÖÂ²½½øËÙÂÊ³¬¹ı×î´óÖ§³ÖÖµ¡£
+13,Check Door,¼ì²âµ½°²È«ÃÅÒÑ´ò¿ª²¢³õÊ¼»¯ÃÅ×´Ì¬¡£
+14,Line length exceeded,¹¹½¨ĞÅÏ¢»òÆô¶¯ĞĞ³¬¹ıÁËĞĞ³¤¶ÈÏŞÖÆ¡£ĞĞÎ´´æ´¢¡£
+15,Travel exceeded,µã¶¯Ä¿±ê³¬³ö»úÆ÷ĞĞ³Ì¡£µã¶¯ÃüÁîÒÑ±»ºöÂÔ¡£
+16,Invalid jog command,µã¶¯ÃüÁîÃ»ÓĞ '=' »ò°üº¬½ûÖ¹Ê¹ÓÃµÄ G ´úÂë¡£
+17,PWM is needed,¼¤¹âÄ£Ê½ĞèÒª PWM Êä³ö¡£
+18,Reset asserted  ,¸´Î»ÒÑ¶Ï¿ª
+19,Non positive value  ,·ÇÕıÖµ
+20,Unsupported command,ÔÚ¿éÖĞÕÒµ½²»Ö§³Ö»òÎŞĞ§µÄ G ´úÂëÃüÁî¡£
+21,Modal group violation,ÔÚ¿éÖĞÕÒµ½À´×ÔÍ¬Ò»Ä£Ì¬×éµÄ¶à¸ö G ´úÂëÃüÁî¡£
+22,Undefined feed rate,½ø¸øËÙÂÊÉĞÎ´ÉèÖÃ»òÎ´¶¨Òå¡£
+23,Invalid gcode ID:23,¿éÖĞµÄ G ´úÂëÃüÁîĞèÒªÒ»¸öÕûÊıÖµ¡£
+24,Invalid gcode ID:24,ÔÚ¿éÖĞÕÒµ½ĞèÒªÖá×ÖµÄ¶à¸ö G ´úÂëÃüÁî¡£
+25,Invalid gcode ID:25,ÔÚ¿éÖĞÕÒµ½ÖØ¸´µÄ G ´úÂë´Ê¡£
+26,Invalid gcode ID:26,ÔÚ¿éÖĞÃ»ÓĞÕÒµ½Öá×Ö£¬¶øÕâÊÇ G ´úÂëÃüÁî»òµ±Ç°Ä£Ì¬×´Ì¬Ëù±ØĞèµÄ¡£
+27,Invalid gcode ID:27,ĞĞºÅÖµÎŞĞ§¡£
+28,Invalid gcode ID:28,G ´úÂëÃüÁîÈ±ÉÙËùĞèµÄÖµ´Ê¡£
+29,Invalid gcode ID:29,²»Ö§³Ö G59.x ¹¤×÷×ø±êÏµ¡£
+30,Invalid gcode ID:30,½öÔÊĞíÔÚ G0 ºÍ G1 ÔË¶¯Ä£Ê½ÏÂÊ¹ÓÃ G53¡£
+31,Invalid gcode ID:31,ÔÚ¿éÖĞÕÒµ½Öá×Ö£¬µ«Ã»ÓĞÃüÁî»òµ±Ç°Ä£Ì¬×´Ì¬Ê¹ÓÃËüÃÇ¡£
+32,Invalid gcode ID:32,G2 ºÍ G3 Ô²»¡ĞèÒªÖÁÉÙÒ»¸öÆ½ÃæÄÚµÄÖá×Ö¡£
+33,Invalid gcode ID:33,ÔË¶¯ÃüÁîÄ¿±êÎŞĞ§¡£
+34,Invalid gcode ID:34,Ô²»¡°ë¾¶ÖµÎŞĞ§¡£
+35,Invalid gcode ID:35,G2 ºÍ G3 Ô²»¡ĞèÒªÖÁÉÙÒ»¸öÆ½ÃæÄÚµÄÆ«ÒÆ×Ö¡£
+36,Invalid gcode ID:36,ÔÚ¿éÖĞÕÒµ½Î´Ê¹ÓÃµÄÖµ´Ê¡£
+37,Invalid gcode ID:37,G43.1 ¶¯Ì¬µ¶¾ß³¤¶È²¹³¥Î´·ÖÅä¸øÅäÖÃµÄµ¶¾ß³¤¶ÈÖá¡£
+38,Invalid gcode ID:38,µ¶¾ß±àºÅ´óÓÚ×î´óÖ§³ÖÖµ»òÑ¡ÔñÁËÎ´¶¨ÒåµÄµ¶¾ß¡£
+39,Invalid gcode ID:39,Öµ³¬³ö·¶Î§¡£
+40,Invalid gcode ID:40,ÔÚµ¶¾ß¸ü»»´ı´¦ÀíÊ±£¬²»ÔÊĞíÊ¹ÓÃ G ´úÂëÃüÁî¡£
+41,Invalid gcode ID:41,ÔÚ CSS »òÖ÷ÖáÍ¬²½Ä£Ê½ÏÂÔË¶¯ÃüÁîÊ±£¬Ö÷ÖáÎ´ÔËĞĞ¡£
+42,Invalid gcode ID:42,Ïß³Ì±ØĞëÊ¹ÓÃ ZX Æ½Ãæ¡£
+43,Invalid gcode ID:43,³¬¹ı×î´ó½ø¸øËÙÂÊ¡£
+44,Invalid gcode ID:44,×ªËÙ³¬³ö·¶Î§¡£
+45,Invalid gcode ID:45,½öµ±ÏŞÎ»¿ª¹Ø´¥·¢Ê±£¬ÔÊĞí½øĞĞ¹éÎ»¡£
+46,Invalid gcode ID:46,Çë¹éÎ»ÒÔ¼ÌĞø¡£
+47,Invalid gcode ID:47,ATC£ºµ±Ç°µ¶¾ßÎ´ÉèÖÃ¡£Ê¹ÓÃ M61 ÉèÖÃµ±Ç°µ¶¾ß¡£
+48,Invalid gcode ID:48,Öµ´Ê³åÍ»¡£
+49,POST Failed,ÉÏµç×Ô¼ìÊ§°Ü¡£ĞèÒªÓ²¸´Î»¡£
+50,Emergency stop,¼±Í£´¦ÓÚ¼¤»î×´Ì¬¡£
+51,Motor fault,µç»ú¹ÊÕÏ¡£
+52,Value out of range,ÉèÖÃÖµ³¬³ö·¶Î§¡£
+53,Invalid gcode ID:53,ÉèÖÃ²»¿ÉÓÃ£¬¿ÉÄÜÊÇÓÉÓÚÊÜÏŞµÄÇı¶¯³ÌĞòÖ§³Ö¡£
+54,Invalid gcode ID:54,³·»ØÎ»ÖÃĞ¡ÓÚ×ê¿×Éî¶È¡£
+60,SD Error 60,SD ¿¨°²×°Ê§°Ü¡£
+61,SD Error 61,SD ¿¨ÎÄ¼ş´ò¿ª/¶ÁÈ¡Ê§°Ü¡£
+62,SD Error 62,SD ¿¨Ä¿Â¼ÁĞ±íÊ§°Ü¡£
+63,SD Error 63,SD ¿¨Ä¿Â¼Î´ÕÒµ½¡£
+64,SD Error 64,SD ¿¨ÎÄ¼şÎª¿Õ¡£
+65,Function error,¹¦ÄÜ´íÎó¡£
+90,WiFi error,WiFi ´íÎó¡£
