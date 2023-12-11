@@ -134,6 +134,18 @@
     <Compile Include="ComWrapper\MySerial\StopBits.cs" />
     <Compile Include="ComWrapper\MySerial\WinSerialStream.cs" />
     <Compile Include="ComWrapper\UsbSerial2.cs" />
+    <Compile Include="ChangePenForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangePenForm.Designer.cs">
+      <DependentUpon>ChangePenForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RasterConverter\ColorRangeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RasterConverter\ColorRangeForm.Designer.cs">
+      <DependentUpon>ColorRangeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SetLineLenForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -804,6 +816,9 @@
     <EmbeddedResource Include="AutoUpdate\NewVersionForm.ro-RO.resx">
       <DependentUpon>NewVersionForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ChangePenForm.resx">
+      <DependentUpon>ChangePenForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConnectLogForm.nl-NL.resx">
       <DependentUpon>ConnectLogForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -867,12 +882,59 @@
     <EmbeddedResource Include="PSHelper\PSHelperForm.ro-RO.resx">
       <DependentUpon>PSHelperForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ColorRangeForm.resx">
+      <DependentUpon>ColorRangeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.cs-CZ.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.da.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.de.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.es.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.fr.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.hu-HU.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.it.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.nl-NL.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.pl-PL.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.pt-BR.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.resx">
       <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.ro-RO.resx">
       <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.ru.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.sk-SK.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.tr-TR.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.zh-CN.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.zh-TW.resx">
+      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RasterConverter\RasterToLaserForm.nl-NL.resx">
       <DependentUpon>RasterToLaserForm.cs</DependentUpon>
@@ -1356,24 +1418,6 @@
     <EmbeddedResource Include="PSHelper\PSHelperForm.zh-TW.resx">
       <DependentUpon>PSHelperForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.cs-CZ.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.hu-HU.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.pl-PL.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.sk-SK.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.tr-TR.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.zh-TW.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="RasterConverter\RasterToLaserForm.cs-CZ.resx">
       <DependentUpon>RasterToLaserForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -1700,39 +1744,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Strings.nl-NL.resx">
       <DependentUpon>Strings.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.da.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.de.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.es.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.fr.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.it.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.pt-BR.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.ru.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RasterConverter\ConvertSizeAndOptionForm.zh-CN.resx">
-      <DependentUpon>ConvertSizeAndOptionForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RasterConverter\RasterToLaserForm.da.resx">
       <DependentUpon>RasterToLaserForm.cs</DependentUpon>

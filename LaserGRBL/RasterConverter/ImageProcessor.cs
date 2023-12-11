@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Management.Instrumentation;
 using System.Threading;
 
 namespace LaserGRBL.RasterConverter
@@ -25,7 +26,7 @@ namespace LaserGRBL.RasterConverter
         public delegate void GenerationCompleteDlg(Exception ex);
         public static event GenerationCompleteDlg GenerationComplete;
 
-        private Bitmap mTrueOriginal;   //real original image
+        public Bitmap mTrueOriginal;   //real original image
         private Bitmap mOriginal;       //original image (cropped or rotated)
         private Bitmap mResized;		//resized for preview
         private int mFileDPI;
@@ -74,6 +75,8 @@ namespace LaserGRBL.RasterConverter
         private float mFrequency;
         private float mLineWidth;
         private LineTypeEnum mLineType;
+        private bool mOnlyFill;
+        private Color mPenColor;
 
         //option for gcode generator
         public SizeF TargetSize;
@@ -129,6 +132,7 @@ namespace LaserGRBL.RasterConverter
             mFileName = fileName;
             mAppend = append;
             mSuspended = true;
+            mPenColor = Color.Black;
             //mOriginal = new Bitmap(fileName);
 
             //this double pass is needed to normalize loaded image pixelformat
@@ -365,7 +369,47 @@ namespace LaserGRBL.RasterConverter
             ResizeRecalc();
             Refresh();
         }
+        public void ColorRange(Color color, int Range)
+        {
+            mPenColor = color;
+            Revert();
+           Bitmap newBmp = new Bitmap(mOriginal.Width, mOriginal.Height);
 
+            for (int y = 0; y < mOriginal.Height; y++)
+            {
+                for (int x = 0; x < mOriginal.Width; x++)
+                {
+                    Color pixelColor = mOriginal.GetPixel(x, y);
+                    int colorDistance = CalculateColorDistance(color, pixelColor);
+
+                    if (colorDistance <= Range)
+                    {
+                        newBmp.SetPixel(x, y, pixelColor);
+                    }
+                    else
+                    {
+                        newBmp.SetPixel(x, y, Color.Transparent);
+                    }
+                }
+            }
+
+            mOriginal.Dispose();
+            mOriginal = newBmp;
+
+            ResizeRecalc();
+            Refresh();
+        }
+
+        private int CalculateColorDistance(Color color1, Color color2)
+        {
+            int rDiff = color1.R - color2.R;
+            int gDiff = color1.G - color2.G;
+            int bDiff = color1.B - color2.B;
+
+            return (int)Math.Sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
+        }
+
+      
         internal void Fill(Point location, Size rsize, Color color, int v)
         {
             Point scaled = new Point(location.X * mOriginal.Width / rsize.Width, location.Y * mOriginal.Height / rsize.Height);
@@ -910,6 +954,30 @@ namespace LaserGRBL.RasterConverter
                 {
                     mLineType = value;
                     Refresh();
+                }
+            }
+        }
+        public bool OnlyFill
+        {
+            get { return mOnlyFill; }
+            set
+            {
+                if (value != mOnlyFill)
+                {
+                    mOnlyFill = value;
+                    //Refresh();
+                }
+            }
+        }
+        public Color PenColor
+        {
+            get { return mPenColor; }
+            set
+            {
+                if (value != mPenColor)
+                {
+                    mPenColor = value;
+                    //Refresh();
                 }
             }
         }
@@ -1490,6 +1558,8 @@ namespace LaserGRBL.RasterConverter
                         conf.firmwareType = Settings.GetObject("Firmware Type", Firmware.Grbl);
                         conf.optimizeSVG = OptimizeSVG;
 
+                        conf.onlyFill = OnlyFill;
+                        conf.penColor = mPenColor;
 
                         if (SelectedTool == Tool.Line2Line || SelectedTool == Tool.Dithering || SelectedTool == Tool.NoProcessing)
                             mCore.LoadedFile.LoadImageL2L(bmp, mFileName, conf, mAppend, mCore);

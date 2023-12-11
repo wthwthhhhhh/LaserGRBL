@@ -18,8 +18,9 @@ using Tools;
 namespace LaserGRBL.RasterConverter
 {
 	public partial class RasterToLaserForm : Form
-	{
-		GrblCore mCore;
+    {
+        ColorRangeForm crf = new ColorRangeForm();
+        GrblCore mCore;
 		ImageProcessor IP;
 		bool preventClose;
 		bool supportPWM = Settings.GetObject("Support Hardware PWM", false);
@@ -93,7 +94,7 @@ namespace LaserGRBL.RasterConverter
 
 		private decimal GetMaxQuality()
 		{
-			return Settings.GetObject("Raster Hi-Res", false) ? 50 : 20;
+			return Settings.GetObject("Raster Hi-Res", false) ? 2 : 20;
 		}
 
 		private Size GetImageSize()
@@ -545,7 +546,8 @@ namespace LaserGRBL.RasterConverter
 		}
 
 		private void RasterToLaserForm_Load(object sender, EventArgs e)
-		{ if (IP != null) IP.Resume(); }
+		{ if (IP != null) IP.Resume();
+        }
 
 		void RasterToLaserFormFormClosing(object sender, FormClosingEventArgs e)
 		{
@@ -997,6 +999,26 @@ namespace LaserGRBL.RasterConverter
 
         }
 
-        
+        private void PbColorRange_Click(object sender, EventArgs e)
+        {
+            crf.SetImg(IP.mTrueOriginal.Clone() as Bitmap);
+            if (crf.ShowDialog(this) == DialogResult.OK) {
+				IP.ColorRange(crf.pixelColor, TbColorRange.Value);
+				PbColorRange.BackColor = crf.pixelColor;
+            }
+        }
+
+        private void TbColorRange_Scroll(object sender, ScrollEventArgs e)
+        {
+            IP.ColorRange(crf.pixelColor, TbColorRange.Value);
+        }
+
+        private void CbOnlyFill_CheckedChanged(object sender, EventArgs e)
+        {
+            if (IP != null)
+            {
+                IP.OnlyFill = CbOnlyFill.Checked;
+            }
+        }
     }
 }

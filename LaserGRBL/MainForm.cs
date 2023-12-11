@@ -77,8 +77,9 @@ namespace LaserGRBL
 			Core.OnFileLoaded += OnFileLoaded;
 			Core.OnOverrideChange += RefreshOverride;
 			Core.IssueDetected += OnIssueDetected;
+            Core.PenChanged += OnPenChanged;
 
-			PreviewForm.SetCore(Core);
+            PreviewForm.SetCore(Core);
 			ConnectionForm.SetCore(Core);
 			JogForm.SetCore(Core);
 
@@ -107,8 +108,14 @@ namespace LaserGRBL
 			if (!Settings.GetObject("Do not show Issue Detector", false))
 				IssueDetectorForm.CreateAndShowDialog(this, issue);
 		}
-
-		private void RefreshColorSchema()
+        void OnPenChanged(Color color)
+        {
+            Core.AbortProgram();
+			ChangePenForm.CreateAndShowDialog(this, color);
+            Core.RunProgramFromSent();
+           
+        }
+        private void RefreshColorSchema()
 		{
 			MMn.BackColor = BackColor = StatusBar.BackColor = ColorScheme.FormBackColor;
 			MMn.ForeColor = ForeColor = ColorScheme.FormForeColor;

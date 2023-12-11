@@ -330,9 +330,11 @@ namespace LaserGRBL
 			Potrace.opttolerance = UseOptimize ? (double)Optimize : 0.2;
 			Potrace.curveoptimizing = UseOptimize; //optimize the path p, replacing sequences of Bezier segments by a single segment when possible.
 
-			List<List<Curve>> plist = Potrace.PotraceTrace(bmp);
+			List<List<Curve>> plist =Potrace.PotraceTrace(bmp);
 			List<List<Curve>> flist = null;
-
+			if (list.Count > 0&& plist.Count>0) {
+                list.Add(new GrblCommand(String.Format("CC{0}", c.penColor.ToArgb())));
+            }
 
 			if (VectorFilling(c.dir))
 			{
@@ -352,9 +354,9 @@ namespace LaserGRBL
 						using (Bitmap resampled = RasterConverter.ImageTransform.ResizeImage(ptb, new Size((int)(bmp.Width * c.fres / c.res) + 1, (int)(bmp.Height * c.fres / c.res) + 1), true, InterpolationMode.HighQualityBicubic))
 						{
 							if (c.pwm)
-								list.Add(new GrblCommand(String.Format("{0} S0", c.lOn))); //laser on and power to zero
+								list.Add(new GrblCommand(String.Format("{0} S0", c.lOn),c.penColor)); //laser on and power to zero
 							else
-								list.Add(new GrblCommand(String.Format($"{c.lOff} S{GrblCore.Configuration.MaxPWM}"))); //laser off and power to max power
+								list.Add(new GrblCommand(String.Format($"{c.lOff} S{GrblCore.Configuration.MaxPWM}"), c.penColor)); //laser off and power to max power
 
 							//set speed to markspeed
 							// For marlin, need to specify G1 each time :
@@ -379,8 +381,31 @@ namespace LaserGRBL
 			else
 				list.Add(new GrblCommand($"{c.lOff} S{GrblCore.Configuration.MaxPWM}"));   //laser off and power to maxPower
 
-			//trace raster filling
-			if (flist != null)
+             //边线                                                                              //跟踪边界
+            if (plist != null && !c.onlyFill) //总是正确的
+            {
+                //优化快速运动
+                if (useOptimizeFast)
+                    plist = OptimizePaths(plist, 0 /*ComputeDirectionChangeCost(c, core, true)*/);
+                else
+                    plist.Reverse(); //
+
+                List<string> gc = new List<string>();
+                if (supportPWM)
+                    gc.AddRange(Potrace.Export2GCode(plist, c.oX, c.oY, c.res, $"S{c.maxPower}", "S0", bmp.Size, skipcmd));
+                else
+                    gc.AddRange(Potrace.Export2GCode(plist, c.oX, c.oY, c.res, c.lOn, c.lOff, bmp.Size, skipcmd));
+
+                // For marlin, need to specify G1 each time :
+                //list.Add(new GrblCommand(String.Format("G1 F{0}", c.borderSpeed)));
+                list.Add(new GrblCommand(String.Format("F{0}", c.borderSpeed)));
+              
+                foreach (string code in gc)
+                    list.Add(new GrblCommand(code, c.penColor));
+                list= OptimizeLine2Line(list, c);
+            }
+            //填充
+            if (flist != null)
 			{
 				List<string> gc = new List<string>();
 				if (supportPWM)
@@ -390,31 +415,11 @@ namespace LaserGRBL
 
 				list.Add(new GrblCommand(String.Format("F{0}", c.markSpeed)));
 				foreach (string code in gc)
-					list.Add(new GrblCommand(code));
+					list.Add(new GrblCommand(code, c.penColor));
 			}
 
 
-			//跟踪边界
-			if (plist != null) //总是正确的
-			{
-				//优化快速运动
-				if (useOptimizeFast)
-					plist = OptimizePaths(plist, 0 /*ComputeDirectionChangeCost(c, core, true)*/);
-				else
-					plist.Reverse(); //la lista viene fornita da potrace con prima esterni e poi interni, ma per il taglio è meglio il contrario
-
-				List<string> gc = new List<string>();
-				if (supportPWM)
-					gc.AddRange(Potrace.Export2GCode(plist, c.oX, c.oY, c.res, $"S{c.maxPower}", "S0", bmp.Size, skipcmd));
-				else
-					gc.AddRange(Potrace.Export2GCode(plist, c.oX, c.oY, c.res, c.lOn, c.lOff, bmp.Size, skipcmd));
-
-				// For marlin, need to specify G1 each time :
-				//list.Add(new GrblCommand(String.Format("G1 F{0}", c.borderSpeed)));
-				list.Add(new GrblCommand(String.Format("F{0}", c.borderSpeed)));
-				foreach (string code in gc)
-					list.Add(new GrblCommand(code));
-			}
+			
 
 			//if (supportPWM)
 			//	gc = Potrace.Export2GCode(flist, c.oX, c.oY, c.res, $"S{c.maxPower}", "S0", bmp.Size, skipcmd);
@@ -470,6 +475,8 @@ namespace LaserGRBL
             public float lineWidth;  // 线宽
             public RasterConverter.ImageProcessor.LineTypeEnum lineType;  // 线宽
             public int optimizeSVG;  // 路径优化程度
+            public bool onlyFill;  // 仅填充
+            public Color penColor;  // 画笔颜色
         }
         public class RandomLineConf
         {
@@ -1522,7 +1529,12 @@ namespace LaserGRBL
 			DrawJobRange(g, size, zoom);
 
 		}
-
+		/// <summary>
+		/// 预览渲染
+		/// </summary>
+		/// <param name="g"></param>
+		/// <param name="spb"></param>
+		/// <param name="zoom"></param>
 		private void DrawJobPreview(Graphics g, GrblCommand.StatePositionBuilder spb, float zoom)
 		{
 			bool firstline = true; //used to draw the first line in a different color
@@ -1536,20 +1548,30 @@ namespace LaserGRBL
 
 					if (spb.TrueMovement())
 					{
-						Color linecolor = Color.FromArgb(spb.GetCurrentAlpha(mRange.SpindleRange), firstline ? ColorScheme.PreviewFirstMovement : spb.LaserBurning ? ColorScheme.PreviewLaserPower : ColorScheme.PreviewOtherMovement);
+						//Color linecolor = Color.FromArgb(spb.GetCurrentAlpha(mRange.SpindleRange), firstline ? ColorScheme.PreviewFirstMovement : spb.LaserBurning ? ColorScheme.PreviewLaserPower : ColorScheme.PreviewOtherMovement);
 
-						using (Pen pen = GetPen(cmd.G.ToString()=="G0"? Color.LightGray: Color.Black))
+						using (Pen pen = GetPen(cmd.G?.ToString()=="G0"? Color.LightGray: cmd.penColor))
 						{
 							pen.ScaleTransform(1 / zoom, 1 / zoom);
 
-							if (!spb.LaserBurning)
+
+							if (cmd.G?.ToString() == "G0" && !spb.LaserBurning)
 							{
 								pen.DashStyle = DashStyle.Dash;
-								pen.DashPattern = new float[] { 1f, 1f };
+								pen.Width = 1;
 							}
-						
+							else if (!spb.LaserBurning)
+							{
+								//pen.DashStyle = DashStyle.Dash;
+								//pen.DashPattern = new float[] { 10f, 10f };
+								pen.Width = 1;
+							}
+							else {
 
-							if (spb.G0G1 && cmd.IsLinearMovement && pen.Color.A > 0)
+                                pen.Width = 2;
+                            }
+
+                            if (spb.G0G1 && cmd.IsLinearMovement && pen.Color.A > 0)
 							{
 								g.DrawLine(pen, new PointF((float)spb.X.Previous, (float)spb.Y.Previous), new PointF((float)spb.X.Number, (float)spb.Y.Number));
 							}

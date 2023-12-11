@@ -16,9 +16,11 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Tools;
+using static LaserGRBL.GrblCore;
 
 namespace LaserGRBL
 {
@@ -252,13 +254,15 @@ namespace LaserGRBL
         }
 
 		public delegate void dlgIssueDetector(DetectedIssue issue);
-		public delegate void dlgOnMachineStatus();
+        public delegate void dlgPenChange(Color color);
+        public delegate void dlgOnMachineStatus();
 		public delegate void dlgOnOverrideChange();
 		public delegate void dlgOnLoopCountChange(decimal current);
 		public delegate void dlgJogStateChange(bool jog);
 
 		public event dlgIssueDetector IssueDetected;
-		public event dlgOnMachineStatus MachineStatusChanged;
+        public event dlgPenChange PenChanged;
+        public event dlgOnMachineStatus MachineStatusChanged;
 		public event GrblFile.OnFileLoadedDlg OnFileLoading;
 		public event GrblFile.OnFileLoadedDlg OnFileLoaded;
 		public event dlgOnOverrideChange OnOverrideChange;
@@ -520,8 +524,8 @@ namespace LaserGRBL
 				SoundEvent.PlaySound(SoundEvent.EventId.Fatal);
 			}
 		}
-
-		void RiseJogStateChange(bool jog)
+       
+        void RiseJogStateChange(bool jog)
 		{
 			if (JogStateChange != null)
 			{
@@ -542,19 +546,19 @@ namespace LaserGRBL
 					IssueDetected(issue);
 			}
 		}
+         void RisePenChanged(Color color)
+        {
+            if (PenChanged != null)
+            {
+                if (syncro.InvokeRequired)
+                    syncro.BeginInvoke(new dlgPenChange(RisePenChanged),color);
+                else
+                    PenChanged(color);
+            }
+        }
 
-		void RiseMachineStatusChanged()
-		{
-			if (MachineStatusChanged != null)
-			{
-				if (syncro.InvokeRequired)
-					syncro.BeginInvoke(new dlgOnMachineStatus(RiseMachineStatusChanged));
-				else
-					MachineStatusChanged();
-			}
-		}
 
-		void RiseOverrideChanged()
+        void RiseOverrideChanged()
 		{
 			if (OnOverrideChange != null)
 			{
@@ -580,8 +584,17 @@ namespace LaserGRBL
 			if (OnFileLoaded != null)
 				OnFileLoaded(elapsed, filename);
 		}
-
-		public GrblFile LoadedFile
+        void RiseMachineStatusChanged()
+        {
+            if (MachineStatusChanged != null)
+            {
+                if (syncro.InvokeRequired)
+                    syncro.BeginInvoke(new dlgOnMachineStatus(RiseMachineStatusChanged));
+                else
+                    MachineStatusChanged();
+            }
+        }
+        public GrblFile LoadedFile
 		{ get { return file; } }
 
 		public void ReOpenFile(System.Windows.Forms.Form parent)
@@ -1430,7 +1443,8 @@ namespace LaserGRBL
 					lock (this)
 					{
 						mQueue.Clear(); //flush the queue of item to send
-						mQueue.Enqueue(new GrblCommand("M5")); //shut down laser
+                        mQueue.Enqueue(new GrblCommand("Z0")); //shut down laser
+                        mQueue.Enqueue(new GrblCommand("M5")); //shut down laser
 					}
 				}
 				catch (Exception ex)
@@ -1463,8 +1477,11 @@ namespace LaserGRBL
 			if (position > 0)
 				ContinueProgramFromKnown(position, homing, setwco);
 		}
-
-		private void RunProgramFromStart(bool homing, bool first = false, bool pass = false)
+        public void RunProgramFromSent()
+        {
+          ContinueProgramFromKnown(mTP.Sent, false, false);
+        }
+        private void RunProgramFromStart(bool homing, bool first = false, bool pass = false)
 		{
 			lock (this)
 			{
@@ -1512,7 +1529,7 @@ namespace LaserGRBL
 			ExecuteCustombutton(Settings.GetObject("GCode.CustomFooter", GrblCore.GCODE_STD_FOOTER));
 		}
 
-		private void ContinueProgramFromKnown(int position, bool homing, bool setwco)
+		public void ContinueProgramFromKnown(int position, bool homing, bool setwco)
 		{
 			lock (this)
 			{
@@ -2016,8 +2033,11 @@ namespace LaserGRBL
 					{
 						PushJogCommand();
 
-						if (CanSend())
-							SendLine();
+							
+                        if (CanSend())
+						{
+                            SendLine();
+                        }
 
 						ManageCoolingCycles();
 					}
@@ -2049,7 +2069,7 @@ namespace LaserGRBL
 				//	cur.DeleteHelper();
 				//}
 
-				bool noQueryResponse = debugLastStatusDelay.ElapsedTime > TimeSpan.FromTicks(QueryTimer.Period.Ticks * 10) && debugLastStatusDelay.ElapsedTime > TimeSpan.FromSeconds(5);
+				bool noQueryResponse = debugLastStatusDelay.ElapsedTime > TimeSpan.FromTicks(QueryTimer.Period.Ticks * 10) && debugLastStatusDelay.ElapsedTime > TimeSpan.FromSeconds(10);
                 //bool noMovement = !executingM4 && debugLastMoveDelay.ElapsedTime > TimeSpan.FromSeconds(10);
 
                 if (noQueryResponse)
@@ -2075,8 +2095,31 @@ namespace LaserGRBL
 			GrblCommand next = PeekNextCommand();
 			return next != null && HasSpaceInBuffer(next);
 		}
+		Regex regexChangePen = new Regex(@"^CC([\-#0-9A-F]+)");
+   //     private bool ChangePen()
+   //     {
+   //         GrblCommand next = PeekNextCommand();
+			//if (next != null && regexChangePen.IsMatch(next.ToString())) {
+			//	RisePenChanged(Color.FromArgb(int.Parse(next.ToString().Replace("CC", ""))));
+   //             RemoveManagedCommand();
+   //             next.BuildHelper();
 
-		private bool BufferIsFull()
+   //             next.SetSending();
+   //             mSentPtr.Add(next);
+   //             mPending.Enqueue(next);
+   //             RemoveManagedCommand();
+
+   //             SendToSerial(next);
+
+   //             if (mTP.InProgram)
+   //                 mTP.JobSent();
+
+   //             debugLastMoveOrActivityDelay.Start();
+   //             return true;
+			//}
+			//return false;
+   //     }
+        private bool BufferIsFull()
 		{
 			GrblCommand next = PeekNextCommand();
 			return mUsedBuffer > 0 && next != null && !HasSpaceInBuffer(next);
@@ -2114,10 +2157,18 @@ namespace LaserGRBL
 			{
 				try
 				{
+
 					tosend.BuildHelper();
 
 					tosend.SetSending();
-					mSentPtr.Add(tosend);
+                    if (regexChangePen.IsMatch(tosend.ToString()))
+                    {
+                        RisePenChanged(Color.FromArgb(int.Parse(tosend.ToString().Replace("CC", ""))));
+                    }
+                    else
+                    {
+                        mSentPtr.Add(tosend);
+                    }
 					mPending.Enqueue(tosend);
 					RemoveManagedCommand();
 

@@ -132,25 +132,35 @@ namespace LaserGRBL
 		private TimeSpan mTimeOffset;
 		private Dictionary<char, GrblCommand.Element> mHelper;
 		private int mRepeatCount;
-
-		public GrblCommand(string line, int repeat = 0, bool preservecase = false)
-		{ 
-			mLine = line.Trim();
+        private Color mColor;
+        public GrblCommand(string line, Color color , int repeat = 0, bool preservecase = false)
+        {
+			mColor = color;
+            mLine = line.Trim();
+            if (!preservecase) mLine = mLine.ToUpper();
+            mRepeatCount = repeat;
+        }
+        public GrblCommand(string line, int repeat = 0, bool preservecase = false)
+		{
+			mColor = Color.Black;
+            mLine = line.Trim();
 			if (!preservecase) mLine = mLine.ToUpper();
 			mRepeatCount = repeat; 
 		}
 
 		public GrblCommand(IEnumerable<Element> elements)
-		{
-			mLine = "";
+        {
+            mColor = Color.Black;
+            mLine = "";
 			foreach (GrblCommand.Element e in elements)
 				mLine = mLine + e.ToString() + " ";
 			mLine = mLine.ToUpper().Trim();
 		}
 
 		public GrblCommand(Element first, GrblCommand toappend)
-		{
-			mLine = string.Format("{0} {1}", first, toappend.mLine).ToUpper().Trim();
+        {
+            mColor = Color.Black;
+            mLine = string.Format("{0} {1}", first, toappend.mLine).ToUpper().Trim();
 		}
 
 		public bool JustBuilt
@@ -219,7 +229,9 @@ namespace LaserGRBL
 			catch { }
 		}
 
-		public int RepeatCount
+        public Color penColor
+        { get { return mColor; } set { mColor = value; } }
+        public int RepeatCount
 		{ get { return mRepeatCount; } }
 
 		public void DeleteHelper()
